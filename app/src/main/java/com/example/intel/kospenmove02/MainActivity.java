@@ -74,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialization - START
-        dbHandler = new MyDBHandler(this, null, null, 1);
+        // -------------------------------------------------------------------------------------- Initialization - START
+//        dbHandler = new MyDBHandler(this, null, null, 1);
         testOutput = (TextView) findViewById(R.id.testOutputId);
         ic = (EditText) findViewById(R.id.icId);
         name = (EditText) findViewById(R.id.nameId);
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         syncDelButton = (Button) findViewById(R.id.syncDelButtonId);
 
         /* Create the dummy account */
-        CreateSyncAccount(this);
+//        CreateSyncAccount(this);
 
         /* prefButton to show preference activity */
         prefButton = (Button) findViewById(R.id.prefButtonId);
@@ -101,25 +101,24 @@ public class MainActivity extends AppCompatActivity {
         networkButton = (Button) findViewById(R.id.networkButtonId);
 
         /* Set up job schedule */
-        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        mJobInfo = jobScheduler.getPendingJob(SYNC_JOB_ID);
-        Log.i(JOB_SCHEDULE_TAG, "[Pre-setup] Number of all pending jobs: " + jobScheduler.getAllPendingJobs().size());
-        Log.i(JOB_SCHEDULE_TAG, "[Pre-setup] All pending jobs: " + jobScheduler.getAllPendingJobs());
-        Log.i(JOB_SCHEDULE_TAG, "...");
-        if(mJobInfo!=null) {
-//            Toast.makeText(this, "Job exist: " + mJobInfo.getId(), Toast.LENGTH_SHORT).show();
-            Log.i(JOB_SCHEDULE_TAG, "Job exist: " + mJobInfo.getId());
-            jobScheduler.cancel(mJobInfo.getId());
-            setupJob();
-        } else {
-//            Toast.makeText(this, "No job. Creating new...", Toast.LENGTH_SHORT).show();
-            Log.i(JOB_SCHEDULE_TAG, "No job. Creating new...");
-            setupJob();
-        }
+//        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+//        mJobInfo = jobScheduler.getPendingJob(SYNC_JOB_ID);
+//        Log.i(JOB_SCHEDULE_TAG, "[Pre-setup] Number of all pending jobs: " + jobScheduler.getAllPendingJobs().size());
+//        Log.i(JOB_SCHEDULE_TAG, "[Pre-setup] All pending jobs: " + jobScheduler.getAllPendingJobs());
+//        Log.i(JOB_SCHEDULE_TAG, "...");
+//        if(mJobInfo!=null) {
+////            Toast.makeText(this, "Job exist: " + mJobInfo.getId(), Toast.LENGTH_SHORT).show();
+//            Log.i(JOB_SCHEDULE_TAG, "Job exist: " + mJobInfo.getId());
+//            jobScheduler.cancel(mJobInfo.getId());
+//            setupJob();
+//        } else {
+////            Toast.makeText(this, "No job. Creating new...", Toast.LENGTH_SHORT).show();
+//            Log.i(JOB_SCHEDULE_TAG, "No job. Creating new...");
+//            setupJob();
+//        }
+        // -------------------------------------------------------------------------------------- Initialization - END
 
-        // Initialization - END
-
-        printDatabase();
+//        printDatabase();
     }
 
 
@@ -172,21 +171,27 @@ public class MainActivity extends AppCompatActivity {
     }
     // =========== Setup JobInfo and Submit job using JobScheduler - END ===========
 
+    // =========== Goto Database Activity - START ===========
+    public void dbButtonClicked(View view) {
+        Intent gotoDbActivityIntent = new Intent(this, DbActivity.class);
+        startActivity(gotoDbActivityIntent);
+    }
+    // =========== Goto Database Activity - END ===========
 
-    // =========== Network Activity - START ===========
+    // =========== Goto Network Activity - START ===========
     public void networkButtonClicked(View view) {
-        Intent prefActivityIntent = new Intent(this, NetworkStatusActivity.class);
-        startActivity(prefActivityIntent);
+        Intent gotoNetworkStatusActivityIntent = new Intent(this, NetworkStatusActivity.class);
+        startActivity(gotoNetworkStatusActivityIntent);
     }
-    // =========== Network Activity - END ===========
+    // =========== Goto Network Activity - END ===========
 
 
-    // =========== Preference Activity - START ===========
+    // =========== Goto Preference Activity - START ===========
     public void prefButtonClicked(View view) {
-        Intent prefActivityIntent = new Intent(this, SettingsActivity.class);
-        startActivity(prefActivityIntent);
+        Intent gotoPrefActivityIntent = new Intent(this, SettingsActivity.class);
+        startActivity(gotoPrefActivityIntent);
     }
-    // =========== Preference Activity - END ===========
+    // =========== Goto Preference Activity - END ===========
 
 
     // =========== SyncAdapter CRUD Api - START ===========

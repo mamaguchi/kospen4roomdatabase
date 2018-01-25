@@ -118,7 +118,8 @@
         android:layout_alignLeft="@+id/textView4"
         android:layout_alignStart="@+id/textView4"
         android:layout_below="@+id/textView4"
-        android:entries="@array/gender"/>
+        android:layout_toStartOf="@+id/dbButtonId"
+        android:entries="@array/gender" />
 
     <EditText
         android:id="@+id/addressId"
@@ -126,8 +127,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textView5"
         android:layout_alignBottom="@+id/textView5"
-        android:layout_alignLeft="@+id/nameId"
-        android:layout_alignStart="@+id/nameId"
+        android:layout_toEndOf="@+id/textView3"
+        android:layout_toStartOf="@+id/networkButtonId"
         android:ems="10"
         android:inputType="textPersonName" />
 
@@ -218,5 +219,14 @@
         android:layout_alignParentRight="true"
         android:onClick="networkButtonClicked"
         android:text="network" />
+
+    <Button
+        android:id="@+id/dbButtonId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/prefButtonId"
+        android:layout_toEndOf="@+id/addressId"
+        android:onClick="dbButtonClicked"
+        android:text="Db" />
 
 </RelativeLayout>
