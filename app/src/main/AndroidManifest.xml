@@ -47,13 +47,6 @@
             </intent-filter>
         </activity>
 
-        <provider
-            android:name=".KospenusersProvider"
-            android:authorities="com.kospen.kospenusersprovider.provider"
-            android:enabled="true"
-            android:exported="true"
-            android:syncable="true" />
-
         <service android:name=".accounts.GenericAccountService">
 
             <!-- Required filter used by the system to launch our account service. -->
@@ -64,23 +57,6 @@
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
-        </service>
-        <service
-            android:name=".SyncService"
-            android:exported="true"
-            android:process=":sync">
-
-            <!--
-            This intent filter is required. It allows the system to launch our sync service
-            as needed.
-            -->
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-            <!-- This points to a required XML file which describes our SyncAdapter. -->
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter" />
         </service>
         <service
             android:name=".KospenBackupJobService"
