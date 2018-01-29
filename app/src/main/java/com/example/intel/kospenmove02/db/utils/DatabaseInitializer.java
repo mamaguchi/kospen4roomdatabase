@@ -7,6 +7,10 @@ import android.util.Log;
 
 import com.example.intel.kospenmove02.db.AppDatabase;
 import com.example.intel.kospenmove02.db.GenderConverter.Gender;
+import com.example.intel.kospenmove02.db.StateConverter.State;
+import com.example.intel.kospenmove02.db.RegionConverter.Region;
+import com.example.intel.kospenmove02.db.SubregionConverter.Subregion;
+import com.example.intel.kospenmove02.db.LocalityConverter.Locality;
 import com.example.intel.kospenmove02.db.Kospenuser;
 import com.example.intel.kospenmove02.db.Screening;
 
@@ -29,11 +33,12 @@ public class DatabaseInitializer {
 
     private static Kospenuser addKospenuser(final AppDatabase db, final String id, String timestamp,
                                       final String ic, final String name, Gender gender,
-                                      final String address, final String userRegion,
-                                      final String firstRegRegion) {
+                                      final String address, State state, Region region, Subregion subregion,
+                                      Locality locality, final String firstRegRegion) {
 
         Kospenuser kospenuser = new Kospenuser(
-                id, timestamp, ic, name, gender, address, userRegion, firstRegRegion);
+                id, timestamp, ic, name, gender, address,
+                state, region, subregion, locality, firstRegRegion);
         db.kospenuserModel().insertKospenuser(kospenuser);
 
         return kospenuser;
@@ -59,11 +64,14 @@ public class DatabaseInitializer {
         String today = getTodayPlusDays(0);
 
         Kospenuser user1 = addKospenuser(db, "1", today, "880601105149", "patrick",
-                Gender.MALE,"132jlntamarind", "klang", "klang");
+                Gender.MALE,"132jlntamarind",
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
         Kospenuser user2 = addKospenuser(db, "2", today, "880601105150", "esther",
-                Gender.FEMALE,"132jlntamarind", "klang", "klang");
+                Gender.FEMALE,"132jlntamarind",
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.JENGKA6, "klang");
         addKospenuser(db, "3", today, "880601105155", "romeo",
-                Gender.MALE,"132jlntamarind", "klang", "klang");
+                Gender.MALE,"132jlntamarind",
+                State.NONPAHANG, Region.MARAN, Subregion.JENGKA2, Locality.JENGKA6, "klang");
 
         Screening screening1 = addScreening(db, "1", "880601105149", today,
                 60, 160, 120, 80, 6,

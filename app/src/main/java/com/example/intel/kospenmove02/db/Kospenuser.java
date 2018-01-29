@@ -6,6 +6,10 @@ import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
 import com.example.intel.kospenmove02.db.GenderConverter.Gender;
+import com.example.intel.kospenmove02.db.StateConverter.State;
+import com.example.intel.kospenmove02.db.RegionConverter.Region;
+import com.example.intel.kospenmove02.db.SubregionConverter.Subregion;
+import com.example.intel.kospenmove02.db.LocalityConverter.Locality;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -33,7 +37,18 @@ public class Kospenuser {
 
     private String address;
 
-    private String userRegion;
+    // Version 1:
+    //private String userRegion;
+    //
+    // Version 2:
+    @TypeConverters(StateConverter.class)
+    private State state;
+    @TypeConverters(RegionConverter.class)
+    private Region region;
+    @TypeConverters(SubregionConverter.class)
+    private Subregion subregion;
+    @TypeConverters(LocalityConverter.class)
+    private Locality locality;
 
     private String firstRegRegion;
 
@@ -43,24 +58,26 @@ public class Kospenuser {
     |   Constructor
     |
     */
-    public Kospenuser(@NonNull String id, String timestamp, String ic, String name,
-                      Gender gender, String address,
-                      String userRegion, String firstRegRegion) {
+    public Kospenuser(String id, String timestamp, @NonNull String ic, String name, Gender gender,
+                      String address, State state, Region region, Subregion subregion, Locality locality, String firstRegRegion) {
         this.id = id;
         this.timestamp = timestamp;
         this.ic = ic;
         this.name = name;
         this.gender = gender;
         this.address = address;
-        this.userRegion = userRegion;
+        this.state = state;
+        this.region = region;
+        this.subregion = subregion;
+        this.locality = locality;
         this.firstRegRegion = firstRegRegion;
     }
 
     /*
-    |
-    |   Getter and Setter
-    |
-    */
+        |
+        |   Getter and Setter
+        |
+        */
     @NonNull
     public String getId() {
         return id;
@@ -110,12 +127,36 @@ public class Kospenuser {
         this.address = address;
     }
 
-    public String getUserRegion() {
-        return userRegion;
+    public State getState() {
+        return state;
     }
 
-    public void setUserRegion(String userRegion) {
-        this.userRegion = userRegion;
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
+    }
+
+    public Subregion getSubregion() {
+        return subregion;
+    }
+
+    public void setSubregion(Subregion subregion) {
+        this.subregion = subregion;
+    }
+
+    public Locality getLocality() {
+        return locality;
+    }
+
+    public void setLocality(Locality locality) {
+        this.locality = locality;
     }
 
     public String getFirstRegRegion() {

@@ -10,7 +10,7 @@ import android.content.Context;
 |   Singleton Pattern - for Database instance
 |
  */
-@Database(entities = {Kospenuser.class, Screening.class}, version=2)
+@Database(entities = {Kospenuser.class, Screening.class}, version=3)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
