@@ -18,6 +18,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,7 +85,22 @@ public class TestSyncActivity extends AppCompatActivity {
         // ========== JsonObjectRequest - POST ==========
         Log.i(TEST_SYNC_TAG, "[doInBackground] Preparing JsonObjectRequest");
         Map<String, String> params = new HashMap<>();
-        params.put("name", "bellio7");
+
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("YYYY-MM-dd hh:mm:ss");
+        String timestamp = LocalDateTime.now().format(df);
+
+        params.put("ic", "881201105314");
+        params.put("created_at", timestamp);
+        params.put("updated_at", timestamp);
+        params.put("name", "bellio");
+        params.put("gender", "MALE");
+        params.put("address", "SouthernPark");
+        params.put("state", "PAHANG");
+        params.put("region", "MARAN");
+        params.put("subregion", "JENGKA2");
+        params.put("locality", "ULUJEMPOL");
+        params.put("firstRegRegion", "klang");
+
         JSONObject parameters = new JSONObject(params);
         JsonObjectRequest postRequest = new JsonObjectRequest(
                 Request.Method.POST,
@@ -92,13 +109,13 @@ public class TestSyncActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject >() {
                     @Override
                     public void onResponse(JSONObject  response) {
-                        Log.i(TEST_SYNC_TAG, "Successful GET: " + response.toString());
+                        Log.i(TEST_SYNC_TAG, "Successful POST: " + response.toString());
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.i(TEST_SYNC_TAG, "Failed GET: " + error.toString());
+                        Log.i(TEST_SYNC_TAG, "Failed POST: " + error.toString());
                     }
                 }) {
             @Override
