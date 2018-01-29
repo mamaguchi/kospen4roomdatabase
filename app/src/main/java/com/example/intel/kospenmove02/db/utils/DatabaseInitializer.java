@@ -10,6 +10,8 @@ import com.example.intel.kospenmove02.db.GenderConverter.Gender;
 import com.example.intel.kospenmove02.db.Kospenuser;
 import com.example.intel.kospenmove02.db.Screening;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,7 +27,7 @@ public class DatabaseInitializer {
         populateWithTestData(db);
     }
 
-    private static Kospenuser addKospenuser(final AppDatabase db, final String id, Date timestamp,
+    private static Kospenuser addKospenuser(final AppDatabase db, final String id, String timestamp,
                                       final String ic, final String name, Gender gender,
                                       final String address, final String userRegion,
                                       final String firstRegRegion) {
@@ -38,7 +40,7 @@ public class DatabaseInitializer {
     }
 
     private static Screening addScreening(final AppDatabase db, final String id, final String fk_ic,
-                                      Date date, final int weight, final int height,
+                                          String date, final int weight, final int height,
                                       final int systolic, final int diastolic,
                                       final int dxt, boolean smoker,
                                      boolean sendToServer) {
@@ -54,7 +56,7 @@ public class DatabaseInitializer {
         db.screeningModel().deleteAll();
         db.kospenuserModel().deleteAll();
 
-        Date today = getTodayPlusDays(0);
+        String today = getTodayPlusDays(0);
 
         Kospenuser user1 = addKospenuser(db, "1", today, "880601105149", "patrick",
                 Gender.MALE,"132jlntamarind", "klang", "klang");
@@ -72,10 +74,13 @@ public class DatabaseInitializer {
 
     }
 
-    private static Date getTodayPlusDays(int daysAgo) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, daysAgo);
-        return calendar.getTime();
+    private static String getTodayPlusDays(int daysAgo) {
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.add(Calendar.DATE, daysAgo);
+//        return calendar.getTime();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("YYYY-MM-dd hh:mm:ss");
+        String timestamp = LocalDateTime.now().format(df);
+        return timestamp;
     }
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {

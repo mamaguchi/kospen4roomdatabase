@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.example.intel.kospenmove02.db.GenderConverter.Gender;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -16,8 +17,10 @@ public class Kospenuser {
 
     private String id;
 
-    @TypeConverters(DateConverter.class)
-    private Date timestamp;
+//    @TypeConverters(DateConverter.class)
+//    private LocalDateTime timestamp;
+
+    private String timestamp;
 
     @PrimaryKey
     @NonNull
@@ -40,7 +43,7 @@ public class Kospenuser {
     |   Constructor
     |
     */
-    public Kospenuser(@NonNull String id, Date timestamp, String ic, String name,
+    public Kospenuser(@NonNull String id, String timestamp, String ic, String name,
                       Gender gender, String address,
                       String userRegion, String firstRegRegion) {
         this.id = id;
@@ -67,11 +70,11 @@ public class Kospenuser {
         this.id = id;
     }
 
-    public Date getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 

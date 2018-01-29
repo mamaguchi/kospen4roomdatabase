@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 @Entity(foreignKeys = {
@@ -21,8 +21,10 @@ public class Screening {
 
     private String fk_ic;
 
-    @TypeConverters(DateConverter.class)
-    private Date date;
+//    @TypeConverters(DateConverter.class)
+//    private LocalDateTime date;
+
+    private String date;
 
     private int weight;
 
@@ -46,7 +48,7 @@ public class Screening {
     |   Constructor
     |
     */
-    public Screening(@NonNull String id, String fk_ic, Date date,
+    public Screening(@NonNull String id, String fk_ic, String date,
                      int weight, int height, int systolic, int diastolic, int dxt,
                      boolean smoker, boolean sendToServer) {
         this.id = id;
@@ -83,11 +85,11 @@ public class Screening {
         this.fk_ic = fk_ic;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

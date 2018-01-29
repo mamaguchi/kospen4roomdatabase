@@ -27,7 +27,6 @@ public class SyncTask extends AsyncTask<JobParameters, Void, Result<JobParameter
 
     private static final String JOB_SCHEDULE_TAG = "SyncJobService";
     public static final String SYNC_KOSPENPATH_KEY = "kospenusers_api_endpoint";
-    private static final int NOTIFICATION_ID = "SyncTaskNotification".hashCode();
     private final WeakReference<JobService> jobServiceWeakRef;
     private String kospenusersUrl = "http://192.168.10.10/api/kospenusers";
 

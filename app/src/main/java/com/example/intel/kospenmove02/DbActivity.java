@@ -60,6 +60,10 @@ public class DbActivity extends AppCompatActivity {
 
         for (Kospenuser kospenuser : kospenusers) {
             sb.append(kospenuser.getName());
+            sb.append("_");
+            sb.append(kospenuser.getGender());
+            sb.append("_");
+            sb.append(kospenuser.getTimestamp());
             sb.append("\n");
         }
         mKospenusersListTextView.setText(sb.toString());

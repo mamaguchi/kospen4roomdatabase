@@ -149,12 +149,14 @@ public class MainActivity extends AppCompatActivity {
     }
     // =========== Setup JobInfo and Submit job using JobScheduler - END ===========
 
+
     // =========== Goto Database Activity - START ===========
     public void dbButtonClicked(View view) {
         Intent gotoDbActivityIntent = new Intent(this, DbActivity.class);
         startActivity(gotoDbActivityIntent);
     }
     // =========== Goto Database Activity - END ===========
+
 
     // =========== Goto Network Activity - START ===========
     public void networkButtonClicked(View view) {
@@ -183,9 +185,9 @@ public class MainActivity extends AppCompatActivity {
     // =========== Sync Simulation Button - END ===========
 
 
-
     public void testButtonClicked(View view){
-
+        Intent gotoTestSyncActivityIntent = new Intent(this, TestSyncActivity.class);
+        startActivity(gotoTestSyncActivityIntent);
     }
 
     public void addButtonClicked(View view){

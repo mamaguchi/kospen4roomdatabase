@@ -69,7 +69,8 @@
             android:exported="true" />
 
         <activity android:name=".NetworkStatusActivity" />
-        <activity android:name=".DbActivity"></activity>
+        <activity android:name=".DbActivity" />
+        <activity android:name=".TestSyncActivity"></activity>
     </application>
 
 </manifest>
