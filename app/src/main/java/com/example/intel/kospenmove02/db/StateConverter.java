@@ -20,6 +20,23 @@ public class StateConverter {
         }
     }
 
+    public static State strToEnumState(String stateStr) {
+
+        final State state;
+
+        switch (stateStr) {
+            case "PAHANG":
+                state = State.PAHANG;
+                break;
+            case "NONPAHANG":
+                state = State.NONPAHANG;
+                break;
+            default:
+                state = null;
+        }
+        return state;
+    }
+
     @TypeConverter
     public static State toEnumState(int stateInt) {
 

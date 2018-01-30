@@ -13,11 +13,7 @@ import com.example.intel.kospenmove02.db.LocalityConverter.Locality;
 
 
 @Entity
-public class Kospenuser {
-
-
-//    @TypeConverters(DateConverter.class)
-//    private LocalDateTime timestamp;
+public class KospenuserServer {
 
     private String timestamp;
 
@@ -32,10 +28,6 @@ public class Kospenuser {
 
     private String address;
 
-    // Version 1:
-    //private String userRegion;
-    //
-    // Version 2:
     @TypeConverters(StateConverter.class)
     private State state;
     @TypeConverters(RegionConverter.class)
@@ -53,7 +45,7 @@ public class Kospenuser {
     |   Constructor
     |
     */
-    public Kospenuser(String timestamp, @NonNull String ic, String name, Gender gender,
+    public KospenuserServer(String timestamp, @NonNull String ic, String name, Gender gender,
                       String address, State state, Region region, Subregion subregion, Locality locality, String firstRegRegion) {
         this.timestamp = timestamp;
         this.ic = ic;
@@ -151,4 +143,5 @@ public class Kospenuser {
     public void setFirstRegRegion(String firstRegRegion) {
         this.firstRegRegion = firstRegRegion;
     }
+
 }

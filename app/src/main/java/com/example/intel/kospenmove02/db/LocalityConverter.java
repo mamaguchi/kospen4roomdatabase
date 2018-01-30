@@ -20,6 +20,23 @@ public class LocalityConverter {
         }
     }
 
+    public static Locality strToEnumLocality(String localityStr) {
+
+        final Locality locality;
+
+        switch (localityStr) {
+            case "ULUJEMPOL":
+                locality = Locality.ULUJEMPOL;
+                break;
+            case "JENGKA6":
+                locality = Locality.JENGKA6;
+                break;
+            default:
+                locality = null;
+        }
+        return locality;
+    }
+
     @TypeConverter
     public static Locality toEnumLocality(int localityInt) {
 

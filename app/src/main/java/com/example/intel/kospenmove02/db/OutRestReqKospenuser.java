@@ -10,16 +10,16 @@ import com.example.intel.kospenmove02.db.StateConverter.State;
 import com.example.intel.kospenmove02.db.RegionConverter.Region;
 import com.example.intel.kospenmove02.db.SubregionConverter.Subregion;
 import com.example.intel.kospenmove02.db.LocalityConverter.Locality;
+import com.example.intel.kospenmove02.db.OutRestReqConverter.OutRestReq;
 
 
 @Entity
-public class Kospenuser {
-
-
-//    @TypeConverters(DateConverter.class)
-//    private LocalDateTime timestamp;
+public class OutRestReqKospenuser {
 
     private String timestamp;
+
+    @TypeConverters(OutRestReqConverter.class)
+    private OutRestReq outRestReqStatus;
 
     @PrimaryKey
     @NonNull
@@ -32,10 +32,6 @@ public class Kospenuser {
 
     private String address;
 
-    // Version 1:
-    //private String userRegion;
-    //
-    // Version 2:
     @TypeConverters(StateConverter.class)
     private State state;
     @TypeConverters(RegionConverter.class)
@@ -47,15 +43,15 @@ public class Kospenuser {
 
     private String firstRegRegion;
 
-
     /*
     |
     |   Constructor
     |
     */
-    public Kospenuser(String timestamp, @NonNull String ic, String name, Gender gender,
-                      String address, State state, Region region, Subregion subregion, Locality locality, String firstRegRegion) {
+    public OutRestReqKospenuser(String timestamp, OutRestReq outRestReqStatus, @NonNull String ic, String name, Gender gender,
+                                String address, State state, Region region, Subregion subregion, Locality locality, String firstRegRegion) {
         this.timestamp = timestamp;
+        this.outRestReqStatus = outRestReqStatus;
         this.ic = ic;
         this.name = name;
         this.gender = gender;
@@ -68,10 +64,10 @@ public class Kospenuser {
     }
 
     /*
-    |
-    |   Getter and Setter
-    |
-    */
+        |
+        |   Getter and Setter
+        |
+        */
     public String getTimestamp() {
         return timestamp;
     }
@@ -80,11 +76,12 @@ public class Kospenuser {
         this.timestamp = timestamp;
     }
 
+    @NonNull
     public String getIc() {
         return ic;
     }
 
-    public void setIc(String ic) {
+    public void setIc(@NonNull String ic) {
         this.ic = ic;
     }
 
@@ -150,5 +147,13 @@ public class Kospenuser {
 
     public void setFirstRegRegion(String firstRegRegion) {
         this.firstRegRegion = firstRegRegion;
+    }
+
+    public OutRestReq getOutRestReqStatus() {
+        return outRestReqStatus;
+    }
+
+    public void setOutRestReqStatus(OutRestReq outRestReqStatus) {
+        this.outRestReqStatus = outRestReqStatus;
     }
 }

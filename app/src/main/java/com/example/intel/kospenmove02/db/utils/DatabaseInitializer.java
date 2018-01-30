@@ -31,13 +31,13 @@ public class DatabaseInitializer {
         populateWithTestData(db);
     }
 
-    private static Kospenuser addKospenuser(final AppDatabase db, final String id, String timestamp,
+    private static Kospenuser addKospenuser(final AppDatabase db, String timestamp,
                                       final String ic, final String name, Gender gender,
                                       final String address, State state, Region region, Subregion subregion,
                                       Locality locality, final String firstRegRegion) {
 
         Kospenuser kospenuser = new Kospenuser(
-                id, timestamp, ic, name, gender, address,
+                timestamp, ic, name, gender, address,
                 state, region, subregion, locality, firstRegRegion);
         db.kospenuserModel().insertKospenuser(kospenuser);
 
@@ -63,20 +63,40 @@ public class DatabaseInitializer {
 
         String today = getTodayPlusDays(0);
 
-        Kospenuser user1 = addKospenuser(db, "1", today, "880601105149", "patrick",
-                Gender.MALE,"132jlntamarind",
+//        Kospenuser user1 = addKospenuser(db, today, "880601105149", "patrick",
+//                Gender.MALE,"132jlntamarind",
+//                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
+//        Kospenuser user2 = addKospenuser(db, today, "880601105150", "esther",
+//                Gender.FEMALE,"132jlntamarind",
+//                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.JENGKA6, "klang");
+//        addKospenuser(db, today, "880601105155", "romeo",
+//                Gender.MALE,"132jlntamarind",
+//                State.NONPAHANG, Region.MARAN, Subregion.JENGKA2, Locality.JENGKA6, "klang");
+
+        Kospenuser user1 = addKospenuser(db, "2018-01-30 10:00:00", "880601105149", "patrick",
+                Gender.MALE,"bandarputeri",
                 State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
-        Kospenuser user2 = addKospenuser(db, "2", today, "880601105150", "esther",
-                Gender.FEMALE,"132jlntamarind",
-                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.JENGKA6, "klang");
-        addKospenuser(db, "3", today, "880601105155", "romeo",
-                Gender.MALE,"132jlntamarind",
-                State.NONPAHANG, Region.MARAN, Subregion.JENGKA2, Locality.JENGKA6, "klang");
+        Kospenuser user2 = addKospenuser(db, "2018-01-30 08:00:00", "880601105150", "bellio",
+                Gender.MALE,"southernpark",
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.JENGKA6,"klang");
+        Kospenuser user3 = addKospenuser(db, "2018-01-30 07:00:00", "880601105151", "bellio2",
+                Gender.FEMALE,"southernpark",
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
+        Kospenuser user4 = addKospenuser(db, "2018-01-30 07:00:00", "880601105152", "esther",
+                Gender.FEMALE,"southernpark",
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.JENGKA6,"klang");
+        Kospenuser user5 = addKospenuser(db, "2018-01-29 03:00:00", "880601105153", "romeo",
+                Gender.MALE,"southernpark",
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
+
+
+
+
 
         Screening screening1 = addScreening(db, "1", "880601105149", today,
                 60, 160, 120, 80, 6,
                 false, false);
-        Screening screening2 = addScreening(db, "2", "880601105155", today,
+        Screening screening2 = addScreening(db, "2", "880601105150", today,
                 20, 80, 90, 60, 6,
                 true, true);
 

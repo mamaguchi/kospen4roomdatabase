@@ -20,6 +20,23 @@ public class SubregionConverter {
         }
     }
 
+    public static Subregion strToEnumSubregion(String subregionStr) {
+
+        final Subregion subregion;
+
+        switch (subregionStr) {
+            case "JENGKA2":
+                subregion = Subregion.JENGKA2;
+                break;
+            case "MARAN":
+                subregion = Subregion.MARAN;
+                break;
+            default:
+                subregion = null;
+        }
+        return subregion;
+    }
+
     @TypeConverter
     public static Subregion toEnumSubregion(int subregionInt) {
 

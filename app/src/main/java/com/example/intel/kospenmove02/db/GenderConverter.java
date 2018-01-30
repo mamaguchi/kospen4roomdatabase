@@ -20,6 +20,23 @@ public class GenderConverter {
         }
     }
 
+    public static Gender strToEnumGender(String genderStr) {
+
+        final Gender gender;
+
+        switch (genderStr) {
+            case "MALE":
+                gender = Gender.MALE;
+                break;
+            case "FEMALE":
+                gender = Gender.FEMALE;
+                break;
+            default:
+                gender = null;
+        }
+        return gender;
+    }
+
     @TypeConverter
     public static Gender toEnumGender(int genderInt) {
 
@@ -35,7 +52,6 @@ public class GenderConverter {
             default:
                 gender = Gender.MALE;
         }
-
         return gender;
     }
 
@@ -54,7 +70,6 @@ public class GenderConverter {
             default:
                 gender = 1;
         }
-
         return gender;
     }
 

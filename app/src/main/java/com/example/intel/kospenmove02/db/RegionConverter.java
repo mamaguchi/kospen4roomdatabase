@@ -20,6 +20,23 @@ public class RegionConverter {
         }
     }
 
+    public static Region strToEnumRegion(String regionStr) {
+
+        final Region region;
+
+        switch (regionStr) {
+            case "MARAN":
+                region = Region.MARAN;
+                break;
+            case "JERANTUT":
+                region = Region.JERANTUT;
+                break;
+            default:
+                region = null;
+        }
+        return region;
+    }
+
     @TypeConverter
     public static Region toEnumRegion(int regionInt) {
 
