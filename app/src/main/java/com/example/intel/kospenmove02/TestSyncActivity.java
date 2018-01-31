@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.intel.kospenmove02.db.GenderConverter.Gender;
+import com.example.intel.kospenmove02.db.KospenuserServer;
 import com.example.intel.kospenmove02.db.LocalityConverter;
 import com.example.intel.kospenmove02.db.RegionConverter;
 import com.example.intel.kospenmove02.db.StateConverter;
@@ -55,6 +56,7 @@ public class TestSyncActivity extends AppCompatActivity {
     private AppDatabase mDb;
 
     private LiveData<List<Kospenuser>> kospenusers;
+    private LiveData<List<KospenuserServer>> kospenusersServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,25 +78,25 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     public void showdbButtonClicked(View view) {
-        kospenusers =  mDb.kospenuserModel().loadAllKospenusers();
-        kospenusers.observe(this,
-                new Observer<List<Kospenuser>>() {
+        kospenusersServer =  mDb.kospenuserServerModel().loadAllKospenusersServer();
+        kospenusersServer.observe(this,
+                new Observer<List<KospenuserServer>>() {
                     @Override
-                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
-                        showKospenusersInUi(kospenusers);
+                    public void onChanged(@Nullable List<KospenuserServer> kospenusersServer) {
+                        showKospenusersInUi(kospenusersServer);
                     }
                 });
     }
 
-    private void showKospenusersInUi(final @NonNull List<Kospenuser> kospenusers) {
+    private void showKospenusersInUi(final @NonNull List<KospenuserServer> kospenusersServer) {
         StringBuilder sb = new StringBuilder();
 
-        for (Kospenuser kospenuser : kospenusers) {
-            sb.append(kospenuser.getName());
+        for (KospenuserServer kospenuserServer : kospenusersServer) {
+            sb.append(kospenuserServer.getName());
             sb.append("_");
-            sb.append(kospenuser.getGender());
+            sb.append(kospenuserServer.getGender());
             sb.append("_");
-            sb.append(kospenuser.getTimestamp());
+            sb.append(kospenuserServer.getTimestamp());
             sb.append("\n");
         }
         apiresTextView.setText(sb.toString());
@@ -114,24 +116,28 @@ public class TestSyncActivity extends AppCompatActivity {
                         try {
                             apiresTextView.setText(response.getJSONObject(0).getString("name"));
 
-                            //Inserting a new kospenuser row into sqlite
-                            JSONObject jsonObject = response.getJSONObject(0);
-                            String updated_at = jsonObject.getString("updated_at");
-                            String ic = jsonObject.getString("ic");
-                            String name = jsonObject.getString("name");
-                            Gender gender = GenderConverter.strToEnumGender(jsonObject.getString("gender"));
-                            String address = jsonObject.getString("address");
-                            State state = StateConverter.strToEnumState(jsonObject.getString("state"));
-                            Region region = RegionConverter.strToEnumRegion(jsonObject.getString("region"));
-                            Subregion subregion = SubregionConverter.strToEnumSubregion(jsonObject.getString("subregion"));
-                            Locality locality = LocalityConverter.strToEnumLocality(jsonObject.getString("locality"));
-                            String firstRegRegion = jsonObject.getString("firstRegRegion");
-                            Kospenuser kospenuser = new Kospenuser(updated_at, ic, name, gender, address,
-                                                        state, region, subregion, locality, firstRegRegion);
-                            mDb.kospenuserModel().insertKospenuser(kospenuser);
+                            mDb.kospenuserServerModel().deleteAll();
+
+                            for (int i=0;i<response.length();i++) {
+                                //Inserting a new kospenuser row into sqlite
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                String updated_at = jsonObject.getString("updated_at");
+                                String ic = jsonObject.getString("ic");
+                                String name = jsonObject.getString("name");
+                                Gender gender = GenderConverter.strToEnumGender(jsonObject.getString("gender"));
+                                String address = jsonObject.getString("address");
+                                State state = StateConverter.strToEnumState(jsonObject.getString("state"));
+                                Region region = RegionConverter.strToEnumRegion(jsonObject.getString("region"));
+                                Subregion subregion = SubregionConverter.strToEnumSubregion(jsonObject.getString("subregion"));
+                                Locality locality = LocalityConverter.strToEnumLocality(jsonObject.getString("locality"));
+                                String firstRegRegion = jsonObject.getString("firstRegRegion");
+                                KospenuserServer kospenuserServer = new KospenuserServer(updated_at, ic, name, gender, address,
+                                        state, region, subregion, locality, firstRegRegion);
+                                mDb.kospenuserServerModel().insertKospenuserServer(kospenuserServer);
+                            }
 
                         } catch (Exception e){
-
+                            Log.e(TEST_SYNC_TAG, e.getMessage());
                         }
                     }
                 },

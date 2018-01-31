@@ -18,7 +18,7 @@ public class InDBQueryKospenuser {
 
     private String timestamp;
 
-    @TypeConverters(OutRestReqConverter.class)
+    @TypeConverters(InDBQueryConverter.class)
     private InDBQuery inDBQueryStatus;
 
     @PrimaryKey

@@ -10,7 +10,8 @@ import android.content.Context;
 |   Singleton Pattern - for Database instance
 |
  */
-@Database(entities = {Kospenuser.class, Screening.class}, version=4)
+@Database(entities = {Kospenuser.class, Screening.class,
+                    KospenuserServer.class, OutRestReqKospenuser.class, InDBQueryKospenuser.class}, version=5)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
@@ -18,6 +19,12 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract KospenuserDao kospenuserModel();
 
     public abstract ScreeningDao screeningModel();
+
+    public abstract KospenuserServerDao kospenuserServerModel();
+
+    public abstract OutRestReqKospenuserDao outRestReqKospenuserModel();
+
+    public abstract InDBQueryKospenuserDao inDBQueryKospenuserModel();
 
     public static AppDatabase getDatabase(Context context) {
         if (INSTANCE == null) {

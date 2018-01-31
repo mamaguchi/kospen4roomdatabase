@@ -1,0 +1,32 @@
+package com.example.intel.kospenmove02.db;
+
+import android.arch.lifecycle.LiveData;
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Query;
+
+import java.util.List;
+
+import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
+
+
+@Dao
+public interface KospenuserServerDao {
+
+    @Query("select * from kospenuserserver")
+    LiveData<List<KospenuserServer>> loadAllKospenusersServer();
+
+    @Query("select * from kospenuserserver where ic = :ic")
+    LiveData<KospenuserServer> loadKospenuserServerByIc(String ic);
+
+    @Insert(onConflict = IGNORE)
+    void insertKospenuserServer(KospenuserServer kospenuserServer);
+
+    @Delete
+    void deleteKospenuserServer(KospenuserServer kospenuserServer);
+
+    @Query("delete from kospenuserserver")
+    void deleteAll();
+
+}
