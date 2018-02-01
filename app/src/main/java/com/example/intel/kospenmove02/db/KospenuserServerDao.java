@@ -14,6 +14,11 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 @Dao
 public interface KospenuserServerDao {
 
+    @Query("SELECT kospenuserserver.name, kospenuserserver.ic " +
+            "FROM kospenuserserver " +
+            "WHERE ic NOT in (SELECT ic FROM kospenuser)")
+    LiveData<List<KospenuserServer>> loadScenarioSix();
+
     @Query("SELECT * from kospenuserserver")
     LiveData<List<KospenuserServer>> loadAllKospenusersServer();
 

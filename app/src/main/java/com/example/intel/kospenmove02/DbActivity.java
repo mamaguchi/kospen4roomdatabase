@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.intel.kospenmove02.db.Kospenuser;
+import com.example.intel.kospenmove02.db.KospenuserServer;
 import com.example.intel.kospenmove02.db.Screening;
 import com.example.intel.kospenmove02.db.ViewModel;
 
@@ -19,6 +20,7 @@ public class DbActivity extends AppCompatActivity {
     private ViewModel mViewModel;
 
     private TextView mKospenusersListTextView;
+    private TextView mKospenusersServerListTextView;
     private TextView mScreeningsListTextView;
 
     @Override
@@ -27,20 +29,32 @@ public class DbActivity extends AppCompatActivity {
         setContentView(R.layout.activity_db);
 
         mKospenusersListTextView = (TextView) findViewById(R.id.kospenusersTextViewId);
+        mKospenusersServerListTextView = (TextView) findViewById(R.id.kospenusersServerTextViewId);
         mScreeningsListTextView = (TextView) findViewById(R.id.screeningsTextViewId);
 
         mViewModel = ViewModelProviders.of(this).get(ViewModel.class);
 
         subscribeToKospenusersList();
+        subscribeToKospenusersServerList();
         subscribeToScreeningsList();
     }
 
     private void subscribeToKospenusersList() {
-        mViewModel.kospenusers.observe(this,
+        mViewModel.kospenusersScenarioFive.observe(this,
                 new Observer<List<Kospenuser>>() {
                     @Override
                     public void onChanged(@Nullable List<Kospenuser> kospenusers) {
                         showKospenusersInUi(kospenusers);
+                    }
+                });
+    }
+
+    private void subscribeToKospenusersServerList() {
+        mViewModel.kospenusersScenarioSix.observe(this,
+                new Observer<List<KospenuserServer>>() {
+                    @Override
+                    public void onChanged(@Nullable List<KospenuserServer> kospenusersServer) {
+                        showKospenusersServerInUi(kospenusersServer);
                     }
                 });
     }
@@ -61,12 +75,26 @@ public class DbActivity extends AppCompatActivity {
         for (Kospenuser kospenuser : kospenusers) {
             sb.append(kospenuser.getName());
             sb.append("_");
-            sb.append(kospenuser.getGender());
+            sb.append(kospenuser.getIc());
             sb.append("_");
-            sb.append(kospenuser.getTimestamp());
+//            sb.append(kospenuser.getTimestamp());
             sb.append("\n");
         }
         mKospenusersListTextView.setText(sb.toString());
+    }
+
+    private void showKospenusersServerInUi(final @NonNull List<KospenuserServer> kospenusersServer) {
+        StringBuilder sb = new StringBuilder();
+
+        for (KospenuserServer kospenuserServer : kospenusersServer) {
+            sb.append(kospenuserServer.getName());
+            sb.append("_");
+            sb.append(kospenuserServer.getIc());
+            sb.append("_");
+//            sb.append(kospenuser.getTimestamp());
+            sb.append("\n");
+        }
+        mKospenusersServerListTextView.setText(sb.toString());
     }
 
     private void showScreeningsInUi(final @NonNull List<Screening> screenings) {
