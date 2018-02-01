@@ -76,16 +76,22 @@ public class DatabaseInitializer {
         Kospenuser user1 = addKospenuser(db, "2018-01-30 10:00:00", "880601105149", "patrick",
                 Gender.MALE,"bandarputeri",
                 State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
-        Kospenuser user2 = addKospenuser(db, "2018-01-30 08:00:00", "880601105150", "bellio",
+        Kospenuser user2 = addKospenuser(db, "2018-01-30 07:00:00", "880601105151", "bellio2",
+                Gender.FEMALE,"southernpark",
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
+        Kospenuser user3 = addKospenuser(db, "2018-01-30 07:00:00", "880601105152", "esther",
+                Gender.FEMALE,"southernpark",
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
+        Kospenuser user4 = addKospenuser(db, "2018-01-29 03:00:00", "880601105153", "romeo",
                 Gender.MALE,"southernpark",
                 State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
-        Kospenuser user3 = addKospenuser(db, "2018-01-30 07:00:00", "880601105151", "bellio2",
-                Gender.FEMALE,"southernpark",
+        Kospenuser user5 = addKospenuser(db, "2018-01-30 09:00:00", "880601105157", "bellio5",
+                Gender.MALE,"bandarputeri",
                 State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
-        Kospenuser user4 = addKospenuser(db, "2018-01-30 07:00:00", "880601105152", "esther",
-                Gender.FEMALE,"southernpark",
+        Kospenuser user6 = addKospenuser(db, "2018-01-30 07:00:00", "880601105158", "bellio6",
+                Gender.MALE,"southernpark",
                 State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
-        Kospenuser user5 = addKospenuser(db, "2018-01-29 03:00:00", "880601105153", "romeo",
+        Kospenuser user7 = addKospenuser(db, "2018-01-30 08:00:00", "880601105159", "bellio7",
                 Gender.MALE,"southernpark",
                 State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
 
@@ -96,7 +102,7 @@ public class DatabaseInitializer {
         Screening screening1 = addScreening(db, "1", "880601105149", today,
                 60, 160, 120, 80, 6,
                 false, false);
-        Screening screening2 = addScreening(db, "2", "880601105150", today,
+        Screening screening2 = addScreening(db, "2", "880601105151", today,
                 20, 80, 90, 60, 6,
                 true, true);
 
