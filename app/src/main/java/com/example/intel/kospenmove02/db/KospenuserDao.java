@@ -14,10 +14,10 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 @Dao
 public interface KospenuserDao {
 
-    @Query("select * from kospenuser")
+    @Query("SELECT * from kospenuser")
     LiveData<List<Kospenuser>> loadAllKospenusers();
 
-    @Query("select * from kospenuser where ic = :ic")
+    @Query("SELECT * from kospenuser WHERE ic = :ic")
     LiveData<Kospenuser> loadKospenuserByIc(String ic);
 
     @Insert(onConflict = IGNORE)
@@ -26,7 +26,7 @@ public interface KospenuserDao {
     @Delete
     void deleteUser(Kospenuser kospenuser);
 
-    @Query("delete from kospenuser")
+    @Query("DELETE from kospenuser")
     void deleteAll();
 
 }
