@@ -78,13 +78,13 @@ public class DatabaseInitializer {
                 State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
         Kospenuser user2 = addKospenuser(db, "2018-01-30 08:00:00", "880601105150", "bellio",
                 Gender.MALE,"southernpark",
-                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.JENGKA6,"klang");
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
         Kospenuser user3 = addKospenuser(db, "2018-01-30 07:00:00", "880601105151", "bellio2",
                 Gender.FEMALE,"southernpark",
                 State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
         Kospenuser user4 = addKospenuser(db, "2018-01-30 07:00:00", "880601105152", "esther",
                 Gender.FEMALE,"southernpark",
-                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.JENGKA6,"klang");
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
         Kospenuser user5 = addKospenuser(db, "2018-01-29 03:00:00", "880601105153", "romeo",
                 Gender.MALE,"southernpark",
                 State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");

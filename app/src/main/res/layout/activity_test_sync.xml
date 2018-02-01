@@ -45,11 +45,22 @@
         android:layout_marginTop="36dp" />
 
     <Button
-        android:id="@+id/showdbButtonId"
+        android:id="@+id/kospenuserserverButtonId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/returnmainButtonId"
-        android:layout_centerHorizontal="true"
-        android:onClick="showdbButtonClicked"
-        android:text="show db" />
+        android:layout_marginEnd="30dp"
+        android:layout_toStartOf="@+id/apiresultTextviewId"
+        android:onClick="kospenuserserverButtonClicked"
+        android:text="kospen server" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/returnmainButtonId"
+        android:layout_marginStart="19dp"
+        android:layout_toEndOf="@+id/apiresultTextviewId"
+        android:onClick="kospenuserglobalButtonClicked"
+        android:text="kospen global" />
 </RelativeLayout>

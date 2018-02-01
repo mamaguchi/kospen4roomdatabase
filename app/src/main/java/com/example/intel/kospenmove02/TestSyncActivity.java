@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.intel.kospenmove02.db.GenderConverter.Gender;
+import com.example.intel.kospenmove02.db.KospenuserGlobal;
 import com.example.intel.kospenmove02.db.KospenuserServer;
 import com.example.intel.kospenmove02.db.LocalityConverter;
 import com.example.intel.kospenmove02.db.RegionConverter;
@@ -47,16 +48,19 @@ public class TestSyncActivity extends AppCompatActivity {
     private Button returnmainButton;
     private Button getApiButton;
     private Button postApiButton;
-    private Button showdbButton;
+    private Button showKospenuserserverButton;
     private TextView apiresTextView;
 
     private static final String TEST_SYNC_TAG = "TestSyncService";
     private String kospenusersUrl = "http://192.168.10.10/api/kospenusers";
+    private String kospenusersInsideLocalityUrl = "http://192.168.10.10/api/kospenusers/insidelocality";
+    private String kospenusersOusideLocalityUrl = "http://192.168.10.10/api/kospenusers/outsidelocality";
 
     private AppDatabase mDb;
 
     private LiveData<List<Kospenuser>> kospenusers;
     private LiveData<List<KospenuserServer>> kospenusersServer;
+    private LiveData<List<KospenuserGlobal>> kospenusersGlobal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +71,7 @@ public class TestSyncActivity extends AppCompatActivity {
         getApiButton = (Button) findViewById(R.id.getButtonId);
         postApiButton = (Button) findViewById(R.id.postButtonId);
         apiresTextView = (TextView) findViewById(R.id.apiresultTextviewId);
-        showdbButton = (Button) findViewById(R.id.showdbButtonId);
+        showKospenuserserverButton = (Button) findViewById(R.id.kospenuserserverButtonId);
 
         mDb = AppDatabase.getDatabase(this);
     }
@@ -77,18 +81,18 @@ public class TestSyncActivity extends AppCompatActivity {
         startActivity(gotoMainActivityIntent);
     }
 
-    public void showdbButtonClicked(View view) {
+    public void kospenuserserverButtonClicked(View view) {
         kospenusersServer =  mDb.kospenuserServerModel().loadAllKospenusersServer();
         kospenusersServer.observe(this,
                 new Observer<List<KospenuserServer>>() {
                     @Override
                     public void onChanged(@Nullable List<KospenuserServer> kospenusersServer) {
-                        showKospenusersInUi(kospenusersServer);
+                        showKospenuserServerInUi(kospenusersServer);
                     }
                 });
     }
 
-    private void showKospenusersInUi(final @NonNull List<KospenuserServer> kospenusersServer) {
+    private void showKospenuserServerInUi(final @NonNull List<KospenuserServer> kospenusersServer) {
         StringBuilder sb = new StringBuilder();
 
         for (KospenuserServer kospenuserServer : kospenusersServer) {
@@ -102,16 +106,106 @@ public class TestSyncActivity extends AppCompatActivity {
         apiresTextView.setText(sb.toString());
     }
 
+    public void kospenuserglobalButtonClicked(View view) {
+        kospenusersGlobal =  mDb.kospenuserGlobalModel().loadAllKospenusersGlobal();
+        kospenusersGlobal.observe(this,
+                new Observer<List<KospenuserGlobal>>() {
+                    @Override
+                    public void onChanged(@Nullable List<KospenuserGlobal> kospenusersGlobal) {
+                        showKospenuserGlobalInUi(kospenusersGlobal);
+                    }
+                });
+    }
+
+    private void showKospenuserGlobalInUi(final @NonNull List<KospenuserGlobal> kospenusersGlobal) {
+        StringBuilder sb = new StringBuilder();
+
+        for (KospenuserGlobal kospenuserGlobal : kospenusersGlobal) {
+            sb.append(kospenuserGlobal.getName());
+            sb.append("_");
+            sb.append(kospenuserGlobal.getState());
+            sb.append("_");
+            sb.append(kospenuserGlobal.getTimestamp());
+            sb.append("\n");
+        }
+        apiresTextView.setText(sb.toString());
+    }
+
     public void getButtonClicked(View view) throws Exception {
         // ========== JsonArrayRequest - GET version 2.0 ==========
-        JsonArrayRequest getRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                kospenusersUrl,
-                null,
+        // ----------------------------------------------------------------------------------------- <getOutsideLocalityRequest>
+        Map<String, String> paramsOutsideLocalityReq = new HashMap<>();
+        paramsOutsideLocalityReq.put("state", "PAHANG");
+        paramsOutsideLocalityReq.put("region", "MARAN");
+        paramsOutsideLocalityReq.put("subregion", "JENGKA2");
+        paramsOutsideLocalityReq.put("locality", "ULUJEMPOL");
+        JSONObject jsonObjOutsideLocalityReq = new JSONObject(paramsOutsideLocalityReq);
+
+        MyJsonArrayRequest getOutsideLocalityRequest = new MyJsonArrayRequest(
+                Request.Method.POST,
+                kospenusersOusideLocalityUrl,
+                jsonObjOutsideLocalityReq,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray  response) {
-                        Log.i(TEST_SYNC_TAG, "Successful GET");
+                        Log.i(TEST_SYNC_TAG, "Successful Outside-Locality-Request GET");
+//                        apiresTextView.setText(response.toString());
+                        try {
+                            mDb.kospenuserGlobalModel().deleteAll();
+
+                            for (int i=0;i<response.length();i++) {
+                                //Inserting a new kospenuser row into sqlite
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                String updated_at = jsonObject.getString("updated_at");
+                                String ic = jsonObject.getString("ic");
+                                String name = jsonObject.getString("name");
+                                State state = StateConverter.strToEnumState(jsonObject.getString("state"));
+                                Region region = RegionConverter.strToEnumRegion(jsonObject.getString("region"));
+                                Subregion subregion = SubregionConverter.strToEnumSubregion(jsonObject.getString("subregion"));
+                                Locality locality = LocalityConverter.strToEnumLocality(jsonObject.getString("locality"));
+                                KospenuserGlobal kospenuserGlobal = new KospenuserGlobal(updated_at, ic, name,
+                                        state, region, subregion, locality);
+                                mDb.kospenuserGlobalModel().insertKospenuserGlobal(kospenuserGlobal);
+                            }
+
+                        } catch (Exception e){
+                            Log.e(TEST_SYNC_TAG, "KospenuserGlobal row insert Failed, error: " + e.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TEST_SYNC_TAG, "Failed GET: " + error.getMessage());
+                        apiresTextView.setText(error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+
+        // ----------------------------------------------------------------------------------------- <getInsideLocalityRequest>
+        Map<String, String> paramsInsideLocalityReq = new HashMap<>();
+        paramsInsideLocalityReq.put("state", "PAHANG");
+        paramsInsideLocalityReq.put("region", "MARAN");
+        paramsInsideLocalityReq.put("subregion", "JENGKA2");
+        paramsInsideLocalityReq.put("locality", "ULUJEMPOL");
+        JSONObject jsonObjInsideLocalityReq = new JSONObject(paramsInsideLocalityReq);
+
+        // 'getInsideLocalityRequest' -> Version 2:
+        MyJsonArrayRequest getInsideLocalityRequest = new MyJsonArrayRequest(
+                Request.Method.POST,
+                kospenusersInsideLocalityUrl,
+                jsonObjInsideLocalityReq,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray  response) {
+                        Log.i(TEST_SYNC_TAG, "Successful Inside-Locality-Request GET");
 //                        apiresTextView.setText(response.toString());
                         try {
                             apiresTextView.setText(response.getJSONObject(0).getString("name"));
@@ -137,14 +231,14 @@ public class TestSyncActivity extends AppCompatActivity {
                             }
 
                         } catch (Exception e){
-                            Log.e(TEST_SYNC_TAG, e.getMessage());
+                            Log.e(TEST_SYNC_TAG, "KospenuserServer row insert Failed, error: " + e.getMessage());
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.i(TEST_SYNC_TAG, "Failed GET: " + error.toString());
+                        Log.i(TEST_SYNC_TAG, "Failed GET: " + error.getMessage());
                         apiresTextView.setText(error.toString());
                     }
                 }) {
@@ -155,8 +249,62 @@ public class TestSyncActivity extends AppCompatActivity {
                 return headers;
             }
         };
+
+//        // 'getInsideLocalityRequest' -> Version 1:
+//        JsonArrayRequest getInsideLocalityRequest = new JsonArrayRequest(
+//                Request.Method.POST,
+//                kospenusersInsideLocalityUrl,
+//                parameters,
+//                new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray  response) {
+//                        Log.i(TEST_SYNC_TAG, "Successful GET");
+////                        apiresTextView.setText(response.toString());
+//                        try {
+//                            apiresTextView.setText(response.getJSONObject(0).getString("name"));
+//
+//                            mDb.kospenuserServerModel().deleteAll();
+//
+//                            for (int i=0;i<response.length();i++) {
+//                                //Inserting a new kospenuser row into sqlite
+//                                JSONObject jsonObject = response.getJSONObject(i);
+//                                String updated_at = jsonObject.getString("updated_at");
+//                                String ic = jsonObject.getString("ic");
+//                                String name = jsonObject.getString("name");
+//                                Gender gender = GenderConverter.strToEnumGender(jsonObject.getString("gender"));
+//                                String address = jsonObject.getString("address");
+//                                State state = StateConverter.strToEnumState(jsonObject.getString("state"));
+//                                Region region = RegionConverter.strToEnumRegion(jsonObject.getString("region"));
+//                                Subregion subregion = SubregionConverter.strToEnumSubregion(jsonObject.getString("subregion"));
+//                                Locality locality = LocalityConverter.strToEnumLocality(jsonObject.getString("locality"));
+//                                String firstRegRegion = jsonObject.getString("firstRegRegion");
+//                                KospenuserServer kospenuserServer = new KospenuserServer(updated_at, ic, name, gender, address,
+//                                        state, region, subregion, locality, firstRegRegion);
+//                                mDb.kospenuserServerModel().insertKospenuserServer(kospenuserServer);
+//                            }
+//
+//                        } catch (Exception e){
+//                            Log.e(TEST_SYNC_TAG, "KospenuserServer row insert Failed, error: " + e.getMessage());
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.i(TEST_SYNC_TAG, "Failed GET: " + error.toString());
+//                        apiresTextView.setText(error.toString());
+//                    }
+//                }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
         Log.i(TEST_SYNC_TAG, "[doInBackground] Adding GET JsonArrayRequest to queue to send request to remote server");
-        MySingleton.getInstance(this).addToRequestQueue(getRequest);
+        MySingleton.getInstance(this).addToRequestQueue(getInsideLocalityRequest);
+        MySingleton.getInstance(this).addToRequestQueue(getOutsideLocalityRequest);
         Log.i(TEST_SYNC_TAG, "[doInBackground] GET JsonArrayRequest sent");
     }
 

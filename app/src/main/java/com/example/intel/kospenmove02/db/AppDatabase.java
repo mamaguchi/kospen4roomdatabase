@@ -11,7 +11,8 @@ import android.content.Context;
 |
  */
 @Database(entities = {Kospenuser.class, Screening.class,
-                    KospenuserServer.class, OutRestReqKospenuser.class, InDBQueryKospenuser.class}, version=5)
+                    KospenuserServer.class, KospenuserGlobal.class,
+                    OutRestReqKospenuser.class, InDBQueryKospenuser.class}, version=6)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
@@ -21,6 +22,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract ScreeningDao screeningModel();
 
     public abstract KospenuserServerDao kospenuserServerModel();
+
+    public abstract KospenuserGlobalDao kospenuserGlobalModel();
 
     public abstract OutRestReqKospenuserDao outRestReqKospenuserModel();
 
