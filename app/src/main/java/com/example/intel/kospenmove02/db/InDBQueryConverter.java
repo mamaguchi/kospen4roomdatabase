@@ -6,9 +6,9 @@ import android.arch.persistence.room.TypeConverter;
 public class InDBQueryConverter {
 
     public enum InDBQuery {
-        LOCALKOSPENUSERUPDATE(1),
-        NEWKOSPENUSERINSERT(2);
-
+        LocalKospenuserUpdateFrmInsideLocality(1),
+        LocalKospenuserUpdateFrmOutsideLocality(2),
+        KospenuserInsideLocalityNotInAndroidDb(3);
         private final int inDBQueryCode;
 
         InDBQuery(int inDBQueryCode) {
@@ -27,10 +27,13 @@ public class InDBQueryConverter {
 
         switch (inDBQueryInt) {
             case 1:
-                inDBQuery = InDBQuery.LOCALKOSPENUSERUPDATE;
+                inDBQuery = InDBQuery.LocalKospenuserUpdateFrmInsideLocality;
                 break;
             case 2:
-                inDBQuery = InDBQuery.NEWKOSPENUSERINSERT;
+                inDBQuery = InDBQuery.LocalKospenuserUpdateFrmOutsideLocality;
+                break;
+            case 3:
+                inDBQuery = InDBQuery.KospenuserInsideLocalityNotInAndroidDb;
                 break;
             default:
                 inDBQuery = null;
@@ -45,11 +48,14 @@ public class InDBQueryConverter {
         final int inDBQuery;
 
         switch (inDBQueryEnum) {
-            case LOCALKOSPENUSERUPDATE:
+            case LocalKospenuserUpdateFrmInsideLocality:
                 inDBQuery = 1;
                 break;
-            case NEWKOSPENUSERINSERT:
+            case LocalKospenuserUpdateFrmOutsideLocality:
                 inDBQuery = 2;
+                break;
+            case KospenuserInsideLocalityNotInAndroidDb:
+                inDBQuery = 3;
                 break;
             default:
                 inDBQuery = 0;

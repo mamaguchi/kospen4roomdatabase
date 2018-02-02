@@ -6,9 +6,9 @@ import android.arch.persistence.room.TypeConverter;
 public class OutRestReqConverter {
 
     public enum OutRestReq {
-        UPDATEFROMLOCAL(1),
-        UPDATEFROMEXTERNAL(2),
-        NEWKOSPENUSER(3);
+        UpdateServerFrmLocal(1),
+        UpdateServerFrmGlobal(2),
+        UpdateServerNewKospenuser(3);
 
         private final int outRestReqCode;
 
@@ -28,13 +28,13 @@ public class OutRestReqConverter {
 
         switch (outRestReqInt) {
             case 1:
-                outRestReq = OutRestReq.UPDATEFROMLOCAL;
+                outRestReq = OutRestReq.UpdateServerFrmLocal;
                 break;
             case 2:
-                outRestReq = OutRestReq.UPDATEFROMEXTERNAL;
+                outRestReq = OutRestReq.UpdateServerFrmGlobal;
                 break;
             case 3:
-                outRestReq = OutRestReq.NEWKOSPENUSER;
+                outRestReq = OutRestReq.UpdateServerNewKospenuser;
                 break;
             default:
                 outRestReq = null;
@@ -49,13 +49,13 @@ public class OutRestReqConverter {
         final int outRestReq;
 
         switch (outRestReqEnum) {
-            case UPDATEFROMLOCAL:
+            case UpdateServerFrmLocal:
                 outRestReq = 1;
                 break;
-            case UPDATEFROMEXTERNAL:
+            case UpdateServerFrmGlobal:
                 outRestReq = 2;
                 break;
-            case NEWKOSPENUSER:
+            case UpdateServerNewKospenuser:
                 outRestReq = 3;
                 break;
             default:

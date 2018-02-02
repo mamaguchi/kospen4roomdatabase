@@ -26,6 +26,9 @@ public interface OutRestReqKospenuserDao {
     @Delete
     void deleteOutRestReqKospenuser(OutRestReqKospenuser outRestReqKospenuser);
 
+    @Query("DELETE from outrestreqkospenuser where ic = :ic")
+    void deleteOutRestReqKospenuserByIc(String ic);
+
     @Query("delete from outrestreqkospenuser")
     void deleteAll();
 

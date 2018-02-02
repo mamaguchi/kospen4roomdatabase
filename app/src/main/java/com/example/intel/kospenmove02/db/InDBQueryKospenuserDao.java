@@ -26,6 +26,9 @@ public interface InDBQueryKospenuserDao {
     @Delete
     void deleteInDBQueryKospenuser(InDBQueryKospenuser inDBQueryKospenuser);
 
+    @Query("DELETE from indbquerykospenuser where ic = :ic")
+    void deleteInDBQueryKospenuserByIc(String ic);
+
     @Query("delete from indbquerykospenuser")
     void deleteAll();
 

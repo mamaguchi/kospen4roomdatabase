@@ -11,8 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="13dp"
+        android:layout_alignStart="@+id/kospenuserserverButtonId"
         android:onClick="returnmainButtonClicked"
         android:text="return main" />
 
@@ -20,9 +19,8 @@
         android:id="@+id/getButtonId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/returnmainButtonId"
-        android:layout_marginEnd="19dp"
-        android:layout_toStartOf="@+id/returnmainButtonId"
+        android:layout_above="@+id/postButtonId"
+        android:layout_alignParentStart="true"
         android:onClick="getButtonClicked"
         android:text="get" />
 
@@ -30,9 +28,8 @@
         android:id="@+id/postButtonId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/returnmainButtonId"
-        android:layout_marginStart="21dp"
-        android:layout_toEndOf="@+id/returnmainButtonId"
+        android:layout_above="@+id/button"
+        android:layout_alignParentStart="true"
         android:onClick="postButtonClicked"
         android:text="post" />
 
@@ -42,15 +39,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="36dp" />
+        android:layout_marginTop="17dp"
+        android:text="Display" />
 
     <Button
         android:id="@+id/kospenuserserverButtonId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/returnmainButtonId"
-        android:layout_marginEnd="30dp"
-        android:layout_toStartOf="@+id/apiresultTextviewId"
+        android:layout_alignParentStart="true"
         android:onClick="kospenuserserverButtonClicked"
         android:text="kospen server" />
 
@@ -58,9 +55,108 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/returnmainButtonId"
-        android:layout_marginStart="19dp"
-        android:layout_toEndOf="@+id/apiresultTextviewId"
+        android:layout_above="@+id/kospenuserserverButtonId"
+        android:layout_alignParentStart="true"
         android:onClick="kospenuserglobalButtonClicked"
         android:text="kospen global" />
+
+    <Button
+        android:id="@+id/scene4aId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="scene4aClicked"
+        android:text="scene4a" />
+
+    <Button
+        android:id="@+id/scene3Id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/scene4aId"
+        android:layout_alignStart="@+id/scene4aId"
+        android:onClick="scene3Clicked"
+        android:text="scene3" />
+
+    <Button
+        android:id="@+id/scene2Id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/scene3Id"
+        android:layout_alignStart="@+id/scene3Id"
+        android:onClick="scene2Clicked"
+        android:text="scene2" />
+
+    <Button
+        android:id="@+id/scene1Id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/scene2Id"
+        android:layout_alignStart="@+id/scene2Id"
+        android:onClick="scene1Clicked"
+        android:text="scene1" />
+
+    <Button
+        android:id="@+id/scene6Id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="14dp"
+        android:layout_toEndOf="@+id/scene4aId"
+        android:onClick="scene6Clicked"
+        android:text="scene6" />
+
+    <Button
+        android:id="@+id/scene5Id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/scene6Id"
+        android:layout_below="@+id/scene2Id"
+        android:onClick="scene5Clicked"
+        android:text="scene5" />
+
+    <Button
+        android:id="@+id/scene4cId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/scene5Id"
+        android:layout_below="@+id/scene1Id"
+        android:onClick="scene4cClicked"
+        android:text="scene4c" />
+
+    <Button
+        android:id="@+id/scene4bId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/scene4cId"
+        android:layout_alignTop="@+id/scene1Id"
+        android:onClick="scene4bClicked"
+        android:text="scene4b" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/apiresultTextviewId"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="43dp"
+        android:text="Database Table" />
+
+    <TextView
+        android:id="@+id/inDBOutReqTableTextViewId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView7"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:text="Data" />
+
+    <Button
+        android:id="@+id/clearInDBOutReqTableBtnId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/scene1Id"
+        android:layout_alignStart="@+id/scene1Id"
+        android:onClick="clearInDBOutReqTableBtnClicked"
+        android:text="clr inout tbl" />
 </RelativeLayout>

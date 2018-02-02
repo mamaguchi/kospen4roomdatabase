@@ -63,6 +63,34 @@ public class InDBQueryKospenuser {
         this.firstRegRegion = firstRegRegion;
     }
 
+    public InDBQueryKospenuser(Kospenuser kospenuser) {
+        this.timestamp = kospenuser.getTimestamp();
+        this.inDBQueryStatus = null;
+        this.ic = kospenuser.getIc();
+        this.name = kospenuser.getName();
+        this.gender = kospenuser.getGender();
+        this.address = kospenuser.getAddress();
+        this.state = kospenuser.getState();
+        this.region = kospenuser.getRegion();
+        this.subregion = kospenuser.getSubregion();
+        this.locality = kospenuser.getLocality();
+        this.firstRegRegion = kospenuser.getFirstRegRegion();
+    }
+
+    public InDBQueryKospenuser(KospenuserServer kospenuserServer) {
+        this.timestamp = kospenuserServer.getTimestamp();
+        this.inDBQueryStatus = null;
+        this.ic = kospenuserServer.getIc();
+        this.name = kospenuserServer.getName();
+        this.gender = kospenuserServer.getGender();
+        this.address = kospenuserServer.getAddress();
+        this.state = kospenuserServer.getState();
+        this.region = kospenuserServer.getRegion();
+        this.subregion = kospenuserServer.getSubregion();
+        this.locality = kospenuserServer.getLocality();
+        this.firstRegRegion = kospenuserServer.getFirstRegRegion();
+    }
+
     /*
         |
         |   Getter and Setter

@@ -63,6 +63,20 @@ public class OutRestReqKospenuser {
         this.firstRegRegion = firstRegRegion;
     }
 
+    public OutRestReqKospenuser(Kospenuser kospenuser) {
+        this.timestamp = kospenuser.getTimestamp();
+        this.outRestReqStatus = null;
+        this.ic = kospenuser.getIc();
+        this.name = kospenuser.getName();
+        this.gender = kospenuser.getGender();
+        this.address = kospenuser.getAddress();
+        this.state = kospenuser.getState();
+        this.region = kospenuser.getRegion();
+        this.subregion = kospenuser.getSubregion();
+        this.locality = kospenuser.getLocality();
+        this.firstRegRegion = kospenuser.getFirstRegRegion();
+    }
+
     /*
         |
         |   Getter and Setter

@@ -16,10 +16,10 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.intel.kospenmove02.db.AppDatabase;
 import com.example.intel.kospenmove02.db.GenderConverter;
+import com.example.intel.kospenmove02.db.InDBQueryKospenuser;
 import com.example.intel.kospenmove02.db.Kospenuser;
 
 import org.json.JSONArray;
@@ -35,6 +35,9 @@ import com.example.intel.kospenmove02.db.GenderConverter.Gender;
 import com.example.intel.kospenmove02.db.KospenuserGlobal;
 import com.example.intel.kospenmove02.db.KospenuserServer;
 import com.example.intel.kospenmove02.db.LocalityConverter;
+import com.example.intel.kospenmove02.db.OutRestReqConverter.OutRestReq;
+import com.example.intel.kospenmove02.db.InDBQueryConverter.InDBQuery;
+import com.example.intel.kospenmove02.db.OutRestReqKospenuser;
 import com.example.intel.kospenmove02.db.RegionConverter;
 import com.example.intel.kospenmove02.db.StateConverter;
 import com.example.intel.kospenmove02.db.StateConverter.State;
@@ -49,7 +52,9 @@ public class TestSyncActivity extends AppCompatActivity {
     private Button getApiButton;
     private Button postApiButton;
     private Button showKospenuserserverButton;
+
     private TextView apiresTextView;
+    private TextView InDBOutReqTableTextView;
 
     private static final String TEST_SYNC_TAG = "TestSyncService";
     private String kospenusersUrl = "http://192.168.10.10/api/kospenusers";
@@ -61,7 +66,19 @@ public class TestSyncActivity extends AppCompatActivity {
     private LiveData<List<Kospenuser>> kospenusers;
     private LiveData<List<KospenuserServer>> kospenusersServer;
     private LiveData<List<KospenuserGlobal>> kospenusersGlobal;
+    private LiveData<List<Kospenuser>> kospenusersScenarioOne;
+    private LiveData<List<Kospenuser>> kospenusersScenarioTwo;
+    private LiveData<List<Kospenuser>> kospenusersScenarioThree;
+    private LiveData<List<Kospenuser>> kospenusersScenarioFourA;
+    private LiveData<List<Kospenuser>> kospenusersScenarioFourB;
+    private LiveData<List<Kospenuser>> kospenusersScenarioFourC;
+    private LiveData<List<Kospenuser>> kospenusersScenarioFive;
+    private LiveData<List<KospenuserServer>> kospenusersScenarioSix;
+    private LiveData<List<OutRestReqKospenuser>> outRestReqKospenusers;
+    private LiveData<List<InDBQueryKospenuser>> inDBQueryKospenusers;
 
+    // --------------------------------------------------------------------------------------------------------------
+    // [Activity On-Create]
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +87,10 @@ public class TestSyncActivity extends AppCompatActivity {
         returnmainButton = (Button) findViewById(R.id.returnMainBtnId);
         getApiButton = (Button) findViewById(R.id.getButtonId);
         postApiButton = (Button) findViewById(R.id.postButtonId);
+
         apiresTextView = (TextView) findViewById(R.id.apiresultTextviewId);
+        InDBOutReqTableTextView = (TextView) findViewById(R.id.inDBOutReqTableTextViewId);
+
         showKospenuserserverButton = (Button) findViewById(R.id.kospenuserserverButtonId);
 
         mDb = AppDatabase.getDatabase(this);
@@ -81,6 +101,342 @@ public class TestSyncActivity extends AppCompatActivity {
         startActivity(gotoMainActivityIntent);
     }
 
+    // --------------------------------------------------------------------------------------------------------------
+    // [Display InDB-OutReq Table]
+    private void showOutRestReqKospenuserInUi(final @NonNull List<OutRestReqKospenuser> outRestReqKospenusers) {
+        StringBuilder sb = new StringBuilder();
+
+        for (OutRestReqKospenuser outRestReqKospenuser : outRestReqKospenusers) {
+            sb.append(outRestReqKospenuser.getName());
+            sb.append("_");
+            sb.append(outRestReqKospenuser.getIc());
+            sb.append("_");
+            sb.append(outRestReqKospenuser.getOutRestReqStatus());
+            sb.append("\n");
+        }
+        InDBOutReqTableTextView.setText(sb.toString());
+    }
+
+    private void showInDBQueryKospenuserInUi(final @NonNull List<InDBQueryKospenuser> inDBQueryKospenusers) {
+        StringBuilder sb = new StringBuilder();
+
+        for (InDBQueryKospenuser inDBQueryKospenuser : inDBQueryKospenusers) {
+            sb.append(inDBQueryKospenuser.getName());
+            sb.append("_");
+            sb.append(inDBQueryKospenuser.getIc());
+            sb.append("_");
+            sb.append(inDBQueryKospenuser.getInDBQueryStatus());
+            sb.append("\n");
+        }
+        InDBOutReqTableTextView.setText(sb.toString());
+    }
+
+    // --------------------------------------------------------------------------------------------------------------
+    // [Create InDB-OutReq Table]
+    public void clearInDBOutReqTableBtnClicked(View view) {
+        mDb.inDBQueryKospenuserModel().deleteAll();
+        mDb.outRestReqKospenuserModel().deleteAll();
+    }
+
+    public void scene1Clicked(View view) {
+        kospenusersScenarioOne =  mDb.kospenuserModel().loadScenarioOne();
+        kospenusersScenarioOne.observe(this,
+                new Observer<List<Kospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+                        showScene1InUi(kospenusers);
+                    }
+                });
+
+        outRestReqKospenusers = mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();
+        outRestReqKospenusers.observe(this,
+                new Observer<List<OutRestReqKospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<OutRestReqKospenuser> outRestReqKospenusers) {
+                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
+                    }
+                });
+    }
+
+    private void showScene1InUi(final @NonNull List<Kospenuser> kospenusers) {
+
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerFrmLocal);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (Kospenuser kospenuser : kospenusers) {
+            sb.append(kospenuser.getName());
+            sb.append("_");
+            sb.append(kospenuser.getIc());
+            sb.append("\n");
+        }
+        apiresTextView.setText(sb.toString());
+    }
+
+    public void scene2Clicked(View view) {
+        kospenusersScenarioTwo =  mDb.kospenuserModel().loadScenarioTwo();
+        kospenusersScenarioTwo.observe(this,
+                new Observer<List<Kospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+                        showScene2InUi(kospenusers);
+                    }
+                });
+
+        inDBQueryKospenusers = mDb.inDBQueryKospenuserModel().loadAllInDBQueryKospenusers();
+        inDBQueryKospenusers.observe(this,
+                new Observer<List<InDBQueryKospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<InDBQueryKospenuser> inDBQueryKospenusers) {
+                        showInDBQueryKospenuserInUi(inDBQueryKospenusers);
+                    }
+                });
+    }
+
+    private void showScene2InUi(final @NonNull List<Kospenuser> kospenusers) {
+
+        for (Kospenuser kospenuser : kospenusers) {
+            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
+            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.LocalKospenuserUpdateFrmInsideLocality);
+            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (Kospenuser kospenuser : kospenusers) {
+            sb.append(kospenuser.getName());
+            sb.append("_");
+            sb.append(kospenuser.getIc());
+            sb.append("\n");
+        }
+        apiresTextView.setText(sb.toString());
+    }
+
+    public void scene3Clicked(View view) {
+        kospenusersScenarioThree =  mDb.kospenuserModel().loadScenarioThree();
+        kospenusersScenarioThree.observe(this,
+                new Observer<List<Kospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+                        showScene3InUi(kospenusers);
+                    }
+                });
+    }
+
+    private void showScene3InUi(final @NonNull List<Kospenuser> kospenusers) {
+        StringBuilder sb = new StringBuilder();
+
+        for (Kospenuser kospenuser : kospenusers) {
+            sb.append(kospenuser.getName());
+            sb.append("_");
+            sb.append(kospenuser.getIc());
+            sb.append("\n");
+        }
+        apiresTextView.setText(sb.toString());
+    }
+
+    public void scene4aClicked(View view) {
+        kospenusersScenarioFourA =  mDb.kospenuserModel().loadScenarioFourA();
+        kospenusersScenarioFourA.observe(this,
+                new Observer<List<Kospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+                        showScene4aInUi(kospenusers);
+                    }
+                });
+
+        outRestReqKospenusers = mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();
+        outRestReqKospenusers.observe(this,
+                new Observer<List<OutRestReqKospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<OutRestReqKospenuser> outRestReqKospenusers) {
+                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
+                    }
+                });
+    }
+
+    private void showScene4aInUi(final @NonNull List<Kospenuser> kospenusers) {
+
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerFrmGlobal);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (Kospenuser kospenuser : kospenusers) {
+            sb.append(kospenuser.getName());
+            sb.append("_");
+            sb.append(kospenuser.getIc());
+            sb.append("\n");
+        }
+        apiresTextView.setText(sb.toString());
+    }
+
+    // Need to delete this kospenuser from Android(local) Kospenuser.java entity
+    public void scene4bClicked(View view) {
+        kospenusersScenarioFourB =  mDb.kospenuserModel().loadScenarioFourB();
+        kospenusersScenarioFourB.observe(this,
+                new Observer<List<Kospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+                        showScene4bInUi(kospenusers);
+                    }
+                });
+
+        inDBQueryKospenusers = mDb.inDBQueryKospenuserModel().loadAllInDBQueryKospenusers();
+        inDBQueryKospenusers.observe(this,
+                new Observer<List<InDBQueryKospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<InDBQueryKospenuser> inDBQueryKospenusers) {
+                        showInDBQueryKospenuserInUi(inDBQueryKospenusers);
+                    }
+                });
+    }
+
+    private void showScene4bInUi(final @NonNull List<Kospenuser> kospenusers) {
+
+        for (Kospenuser kospenuser : kospenusers) {
+            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
+            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.LocalKospenuserUpdateFrmOutsideLocality);
+            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (Kospenuser kospenuser : kospenusers) {
+            sb.append(kospenuser.getName());
+            sb.append("_");
+            sb.append(kospenuser.getIc());
+            sb.append("\n");
+        }
+        apiresTextView.setText(sb.toString());
+    }
+
+    public void scene4cClicked(View view) {
+        kospenusersScenarioFourC =  mDb.kospenuserModel().loadScenarioFourC();
+        kospenusersScenarioFourC.observe(this,
+                new Observer<List<Kospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+                        showScene4cInUi(kospenusers);
+                    }
+                });
+
+        outRestReqKospenusers = mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();
+        outRestReqKospenusers.observe(this,
+                new Observer<List<OutRestReqKospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<OutRestReqKospenuser> outRestReqKospenusers) {
+                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
+                    }
+                });
+    }
+
+    private void showScene4cInUi(final @NonNull List<Kospenuser> kospenusers) {
+
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerFrmGlobal);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (Kospenuser kospenuser : kospenusers) {
+            sb.append(kospenuser.getName());
+            sb.append("_");
+            sb.append(kospenuser.getIc());
+            sb.append("\n");
+        }
+        apiresTextView.setText(sb.toString());
+    }
+
+    public void scene5Clicked(View view) {
+        kospenusersScenarioFive =  mDb.kospenuserModel().loadScenarioFive();
+        kospenusersScenarioFive.observe(this,
+                new Observer<List<Kospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+                        showScene5InUi(kospenusers);
+                    }
+                });
+
+        outRestReqKospenusers = mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();
+        outRestReqKospenusers.observe(this,
+                new Observer<List<OutRestReqKospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<OutRestReqKospenuser> outRestReqKospenusers) {
+                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
+                    }
+                });
+    }
+
+    private void showScene5InUi(final @NonNull List<Kospenuser> kospenusers) {
+
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerNewKospenuser);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (Kospenuser kospenuser : kospenusers) {
+            sb.append(kospenuser.getName());
+            sb.append("_");
+            sb.append(kospenuser.getIc());
+            sb.append("\n");
+        }
+        apiresTextView.setText(sb.toString());
+    }
+
+    public void scene6Clicked(View view) {
+        kospenusersScenarioSix =  mDb.kospenuserServerModel().loadScenarioSix();
+        kospenusersScenarioSix.observe(this,
+                new Observer<List<KospenuserServer>>() {
+                    @Override
+                    public void onChanged(@Nullable List<KospenuserServer> kospenusersServer) {
+                        showScene6InUi(kospenusersServer);
+                    }
+                });
+
+        inDBQueryKospenusers = mDb.inDBQueryKospenuserModel().loadAllInDBQueryKospenusers();
+        inDBQueryKospenusers.observe(this,
+                new Observer<List<InDBQueryKospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<InDBQueryKospenuser> inDBQueryKospenusers) {
+                        showInDBQueryKospenuserInUi(inDBQueryKospenusers);
+                    }
+                });
+    }
+
+    private void showScene6InUi(final @NonNull List<KospenuserServer> kospenusersServer) {
+
+        for (KospenuserServer kospenuserServer : kospenusersServer) {
+            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuserServer);
+            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.KospenuserInsideLocalityNotInAndroidDb);
+            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (KospenuserServer kospenuserServer : kospenusersServer) {
+            sb.append(kospenuserServer.getName());
+            sb.append("_");
+            sb.append(kospenuserServer.getIc());
+            sb.append("\n");
+        }
+        apiresTextView.setText(sb.toString());
+    }
+
+    // --------------------------------------------------------------------------------------------------------------
+    // [Create Kospenuser Table from Inside-Locality & Outside-Locality]
     public void kospenuserserverButtonClicked(View view) {
         kospenusersServer =  mDb.kospenuserServerModel().loadAllKospenusersServer();
         kospenusersServer.observe(this,
