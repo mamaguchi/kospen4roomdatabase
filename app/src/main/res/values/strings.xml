@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">KospenMove02</string>
+    <string-array name="birthday_day">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+    <string-array name="birthday_month">
+        <item>jan</item>
+        <item>feb</item>
+        <item>march</item>
+        <item>april</item>
+        <item>may</item>
+        <item>june</item>
+        <item>july</item>
+        <item>august</item>
+    </string-array>
+    <string-array name="birthday_year">
+        <item>2000</item>
+        <item>2001</item>
+        <item>2002</item>
+        <item>2003</item>
+    </string-array>
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string name="pref_sync_wifi">Update on WiFi</string>
+    <string name="pref_sync_wifi_summ">To allow app to update when Wifi is available</string>
+</resources>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.intel.kospenmove02.DbActivity">
+
+    <TextView
+        android:id="@+id/kospenusersTextViewId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/textView8"
+        android:layout_below="@+id/textView8"
+        android:layout_marginTop="41dp"
+        android:text="kospenusers" />
+
+    <TextView
+        android:id="@+id/screeningsTextViewId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView9"
+        android:layout_alignBottom="@+id/textView9"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="71dp"
+        android:text="screenings" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/textView9"
+        android:layout_marginTop="18dp"
+        android:text="Kospenusers List" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="109dp"
+        android:layout_marginStart="14dp"
+        android:text="Screenings List" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView8"
+        android:layout_alignBottom="@+id/textView8"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="26dp"
+        android:text="KospenusersServer List" />
+
+    <TextView
+        android:id="@+id/kospenusersServerTextViewId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/kospenusersTextViewId"
+        android:layout_alignBottom="@+id/kospenusersTextViewId"
+        android:layout_alignStart="@+id/textView6"
+        android:text="kospenusersServer" />
+
+</RelativeLayout>
