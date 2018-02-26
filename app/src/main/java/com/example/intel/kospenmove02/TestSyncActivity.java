@@ -58,8 +58,8 @@ public class TestSyncActivity extends AppCompatActivity {
 
     private static final String TEST_SYNC_TAG = "TestSyncService";
     private String kospenusersUrl = "http://192.168.10.10/api/kospenusers";
-    private String kospenusersInsideLocalityUrl = "http://192.168.10.10/api/kospenusers/insidelocality";
-    private String kospenusersOusideLocalityUrl = "http://192.168.10.10/api/kospenusers/outsidelocality";
+    private String kospenusersInsideLocalityUrl = "http://192.168.10.11/api/kospenusers/insidelocality";
+    private String kospenusersOusideLocalityUrl = "http://192.168.10.11/api/kospenusers/outsidelocality";
 
     private AppDatabase mDb;
 
@@ -436,7 +436,32 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     // --------------------------------------------------------------------------------------------------------------
-    // [Create Kospenuser Table from Inside-Locality & Outside-Locality]
+    // [Show OutRestReqKospenuser List in UI]
+    public void outrestreqButtonClicked(View view) {
+        outRestReqKospenusers =  mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();
+        outRestReqKospenusers.observe(this,
+                new Observer<List<OutRestReqKospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<OutRestReqKospenuser> outRestReqKospenusers) {
+                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
+                    }
+                });
+    }
+
+    // [Show InDBQueryKospenuser List in UI]
+    public void indbqueryButtonClicked(View view) {
+        inDBQueryKospenusers = mDb.inDBQueryKospenuserModel().loadAllInDBQueryKospenusers();
+        inDBQueryKospenusers.observe(this,
+                new Observer<List<InDBQueryKospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<InDBQueryKospenuser> inDBQueryKospenusers) {
+                        showInDBQueryKospenuserInUi(inDBQueryKospenusers);
+                    }
+                });
+    }
+
+
+    // [Show KospenuserServer List in UI]
     public void kospenuserserverButtonClicked(View view) {
         kospenusersServer =  mDb.kospenuserServerModel().loadAllKospenusersServer();
         kospenusersServer.observe(this,
@@ -462,6 +487,7 @@ public class TestSyncActivity extends AppCompatActivity {
         apiresTextView.setText(sb.toString());
     }
 
+    // [Show KospenuserGlobal List in UI]
     public void kospenuserglobalButtonClicked(View view) {
         kospenusersGlobal =  mDb.kospenuserGlobalModel().loadAllKospenusersGlobal();
         kospenusersGlobal.observe(this,
@@ -487,6 +513,8 @@ public class TestSyncActivity extends AppCompatActivity {
         apiresTextView.setText(sb.toString());
     }
 
+    // [Get a list of Inside-locality & Outside-locality Kospenusers.
+    // Create KospenuserGlobal-Table & KospenuserServer-Table in Android-Sqlite from Inside-Locality & Outside-Locality]
     public void getButtonClicked(View view) throws Exception {
         // ========== JsonArrayRequest - GET version 2.0 ==========
         // ----------------------------------------------------------------------------------------- <getOutsideLocalityRequest>
@@ -664,6 +692,7 @@ public class TestSyncActivity extends AppCompatActivity {
         Log.i(TEST_SYNC_TAG, "[doInBackground] GET JsonArrayRequest sent");
     }
 
+    // [Insert a new Kospenuser into Server DB]
     public void postButtonClicked(View view) {
         // ========== JsonObjectRequest - POST ==========
         Log.i(TEST_SYNC_TAG, "[doInBackground] Preparing JsonObjectRequest");

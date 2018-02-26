@@ -63,6 +63,7 @@ public class DatabaseInitializer {
 
         String today = getTodayPlusDays(0);
 
+        // Version 1:
 //        Kospenuser user1 = addKospenuser(db, today, "880601105149", "patrick",
 //                Gender.MALE,"132jlntamarind",
 //                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
@@ -73,6 +74,7 @@ public class DatabaseInitializer {
 //                Gender.MALE,"132jlntamarind",
 //                State.NONPAHANG, Region.MARAN, Subregion.JENGKA2, Locality.JENGKA6, "klang");
 
+        // Version 2:
         Kospenuser user1 = addKospenuser(db, "2018-01-30 10:00:00", "880601105149", "patrick",
                 Gender.MALE,"bandarputeri",
                 State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
@@ -94,17 +96,27 @@ public class DatabaseInitializer {
         Kospenuser user7 = addKospenuser(db, "2018-01-30 08:00:00", "880601105159", "bellio7",
                 Gender.MALE,"southernpark",
                 State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
-
-
-
-
-
         Screening screening1 = addScreening(db, "1", "880601105149", today,
                 60, 160, 120, 80, 6,
                 false, false);
         Screening screening2 = addScreening(db, "2", "880601105151", today,
                 20, 80, 90, 60, 6,
                 true, true);
+
+
+        // Version 3:
+//        Kospenuser user1 = addKospenuser(db, "2018-02-11 09:17:27", "888888105555", "monster",
+//                Gender.MALE,"southernpark",
+//                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
+//        Kospenuser user2 = addKospenuser(db, "2018-02-12 23:55:40", "888888106666", "mongola",
+//                Gender.FEMALE,"southernpark",
+//                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
+//        Screening screening1 = addScreening(db, "1", "888888105555", today,
+//                60, 160, 120, 80, 6,
+//                false, false);
+//        Screening screening2 = addScreening(db, "2", "888888106666", today,
+//                20, 80, 90, 60, 6,
+//                true, true);
 
     }
 
