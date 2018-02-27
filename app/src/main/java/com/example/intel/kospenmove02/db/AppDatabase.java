@@ -12,7 +12,7 @@ import android.content.Context;
  */
 @Database(entities = {Kospenuser.class, Screening.class,
                     KospenuserServer.class, KospenuserGlobal.class,
-                    OutRestReqKospenuser.class, InDBQueryKospenuser.class}, version=6)
+                    OutRestReqKospenuser.class, InDBQueryKospenuser.class}, version=7)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;

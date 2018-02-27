@@ -15,6 +15,9 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 public interface OutRestReqKospenuserDao {
 
     @Query("select * from outrestreqkospenuser")
+    List<OutRestReqKospenuser> loadAll();
+
+    @Query("select * from outrestreqkospenuser")
     LiveData<List<OutRestReqKospenuser>> loadAllOutRestReqKospenusers();
 
     @Query("select * from outrestreqkospenuser where ic = :ic")

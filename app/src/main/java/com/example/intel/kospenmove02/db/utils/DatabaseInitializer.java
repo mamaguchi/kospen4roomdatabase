@@ -34,11 +34,11 @@ public class DatabaseInitializer {
     private static Kospenuser addKospenuser(final AppDatabase db, String timestamp,
                                       final String ic, final String name, Gender gender,
                                       final String address, State state, Region region, Subregion subregion,
-                                      Locality locality, final String firstRegRegion) {
+                                      Locality locality, final String firstRegRegion, int version) {
 
         Kospenuser kospenuser = new Kospenuser(
                 timestamp, ic, name, gender, address,
-                state, region, subregion, locality, firstRegRegion);
+                state, region, subregion, locality, firstRegRegion, version);
         db.kospenuserModel().insertKospenuser(kospenuser);
 
         return kospenuser;
@@ -77,25 +77,25 @@ public class DatabaseInitializer {
         // Version 2:
         Kospenuser user1 = addKospenuser(db, "2018-01-30 10:00:00", "880601105149", "patrick",
                 Gender.MALE,"bandarputeri",
-                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang", 1);
         Kospenuser user2 = addKospenuser(db, "2018-01-30 07:00:00", "880601105151", "bellio2",
                 Gender.FEMALE,"southernpark",
-                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang", 1);
         Kospenuser user3 = addKospenuser(db, "2018-01-30 07:00:00", "880601105152", "esther",
                 Gender.FEMALE,"southernpark",
-                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang", 1);
         Kospenuser user4 = addKospenuser(db, "2018-01-29 03:00:00", "880601105153", "romeo",
                 Gender.MALE,"southernpark",
-                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang", 1);
         Kospenuser user5 = addKospenuser(db, "2018-01-30 09:00:00", "880601105157", "bellio5",
                 Gender.MALE,"bandarputeri",
-                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang", 1);
         Kospenuser user6 = addKospenuser(db, "2018-01-30 07:00:00", "880601105158", "bellio6",
                 Gender.MALE,"southernpark",
-                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang", 1);
         Kospenuser user7 = addKospenuser(db, "2018-01-30 08:00:00", "880601105159", "bellio7",
                 Gender.MALE,"southernpark",
-                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang");
+                State.PAHANG, Region.MARAN, Subregion.JENGKA2, Locality.ULUJEMPOL,"klang", 1);
         Screening screening1 = addScreening(db, "1", "880601105149", today,
                 60, 160, 120, 80, 6,
                 false, false);

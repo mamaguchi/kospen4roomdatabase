@@ -39,6 +39,7 @@ public class KospenuserServer {
 
     private String firstRegRegion;
 
+    private int version;
 
     /*
     |
@@ -46,7 +47,8 @@ public class KospenuserServer {
     |
     */
     public KospenuserServer(String timestamp, @NonNull String ic, String name, Gender gender,
-                      String address, State state, Region region, Subregion subregion, Locality locality, String firstRegRegion) {
+                            String address, State state, Region region, Subregion subregion, Locality locality, String firstRegRegion,
+                            int version) {
         this.timestamp = timestamp;
         this.ic = ic;
         this.name = name;
@@ -57,6 +59,7 @@ public class KospenuserServer {
         this.subregion = subregion;
         this.locality = locality;
         this.firstRegRegion = firstRegRegion;
+        this.version = version;
     }
 
     /*
@@ -144,4 +147,11 @@ public class KospenuserServer {
         this.firstRegRegion = firstRegRegion;
     }
 
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 }

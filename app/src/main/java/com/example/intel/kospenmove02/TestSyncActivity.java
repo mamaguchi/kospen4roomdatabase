@@ -16,6 +16,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.intel.kospenmove02.db.AppDatabase;
 import com.example.intel.kospenmove02.db.GenderConverter;
@@ -23,6 +24,7 @@ import com.example.intel.kospenmove02.db.InDBQueryKospenuser;
 import com.example.intel.kospenmove02.db.Kospenuser;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
@@ -60,6 +62,7 @@ public class TestSyncActivity extends AppCompatActivity {
     private String kospenusersUrl = "http://192.168.10.10/api/kospenusers";
     private String kospenusersInsideLocalityUrl = "http://192.168.10.11/api/kospenusers/insidelocality";
     private String kospenusersOusideLocalityUrl = "http://192.168.10.11/api/kospenusers/outsidelocality";
+    private String outRestReqKospenuserUrl = "http://192.168.10.11/api/kospenusers/testoutrestreq";
 
     private AppDatabase mDb;
 
@@ -435,7 +438,7 @@ public class TestSyncActivity extends AppCompatActivity {
         apiresTextView.setText(sb.toString());
     }
 
-    // --------------------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------------<AndroidDB manipulation>
     // [Show OutRestReqKospenuser List in UI]
     public void outrestreqButtonClicked(View view) {
         outRestReqKospenusers =  mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();
@@ -459,7 +462,6 @@ public class TestSyncActivity extends AppCompatActivity {
                     }
                 });
     }
-
 
     // [Show KospenuserServer List in UI]
     public void kospenuserserverButtonClicked(View view) {
@@ -513,6 +515,8 @@ public class TestSyncActivity extends AppCompatActivity {
         apiresTextView.setText(sb.toString());
     }
 
+
+    // --------------------------------------------------------------------------------------------------------------<REST api interection>
     // [Get a list of Inside-locality & Outside-locality Kospenusers.
     // Create KospenuserGlobal-Table & KospenuserServer-Table in Android-Sqlite from Inside-Locality & Outside-Locality]
     public void getButtonClicked(View view) throws Exception {
@@ -543,12 +547,16 @@ public class TestSyncActivity extends AppCompatActivity {
                                 String updated_at = jsonObject.getString("updated_at");
                                 String ic = jsonObject.getString("ic");
                                 String name = jsonObject.getString("name");
+                                Gender gender = GenderConverter.strToEnumGender(jsonObject.getString("gender"));
+                                String address = jsonObject.getString("address");
                                 State state = StateConverter.strToEnumState(jsonObject.getString("state"));
                                 Region region = RegionConverter.strToEnumRegion(jsonObject.getString("region"));
                                 Subregion subregion = SubregionConverter.strToEnumSubregion(jsonObject.getString("subregion"));
                                 Locality locality = LocalityConverter.strToEnumLocality(jsonObject.getString("locality"));
-                                KospenuserGlobal kospenuserGlobal = new KospenuserGlobal(updated_at, ic, name,
-                                        state, region, subregion, locality);
+                                String firstRegRegion = jsonObject.getString("firstRegRegion");
+                                int version = jsonObject.getInt("version");
+                                KospenuserGlobal kospenuserGlobal = new KospenuserGlobal(updated_at, ic, name, gender, address,
+                                        state, region, subregion, locality, firstRegRegion, version);
                                 mDb.kospenuserGlobalModel().insertKospenuserGlobal(kospenuserGlobal);
                             }
 
@@ -609,8 +617,9 @@ public class TestSyncActivity extends AppCompatActivity {
                                 Subregion subregion = SubregionConverter.strToEnumSubregion(jsonObject.getString("subregion"));
                                 Locality locality = LocalityConverter.strToEnumLocality(jsonObject.getString("locality"));
                                 String firstRegRegion = jsonObject.getString("firstRegRegion");
+                                int version = jsonObject.getInt("version");
                                 KospenuserServer kospenuserServer = new KospenuserServer(updated_at, ic, name, gender, address,
-                                        state, region, subregion, locality, firstRegRegion);
+                                        state, region, subregion, locality, firstRegRegion, version);
                                 mDb.kospenuserServerModel().insertKospenuserServer(kospenuserServer);
                             }
 
@@ -740,5 +749,70 @@ public class TestSyncActivity extends AppCompatActivity {
         Log.i(TEST_SYNC_TAG, "[doInBackground] Adding JsonObjectRequest to queue to send request to remote server");
         MySingleton.getInstance(this).addToRequestQueue(postRequest);
         Log.i(TEST_SYNC_TAG, "[doInBackground] JsonObjectRequest sent");
+    }
+
+    // [Send OutRestReqKospenusers to Server DB]
+    public void outreqsyncButtonClicked(View view) {
+        // ========== JsonObjectRequest - POST ==========
+        Log.i(TEST_SYNC_TAG, "[doInBackground] Preparing JsonObjectRequest for OutRestReqKospenuser Sync with ServerDB");
+
+        List<OutRestReqKospenuser> outRestReqKospenuserList = mDb.outRestReqKospenuserModel().loadAll();
+        JSONObject jsonObjectPayload = new JSONObject();
+        try{
+            JSONObject jsonObjectTable = new JSONObject();
+            int counter = 1;
+            for (OutRestReqKospenuser outRestReqKospenuser : outRestReqKospenuserList) {
+                JSONObject jsonObjectRow = new JSONObject();
+                jsonObjectRow.put("version", outRestReqKospenuser.getVersion());
+                jsonObjectRow.put("status", outRestReqKospenuser.getOutRestReqStatus());
+                jsonObjectRow.put("ic", outRestReqKospenuser.getIc());
+                jsonObjectRow.put("created_at", outRestReqKospenuser.getTimestamp());
+                jsonObjectRow.put("updated_at", outRestReqKospenuser.getTimestamp());
+                jsonObjectRow.put("name", outRestReqKospenuser.getName());
+                jsonObjectRow.put("gender", outRestReqKospenuser.getGender().name());
+                jsonObjectRow.put("address", outRestReqKospenuser.getAddress());
+                jsonObjectRow.put("state", outRestReqKospenuser.getState().name());
+                jsonObjectRow.put("region", outRestReqKospenuser.getRegion().name());
+                jsonObjectRow.put("subregion", outRestReqKospenuser.getSubregion().name());
+                jsonObjectRow.put("locality", outRestReqKospenuser.getLocality().name());
+                jsonObjectRow.put("firstRegRegion", outRestReqKospenuser.getFirstRegRegion());
+
+                jsonObjectTable.put("user"+counter, jsonObjectRow);
+                counter += 1;
+            }
+            jsonObjectPayload.put("data", jsonObjectTable);
+
+        } catch (JSONException jse) {
+            Log.e(TEST_SYNC_TAG, jse.getMessage());
+        }
+
+        Log.i(TEST_SYNC_TAG, jsonObjectPayload.toString());
+
+        JsonObjectRequest postRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                outRestReqKospenuserUrl,
+                jsonObjectPayload,
+                new Response.Listener<JSONObject >() {
+                    @Override
+                    public void onResponse(JSONObject  response) {
+                        Log.i(TEST_SYNC_TAG, "Successful outRestReqKospenuserUrl: \n" + response.toString() + "\n");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TEST_SYNC_TAG, "Failed outRestReqKospenuserUrl: " + error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+        Log.i(TEST_SYNC_TAG, "[doInBackground] Adding JsonObjectRequest[outRestReqKospenuserUrl] to queue to send request to remote server");
+        MySingleton.getInstance(this).addToRequestQueue(postRequest);
+        Log.i(TEST_SYNC_TAG, "[doInBackground] JsonObjectRequest[outRestReqKospenuserUrl] sent");
     }
 }

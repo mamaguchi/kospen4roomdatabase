@@ -23,6 +23,11 @@ public class KospenuserGlobal {
 
     private String name;
 
+    @TypeConverters(GenderConverter.class)
+    private Gender gender;
+
+    private String address;
+
     @TypeConverters(StateConverter.class)
     private State state;
     @TypeConverters(RegionConverter.class)
@@ -32,19 +37,29 @@ public class KospenuserGlobal {
     @TypeConverters(LocalityConverter.class)
     private Locality locality;
 
+    private String firstRegRegion;
+
+    private int version;
+
     /*
     |
     |   Constructor
     |
     */
-    public KospenuserGlobal(String timestamp, @NonNull String ic, String name, State state, Region region, Subregion subregion, Locality locality) {
+    public KospenuserGlobal(String timestamp, @NonNull String ic, String name, Gender gender,
+                            String address, State state, Region region, Subregion subregion, Locality locality, String firstRegRegion,
+                            int version) {
         this.timestamp = timestamp;
         this.ic = ic;
         this.name = name;
+        this.gender = gender;
+        this.address = address;
         this.state = state;
         this.region = region;
         this.subregion = subregion;
         this.locality = locality;
+        this.firstRegRegion = firstRegRegion;
+        this.version = version;
     }
 
     /*
@@ -52,6 +67,7 @@ public class KospenuserGlobal {
     |   Getter and Setter
     |
     */
+
     public String getTimestamp() {
         return timestamp;
     }
@@ -75,6 +91,22 @@ public class KospenuserGlobal {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public State getState() {
@@ -107,5 +139,21 @@ public class KospenuserGlobal {
 
     public void setLocality(Locality locality) {
         this.locality = locality;
+    }
+
+    public String getFirstRegRegion() {
+        return firstRegRegion;
+    }
+
+    public void setFirstRegRegion(String firstRegRegion) {
+        this.firstRegRegion = firstRegRegion;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

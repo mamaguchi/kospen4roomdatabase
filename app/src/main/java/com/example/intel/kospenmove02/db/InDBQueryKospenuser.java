@@ -43,13 +43,16 @@ public class InDBQueryKospenuser {
 
     private String firstRegRegion;
 
+    private int version;
+
     /*
     |
     |   Constructor
     |
     */
     public InDBQueryKospenuser(String timestamp, InDBQuery inDBQueryStatus, @NonNull String ic, String name, Gender gender,
-                               String address, State state, Region region, Subregion subregion, Locality locality, String firstRegRegion) {
+                               String address, State state, Region region, Subregion subregion, Locality locality, String firstRegRegion,
+                               int version) {
         this.timestamp = timestamp;
         this.inDBQueryStatus = inDBQueryStatus;
         this.ic = ic;
@@ -61,6 +64,7 @@ public class InDBQueryKospenuser {
         this.subregion = subregion;
         this.locality = locality;
         this.firstRegRegion = firstRegRegion;
+        this.version = version;
     }
 
     public InDBQueryKospenuser(Kospenuser kospenuser) {
@@ -75,6 +79,7 @@ public class InDBQueryKospenuser {
         this.subregion = kospenuser.getSubregion();
         this.locality = kospenuser.getLocality();
         this.firstRegRegion = kospenuser.getFirstRegRegion();
+        this.version = kospenuser.getVersion();
     }
 
     public InDBQueryKospenuser(KospenuserServer kospenuserServer) {
@@ -89,6 +94,7 @@ public class InDBQueryKospenuser {
         this.subregion = kospenuserServer.getSubregion();
         this.locality = kospenuserServer.getLocality();
         this.firstRegRegion = kospenuserServer.getFirstRegRegion();
+        this.version = kospenuserServer.getVersion();
     }
 
     /*
@@ -183,5 +189,13 @@ public class InDBQueryKospenuser {
 
     public void setInDBQueryStatus(InDBQuery inDBQueryStatus) {
         this.inDBQueryStatus = inDBQueryStatus;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

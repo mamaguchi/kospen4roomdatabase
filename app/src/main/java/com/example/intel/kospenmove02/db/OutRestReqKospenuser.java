@@ -43,13 +43,16 @@ public class OutRestReqKospenuser {
 
     private String firstRegRegion;
 
+    private int version;
+
     /*
     |
     |   Constructor
     |
     */
     public OutRestReqKospenuser(String timestamp, OutRestReq outRestReqStatus, @NonNull String ic, String name, Gender gender,
-                                String address, State state, Region region, Subregion subregion, Locality locality, String firstRegRegion) {
+                                String address, State state, Region region, Subregion subregion, Locality locality, String firstRegRegion,
+                                int version) {
         this.timestamp = timestamp;
         this.outRestReqStatus = outRestReqStatus;
         this.ic = ic;
@@ -61,6 +64,7 @@ public class OutRestReqKospenuser {
         this.subregion = subregion;
         this.locality = locality;
         this.firstRegRegion = firstRegRegion;
+        this.version = version;
     }
 
     public OutRestReqKospenuser(Kospenuser kospenuser) {
@@ -75,6 +79,7 @@ public class OutRestReqKospenuser {
         this.subregion = kospenuser.getSubregion();
         this.locality = kospenuser.getLocality();
         this.firstRegRegion = kospenuser.getFirstRegRegion();
+        this.version = kospenuser.getVersion();
     }
 
     /*
@@ -169,5 +174,13 @@ public class OutRestReqKospenuser {
 
     public void setOutRestReqStatus(OutRestReq outRestReqStatus) {
         this.outRestReqStatus = outRestReqStatus;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }
