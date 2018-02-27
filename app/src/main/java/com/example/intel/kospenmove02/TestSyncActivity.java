@@ -33,20 +33,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.intel.kospenmove02.db.GenderConverter.Gender;
 import com.example.intel.kospenmove02.db.KospenuserGlobal;
 import com.example.intel.kospenmove02.db.KospenuserServer;
-import com.example.intel.kospenmove02.db.LocalityConverter;
 import com.example.intel.kospenmove02.db.OutRestReqConverter.OutRestReq;
 import com.example.intel.kospenmove02.db.InDBQueryConverter.InDBQuery;
 import com.example.intel.kospenmove02.db.OutRestReqKospenuser;
-import com.example.intel.kospenmove02.db.RegionConverter;
-import com.example.intel.kospenmove02.db.StateConverter;
-import com.example.intel.kospenmove02.db.StateConverter.State;
-import com.example.intel.kospenmove02.db.RegionConverter.Region;
-import com.example.intel.kospenmove02.db.SubregionConverter;
-import com.example.intel.kospenmove02.db.SubregionConverter.Subregion;
-import com.example.intel.kospenmove02.db.LocalityConverter.Locality;
+import com.example.intel.kospenmove02.db.entity.Gender;
+import com.example.intel.kospenmove02.db.entity.Locality;
+import com.example.intel.kospenmove02.db.entity.Region;
+import com.example.intel.kospenmove02.db.entity.State;
+import com.example.intel.kospenmove02.db.entity.Subregion;
 
 public class TestSyncActivity extends AppCompatActivity {
 
@@ -481,7 +477,7 @@ public class TestSyncActivity extends AppCompatActivity {
         for (KospenuserServer kospenuserServer : kospenusersServer) {
             sb.append(kospenuserServer.getName());
             sb.append("_");
-            sb.append(kospenuserServer.getGender());
+            sb.append(kospenuserServer.getFk_gender());
             sb.append("_");
             sb.append(kospenuserServer.getTimestamp());
             sb.append("\n");
@@ -507,7 +503,7 @@ public class TestSyncActivity extends AppCompatActivity {
         for (KospenuserGlobal kospenuserGlobal : kospenusersGlobal) {
             sb.append(kospenuserGlobal.getName());
             sb.append("_");
-            sb.append(kospenuserGlobal.getState());
+            sb.append(kospenuserGlobal.getFk_state());
             sb.append("_");
             sb.append(kospenuserGlobal.getTimestamp());
             sb.append("\n");
@@ -522,11 +518,16 @@ public class TestSyncActivity extends AppCompatActivity {
     public void getButtonClicked(View view) throws Exception {
         // ========== JsonArrayRequest - GET version 2.0 ==========
         // ----------------------------------------------------------------------------------------- <getOutsideLocalityRequest>
-        Map<String, String> paramsOutsideLocalityReq = new HashMap<>();
-        paramsOutsideLocalityReq.put("state", "PAHANG");
-        paramsOutsideLocalityReq.put("region", "MARAN");
-        paramsOutsideLocalityReq.put("subregion", "JENGKA2");
-        paramsOutsideLocalityReq.put("locality", "ULUJEMPOL");
+
+        // !!! TODO-ATTENTION !!! //
+        // THESE PART IS STILL HARDCODE.
+        // THE QUERY PARAMS NEED TO BE ABLE
+        // TO CAPTURE THE LOCATION OF THE JURURAWAT-MASYARAKAT AUTOMATICALLY
+        Map<String, Integer> paramsOutsideLocalityReq = new HashMap<>();
+        paramsOutsideLocalityReq.put("state", 1);
+        paramsOutsideLocalityReq.put("region", 1);
+        paramsOutsideLocalityReq.put("subregion", 1);
+        paramsOutsideLocalityReq.put("locality", 1);
         JSONObject jsonObjOutsideLocalityReq = new JSONObject(paramsOutsideLocalityReq);
 
         MyJsonArrayRequest getOutsideLocalityRequest = new MyJsonArrayRequest(
@@ -547,15 +548,15 @@ public class TestSyncActivity extends AppCompatActivity {
                                 String updated_at = jsonObject.getString("updated_at");
                                 String ic = jsonObject.getString("ic");
                                 String name = jsonObject.getString("name");
-                                Gender gender = GenderConverter.strToEnumGender(jsonObject.getString("gender"));
+                                int gender = jsonObject.getInt("gender");
                                 String address = jsonObject.getString("address");
-                                State state = StateConverter.strToEnumState(jsonObject.getString("state"));
-                                Region region = RegionConverter.strToEnumRegion(jsonObject.getString("region"));
-                                Subregion subregion = SubregionConverter.strToEnumSubregion(jsonObject.getString("subregion"));
-                                Locality locality = LocalityConverter.strToEnumLocality(jsonObject.getString("locality"));
+                                int state = jsonObject.getInt("state");
+                                int region = jsonObject.getInt("region");
+                                int subregion = jsonObject.getInt("subregion");
+                                int locality = jsonObject.getInt("locality");
                                 String firstRegRegion = jsonObject.getString("firstRegRegion");
                                 int version = jsonObject.getInt("version");
-                                KospenuserGlobal kospenuserGlobal = new KospenuserGlobal(updated_at, ic, name, gender, address,
+                                KospenuserGlobal kospenuserGlobal = new KospenuserGlobal(updated_at, ic, name, address, gender,
                                         state, region, subregion, locality, firstRegRegion, version);
                                 mDb.kospenuserGlobalModel().insertKospenuserGlobal(kospenuserGlobal);
                             }
@@ -582,11 +583,16 @@ public class TestSyncActivity extends AppCompatActivity {
 
 
         // ----------------------------------------------------------------------------------------- <getInsideLocalityRequest>
-        Map<String, String> paramsInsideLocalityReq = new HashMap<>();
-        paramsInsideLocalityReq.put("state", "PAHANG");
-        paramsInsideLocalityReq.put("region", "MARAN");
-        paramsInsideLocalityReq.put("subregion", "JENGKA2");
-        paramsInsideLocalityReq.put("locality", "ULUJEMPOL");
+
+        // !!! TODO-ATTENTION !!! //
+        // THESE PART IS STILL HARDCODE.
+        // THE QUERY PARAMS NEED TO BE ABLE
+        // TO CAPTURE THE LOCATION OF THE JURURAWAT-MASYARAKAT AUTOMATICALLY
+        Map<String, Integer> paramsInsideLocalityReq = new HashMap<>();
+        paramsInsideLocalityReq.put("state", 1);
+        paramsInsideLocalityReq.put("region", 1);
+        paramsInsideLocalityReq.put("subregion", 1);
+        paramsInsideLocalityReq.put("locality", 1);
         JSONObject jsonObjInsideLocalityReq = new JSONObject(paramsInsideLocalityReq);
 
         // 'getInsideLocalityRequest' -> Version 2:
@@ -610,15 +616,15 @@ public class TestSyncActivity extends AppCompatActivity {
                                 String updated_at = jsonObject.getString("updated_at");
                                 String ic = jsonObject.getString("ic");
                                 String name = jsonObject.getString("name");
-                                Gender gender = GenderConverter.strToEnumGender(jsonObject.getString("gender"));
+                                int gender = jsonObject.getInt("gender");
                                 String address = jsonObject.getString("address");
-                                State state = StateConverter.strToEnumState(jsonObject.getString("state"));
-                                Region region = RegionConverter.strToEnumRegion(jsonObject.getString("region"));
-                                Subregion subregion = SubregionConverter.strToEnumSubregion(jsonObject.getString("subregion"));
-                                Locality locality = LocalityConverter.strToEnumLocality(jsonObject.getString("locality"));
+                                int state = jsonObject.getInt("state");
+                                int region = jsonObject.getInt("region");
+                                int subregion = jsonObject.getInt("subregion");
+                                int locality = jsonObject.getInt("locality");
                                 String firstRegRegion = jsonObject.getString("firstRegRegion");
                                 int version = jsonObject.getInt("version");
-                                KospenuserServer kospenuserServer = new KospenuserServer(updated_at, ic, name, gender, address,
+                                KospenuserServer kospenuserServer = new KospenuserServer(updated_at, ic, name, address, gender,
                                         state, region, subregion, locality, firstRegRegion, version);
                                 mDb.kospenuserServerModel().insertKospenuserServer(kospenuserServer);
                             }
@@ -769,12 +775,12 @@ public class TestSyncActivity extends AppCompatActivity {
                 jsonObjectRow.put("created_at", outRestReqKospenuser.getTimestamp());
                 jsonObjectRow.put("updated_at", outRestReqKospenuser.getTimestamp());
                 jsonObjectRow.put("name", outRestReqKospenuser.getName());
-                jsonObjectRow.put("gender", outRestReqKospenuser.getGender().name());
+                jsonObjectRow.put("gender", outRestReqKospenuser.getFk_gender());
                 jsonObjectRow.put("address", outRestReqKospenuser.getAddress());
-                jsonObjectRow.put("state", outRestReqKospenuser.getState().name());
-                jsonObjectRow.put("region", outRestReqKospenuser.getRegion().name());
-                jsonObjectRow.put("subregion", outRestReqKospenuser.getSubregion().name());
-                jsonObjectRow.put("locality", outRestReqKospenuser.getLocality().name());
+                jsonObjectRow.put("state", outRestReqKospenuser.getFk_state());
+                jsonObjectRow.put("region", outRestReqKospenuser.getFk_region());
+                jsonObjectRow.put("subregion", outRestReqKospenuser.getFk_subregion());
+                jsonObjectRow.put("locality", outRestReqKospenuser.getFk_locality());
                 jsonObjectRow.put("firstRegRegion", outRestReqKospenuser.getFirstRegRegion());
 
                 jsonObjectTable.put("user"+counter, jsonObjectRow);

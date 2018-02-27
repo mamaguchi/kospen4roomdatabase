@@ -5,17 +5,40 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import com.example.intel.kospenmove02.db.dao.GenderDao;
+import com.example.intel.kospenmove02.db.dao.LocalityDao;
+import com.example.intel.kospenmove02.db.dao.RegionDao;
+import com.example.intel.kospenmove02.db.dao.StateDao;
+import com.example.intel.kospenmove02.db.dao.SubregionDao;
+
+import com.example.intel.kospenmove02.db.entity.Gender;
+import com.example.intel.kospenmove02.db.entity.Locality;
+import com.example.intel.kospenmove02.db.entity.Region;
+import com.example.intel.kospenmove02.db.entity.State;
+import com.example.intel.kospenmove02.db.entity.Subregion;
+
 /*
 |
 |   Singleton Pattern - for Database instance
 |
  */
-@Database(entities = {Kospenuser.class, Screening.class,
+@Database(entities = {Gender.class, State.class, Region.class, Subregion.class, Locality.class,
+                    Kospenuser.class, Screening.class,
                     KospenuserServer.class, KospenuserGlobal.class,
-                    OutRestReqKospenuser.class, InDBQueryKospenuser.class}, version=7)
+                    OutRestReqKospenuser.class, InDBQueryKospenuser.class}, version=8)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
+
+    public abstract GenderDao genderModel();
+
+    public abstract StateDao stateModel();
+
+    public abstract RegionDao regionModel();
+
+    public abstract SubregionDao subregionModel();
+
+    public abstract LocalityDao localityModel();
 
     public abstract KospenuserDao kospenuserModel();
 
