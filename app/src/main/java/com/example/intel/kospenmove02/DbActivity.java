@@ -40,7 +40,7 @@ public class DbActivity extends AppCompatActivity {
     }
 
     private void subscribeToKospenusersList() {
-        mViewModel.kospenusersScenarioFive.observe(this,
+        mViewModel.kospenusers.observe(this,
                 new Observer<List<Kospenuser>>() {
                     @Override
                     public void onChanged(@Nullable List<Kospenuser> kospenusers) {

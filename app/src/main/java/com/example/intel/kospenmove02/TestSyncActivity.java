@@ -482,7 +482,7 @@ public class TestSyncActivity extends AppCompatActivity {
             sb.append(kospenuserServer.getTimestamp());
             sb.append("\n");
         }
-        apiresTextView.setText(sb.toString());
+        InDBOutReqTableTextView.setText(sb.toString());
     }
 
     // [Show KospenuserGlobal List in UI]
@@ -508,7 +508,7 @@ public class TestSyncActivity extends AppCompatActivity {
             sb.append(kospenuserGlobal.getTimestamp());
             sb.append("\n");
         }
-        apiresTextView.setText(sb.toString());
+        InDBOutReqTableTextView.setText(sb.toString());
     }
 
 
