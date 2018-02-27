@@ -1,6 +1,5 @@
-package com.example.intel.kospenmove02.db;
+package com.example.intel.kospenmove02.db.entity;
 
-import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
@@ -30,13 +29,8 @@ import com.example.intel.kospenmove02.db.entity.Subregion;
         @ForeignKey(entity=Locality.class,
                 parentColumns = "id",
                 childColumns = "fk_locality")})
-public class Kospenuser {
+public class KospenuserServer {
 
-    // Version 1:
-//    @TypeConverters(DateConverter.class)
-//    private LocalDateTime timestamp;
-    //
-    // Version 2:
     private String timestamp;
 
     @PrimaryKey
@@ -45,15 +39,8 @@ public class Kospenuser {
 
     private String name;
 
-    // Version 3:
-//    @TypeConverters(GenderConverter.class)
-//    private Gender gender;
-
     private String address;
 
-    // Version 1:
-//    private String userRegion;
-    //
     // Version 2:
 //    @TypeConverters(StateConverter.class)
 //    private State state;
@@ -81,8 +68,9 @@ public class Kospenuser {
     |
     */
 
-    public Kospenuser(String timestamp, @NonNull String ic, String name, String address, int fk_gender,
-                      int fk_state, int fk_region, int fk_subregion, int fk_locality, String firstRegRegion, int version) {
+    public KospenuserServer(String timestamp, @NonNull String ic, String name, String address,
+                            int fk_gender, int fk_state, int fk_region, int fk_subregion, int fk_locality,
+                            String firstRegRegion, int version) {
         this.timestamp = timestamp;
         this.ic = ic;
         this.name = name;

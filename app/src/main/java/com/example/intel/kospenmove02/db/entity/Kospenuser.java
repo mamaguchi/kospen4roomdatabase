@@ -1,5 +1,6 @@
-package com.example.intel.kospenmove02.db;
+package com.example.intel.kospenmove02.db.entity;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
@@ -29,8 +30,13 @@ import com.example.intel.kospenmove02.db.entity.Subregion;
         @ForeignKey(entity=Locality.class,
                 parentColumns = "id",
                 childColumns = "fk_locality")})
-public class KospenuserGlobal {
+public class Kospenuser {
 
+    // Version 1:
+//    @TypeConverters(DateConverter.class)
+//    private LocalDateTime timestamp;
+    //
+    // Version 2:
     private String timestamp;
 
     @PrimaryKey
@@ -39,8 +45,15 @@ public class KospenuserGlobal {
 
     private String name;
 
+    // Version 3:
+//    @TypeConverters(GenderConverter.class)
+//    private Gender gender;
+
     private String address;
 
+    // Version 1:
+//    private String userRegion;
+    //
     // Version 2:
 //    @TypeConverters(StateConverter.class)
 //    private State state;
@@ -68,9 +81,8 @@ public class KospenuserGlobal {
     |
     */
 
-    public KospenuserGlobal(String timestamp, @NonNull String ic, String name, String address,
-                            int fk_gender, int fk_state, int fk_region, int fk_subregion, int fk_locality,
-                            String firstRegRegion, int version) {
+    public Kospenuser(String timestamp, @NonNull String ic, String name, String address, int fk_gender,
+                      int fk_state, int fk_region, int fk_subregion, int fk_locality, String firstRegRegion, int version) {
         this.timestamp = timestamp;
         this.ic = ic;
         this.name = name;
@@ -89,7 +101,6 @@ public class KospenuserGlobal {
     |   Getter and Setter
     |
     */
-
     public String getTimestamp() {
         return timestamp;
     }
@@ -98,12 +109,11 @@ public class KospenuserGlobal {
         this.timestamp = timestamp;
     }
 
-    @NonNull
     public String getIc() {
         return ic;
     }
 
-    public void setIc(@NonNull String ic) {
+    public void setIc(String ic) {
         this.ic = ic;
     }
 

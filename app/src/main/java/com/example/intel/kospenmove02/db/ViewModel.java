@@ -4,6 +4,8 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
+import com.example.intel.kospenmove02.db.entity.Kospenuser;
+import com.example.intel.kospenmove02.db.entity.KospenuserServer;
 import com.example.intel.kospenmove02.db.utils.DatabaseInitializer;
 
 import java.util.List;

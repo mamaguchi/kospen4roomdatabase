@@ -2,11 +2,10 @@ package com.example.intel.kospenmove02.db.utils;
 
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 
 import com.example.intel.kospenmove02.db.AppDatabase;
-import com.example.intel.kospenmove02.db.Kospenuser;
+import com.example.intel.kospenmove02.db.entity.Kospenuser;
 import com.example.intel.kospenmove02.db.Screening;
 import com.example.intel.kospenmove02.db.entity.Gender;
 import com.example.intel.kospenmove02.db.entity.Locality;
@@ -16,8 +15,6 @@ import com.example.intel.kospenmove02.db.entity.Subregion;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
 
 public class DatabaseInitializer {
 

@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.example.intel.kospenmove02.db.Kospenuser;
-import com.example.intel.kospenmove02.db.KospenuserServer;
+import com.example.intel.kospenmove02.db.entity.Kospenuser;
+import com.example.intel.kospenmove02.db.entity.KospenuserServer;
 import com.example.intel.kospenmove02.db.Screening;
 import com.example.intel.kospenmove02.db.ViewModel;
 

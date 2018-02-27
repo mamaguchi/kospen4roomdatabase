@@ -16,12 +16,10 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.intel.kospenmove02.db.AppDatabase;
-import com.example.intel.kospenmove02.db.GenderConverter;
-import com.example.intel.kospenmove02.db.InDBQueryKospenuser;
-import com.example.intel.kospenmove02.db.Kospenuser;
+import com.example.intel.kospenmove02.db.entity.InDBQueryKospenuser;
+import com.example.intel.kospenmove02.db.entity.Kospenuser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,16 +31,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.intel.kospenmove02.db.KospenuserGlobal;
-import com.example.intel.kospenmove02.db.KospenuserServer;
+import com.example.intel.kospenmove02.db.entity.KospenuserGlobal;
+import com.example.intel.kospenmove02.db.entity.KospenuserServer;
 import com.example.intel.kospenmove02.db.OutRestReqConverter.OutRestReq;
 import com.example.intel.kospenmove02.db.InDBQueryConverter.InDBQuery;
-import com.example.intel.kospenmove02.db.OutRestReqKospenuser;
-import com.example.intel.kospenmove02.db.entity.Gender;
-import com.example.intel.kospenmove02.db.entity.Locality;
-import com.example.intel.kospenmove02.db.entity.Region;
-import com.example.intel.kospenmove02.db.entity.State;
-import com.example.intel.kospenmove02.db.entity.Subregion;
+import com.example.intel.kospenmove02.db.entity.OutRestReqKospenuser;
 
 public class TestSyncActivity extends AppCompatActivity {
 

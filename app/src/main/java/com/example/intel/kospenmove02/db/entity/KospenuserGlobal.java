@@ -1,4 +1,4 @@
-package com.example.intel.kospenmove02.db;
+package com.example.intel.kospenmove02.db.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
@@ -11,7 +11,6 @@ import com.example.intel.kospenmove02.db.entity.Locality;
 import com.example.intel.kospenmove02.db.entity.Region;
 import com.example.intel.kospenmove02.db.entity.State;
 import com.example.intel.kospenmove02.db.entity.Subregion;
-import com.example.intel.kospenmove02.db.InDBQueryConverter.InDBQuery;
 
 
 @Entity(foreignKeys = {
@@ -30,12 +29,9 @@ import com.example.intel.kospenmove02.db.InDBQueryConverter.InDBQuery;
         @ForeignKey(entity=Locality.class,
                 parentColumns = "id",
                 childColumns = "fk_locality")})
-public class InDBQueryKospenuser {
+public class KospenuserGlobal {
 
     private String timestamp;
-
-    @TypeConverters(InDBQueryConverter.class)
-    private InDBQuery inDBQueryStatus;
 
     @PrimaryKey
     @NonNull
@@ -72,11 +68,10 @@ public class InDBQueryKospenuser {
     |
     */
 
-    public InDBQueryKospenuser(String timestamp, InDBQuery inDBQueryStatus, @NonNull String ic, String name, String address,
-                               int fk_gender, int fk_state, int fk_region, int fk_subregion, int fk_locality, String firstRegRegion,
-                               int version) {
+    public KospenuserGlobal(String timestamp, @NonNull String ic, String name, String address,
+                            int fk_gender, int fk_state, int fk_region, int fk_subregion, int fk_locality,
+                            String firstRegRegion, int version) {
         this.timestamp = timestamp;
-        this.inDBQueryStatus = inDBQueryStatus;
         this.ic = ic;
         this.name = name;
         this.address = address;
@@ -89,41 +84,12 @@ public class InDBQueryKospenuser {
         this.version = version;
     }
 
-    public InDBQueryKospenuser(Kospenuser kospenuser) {
-        this.timestamp = kospenuser.getTimestamp();
-        this.inDBQueryStatus = null;
-        this.ic = kospenuser.getIc();
-        this.name = kospenuser.getName();
-        this.fk_gender = kospenuser.getFk_gender();
-        this.address = kospenuser.getAddress();
-        this.fk_state = kospenuser.getFk_state();
-        this.fk_region = kospenuser.getFk_region();
-        this.fk_subregion = kospenuser.getFk_subregion();
-        this.fk_locality = kospenuser.getFk_locality();
-        this.firstRegRegion = kospenuser.getFirstRegRegion();
-        this.version = kospenuser.getVersion();
-    }
-
-    public InDBQueryKospenuser(KospenuserServer kospenuserServer) {
-        this.timestamp = kospenuserServer.getTimestamp();
-        this.inDBQueryStatus = null;
-        this.ic = kospenuserServer.getIc();
-        this.name = kospenuserServer.getName();
-        this.fk_gender = kospenuserServer.getFk_gender();
-        this.address = kospenuserServer.getAddress();
-        this.fk_state = kospenuserServer.getFk_state();
-        this.fk_region = kospenuserServer.getFk_region();
-        this.fk_subregion = kospenuserServer.getFk_subregion();
-        this.fk_locality = kospenuserServer.getFk_locality();
-        this.firstRegRegion = kospenuserServer.getFirstRegRegion();
-        this.version = kospenuserServer.getVersion();
-    }
-
     /*
-        |
-        |   Getter and Setter
-        |
-        */
+    |
+    |   Getter and Setter
+    |
+    */
+
     public String getTimestamp() {
         return timestamp;
     }
@@ -203,14 +169,6 @@ public class InDBQueryKospenuser {
 
     public void setFirstRegRegion(String firstRegRegion) {
         this.firstRegRegion = firstRegRegion;
-    }
-
-    public InDBQuery getInDBQueryStatus() {
-        return inDBQueryStatus;
-    }
-
-    public void setInDBQueryStatus(InDBQuery inDBQueryStatus) {
-        this.inDBQueryStatus = inDBQueryStatus;
     }
 
     public int getVersion() {

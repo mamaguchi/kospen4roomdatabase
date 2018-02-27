@@ -12,7 +12,12 @@ import com.example.intel.kospenmove02.db.dao.StateDao;
 import com.example.intel.kospenmove02.db.dao.SubregionDao;
 
 import com.example.intel.kospenmove02.db.entity.Gender;
+import com.example.intel.kospenmove02.db.entity.InDBQueryKospenuser;
+import com.example.intel.kospenmove02.db.entity.Kospenuser;
+import com.example.intel.kospenmove02.db.entity.KospenuserGlobal;
+import com.example.intel.kospenmove02.db.entity.KospenuserServer;
 import com.example.intel.kospenmove02.db.entity.Locality;
+import com.example.intel.kospenmove02.db.entity.OutRestReqKospenuser;
 import com.example.intel.kospenmove02.db.entity.Region;
 import com.example.intel.kospenmove02.db.entity.State;
 import com.example.intel.kospenmove02.db.entity.Subregion;

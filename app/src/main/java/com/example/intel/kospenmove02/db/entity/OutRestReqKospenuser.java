@@ -1,4 +1,4 @@
-package com.example.intel.kospenmove02.db;
+package com.example.intel.kospenmove02.db.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
@@ -6,11 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
-import com.example.intel.kospenmove02.db.entity.Gender;
-import com.example.intel.kospenmove02.db.entity.Locality;
-import com.example.intel.kospenmove02.db.entity.Region;
-import com.example.intel.kospenmove02.db.entity.State;
-import com.example.intel.kospenmove02.db.entity.Subregion;
+import com.example.intel.kospenmove02.db.OutRestReqConverter;
 import com.example.intel.kospenmove02.db.OutRestReqConverter.OutRestReq;
 
 
