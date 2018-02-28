@@ -1,4 +1,4 @@
-package com.example.intel.kospenmove02.db;
+package com.example.intel.kospenmove02.db.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;

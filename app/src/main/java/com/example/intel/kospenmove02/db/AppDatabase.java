@@ -6,8 +6,14 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 import com.example.intel.kospenmove02.db.dao.GenderDao;
+import com.example.intel.kospenmove02.db.dao.InDBQueryKospenuserDao;
+import com.example.intel.kospenmove02.db.dao.KospenuserDao;
+import com.example.intel.kospenmove02.db.dao.KospenuserGlobalDao;
+import com.example.intel.kospenmove02.db.dao.KospenuserServerDao;
 import com.example.intel.kospenmove02.db.dao.LocalityDao;
+import com.example.intel.kospenmove02.db.dao.OutRestReqKospenuserDao;
 import com.example.intel.kospenmove02.db.dao.RegionDao;
+import com.example.intel.kospenmove02.db.dao.ScreeningDao;
 import com.example.intel.kospenmove02.db.dao.StateDao;
 import com.example.intel.kospenmove02.db.dao.SubregionDao;
 
@@ -19,6 +25,7 @@ import com.example.intel.kospenmove02.db.entity.KospenuserServer;
 import com.example.intel.kospenmove02.db.entity.Locality;
 import com.example.intel.kospenmove02.db.entity.OutRestReqKospenuser;
 import com.example.intel.kospenmove02.db.entity.Region;
+import com.example.intel.kospenmove02.db.entity.Screening;
 import com.example.intel.kospenmove02.db.entity.State;
 import com.example.intel.kospenmove02.db.entity.Subregion;
 

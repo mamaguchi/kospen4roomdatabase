@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.example.intel.kospenmove02.db.entity.Kospenuser;
 import com.example.intel.kospenmove02.db.entity.KospenuserServer;
-import com.example.intel.kospenmove02.db.Screening;
+import com.example.intel.kospenmove02.db.entity.Screening;
 import com.example.intel.kospenmove02.db.ViewModel;
 
 import java.util.List;

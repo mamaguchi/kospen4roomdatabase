@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.example.intel.kospenmove02.db.AppDatabase;
 import com.example.intel.kospenmove02.db.entity.Kospenuser;
-import com.example.intel.kospenmove02.db.Screening;
+import com.example.intel.kospenmove02.db.entity.Screening;
 import com.example.intel.kospenmove02.db.entity.Gender;
 import com.example.intel.kospenmove02.db.entity.Locality;
 import com.example.intel.kospenmove02.db.entity.Region;

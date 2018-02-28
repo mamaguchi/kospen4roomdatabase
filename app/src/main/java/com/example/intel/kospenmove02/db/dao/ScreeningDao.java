@@ -1,10 +1,12 @@
-package com.example.intel.kospenmove02.db;
+package com.example.intel.kospenmove02.db.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+
+import com.example.intel.kospenmove02.db.entity.Screening;
 
 import java.util.List;
 
