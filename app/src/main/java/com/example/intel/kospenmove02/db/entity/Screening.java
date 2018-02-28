@@ -6,8 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
-import com.example.intel.kospenmove02.db.BooleanConverter;
-import com.example.intel.kospenmove02.db.entity.Kospenuser;
+import com.example.intel.kospenmove02.db.converter.BooleanConverter;
 
 
 @Entity(foreignKeys = {

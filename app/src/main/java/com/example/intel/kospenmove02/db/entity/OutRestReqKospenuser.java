@@ -6,8 +6,8 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
-import com.example.intel.kospenmove02.db.OutRestReqConverter;
-import com.example.intel.kospenmove02.db.OutRestReqConverter.OutRestReq;
+import com.example.intel.kospenmove02.db.converter.OutRestReqConverter;
+import com.example.intel.kospenmove02.db.converter.OutRestReqConverter.OutRestReq;
 
 
 @Entity(foreignKeys = {

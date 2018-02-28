@@ -33,8 +33,8 @@ import java.util.Map;
 
 import com.example.intel.kospenmove02.db.entity.KospenuserGlobal;
 import com.example.intel.kospenmove02.db.entity.KospenuserServer;
-import com.example.intel.kospenmove02.db.OutRestReqConverter.OutRestReq;
-import com.example.intel.kospenmove02.db.InDBQueryConverter.InDBQuery;
+import com.example.intel.kospenmove02.db.converter.OutRestReqConverter.OutRestReq;
+import com.example.intel.kospenmove02.db.converter.InDBQueryConverter.InDBQuery;
 import com.example.intel.kospenmove02.db.entity.OutRestReqKospenuser;
 
 public class TestSyncActivity extends AppCompatActivity {

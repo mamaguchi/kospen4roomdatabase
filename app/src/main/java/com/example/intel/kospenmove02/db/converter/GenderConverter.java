@@ -1,8 +1,10 @@
-package com.example.intel.kospenmove02.db;
+package com.example.intel.kospenmove02.db.converter;
 
 
 import android.arch.persistence.room.TypeConverter;
 
+
+@Deprecated
 public class GenderConverter {
 
     public enum Gender {

@@ -6,8 +6,8 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
-import com.example.intel.kospenmove02.db.InDBQueryConverter;
-import com.example.intel.kospenmove02.db.InDBQueryConverter.InDBQuery;
+import com.example.intel.kospenmove02.db.converter.InDBQueryConverter;
+import com.example.intel.kospenmove02.db.converter.InDBQueryConverter.InDBQuery;
 
 
 @Entity(foreignKeys = {
