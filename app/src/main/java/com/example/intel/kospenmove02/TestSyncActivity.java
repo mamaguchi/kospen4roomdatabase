@@ -512,6 +512,33 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     // --------------------------------------------------------------------------------------------------------------<AndroidDB manipulation>
+    // [Show Local Kospenuser List in UI]
+    public void localdbButtonClicked(View view) {
+        kospenusers =  mDb.kospenuserModel().loadAllKospenusers();
+        kospenusers.observe(this,
+                new Observer<List<Kospenuser>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+                        showLocalKospenusersInUi(kospenusers);
+                    }
+                });
+    }
+
+    // [Display Local Kospenuser List]
+    private void showLocalKospenusersInUi(final @NonNull List<Kospenuser> kospenusers) {
+        StringBuilder sb = new StringBuilder();
+
+        for (Kospenuser kospenuser : kospenusers) {
+            sb.append(kospenuser.getName());
+            sb.append("_");
+            sb.append(kospenuser.getIc());
+            sb.append("_Version :");
+            sb.append(kospenuser.getVersion());
+            sb.append("\n");
+        }
+        InDBOutReqTableTextView.setText(sb.toString());
+    }
+
     // [Show OutRestReqKospenuser List in UI]
     public void outrestreqButtonClicked(View view) {
         outRestReqKospenusers =  mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();

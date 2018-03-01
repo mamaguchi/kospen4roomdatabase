@@ -162,7 +162,7 @@ public class TestActivityViewModel extends AndroidViewModel {
 
                                         // VERSION 1: mDB
                                         updateVersionColKospenuser(jsonObjectEachUser.getInt("version"),jsonObjectEachUser.getString("ic"));
-//                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
 
                                         // VERSION 2: rowsToBeDeleted
 //                                        rowsToBeDeleted.add(jsonObjectEachUser.getString("ic"));
@@ -211,7 +211,7 @@ public class TestActivityViewModel extends AndroidViewModel {
                                                 " " + jsonObjectEachUser.getInt("version"));
 
                                         // VERSION 1: mDB
-//                                        mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
 
                                         // VERSION 2: rowsToBeDeleted
 //                                        rowsToBeDeleted.add(jsonObjectEachUser.getString("ic"));
@@ -241,20 +241,15 @@ public class TestActivityViewModel extends AndroidViewModel {
                             }// end-try
                         }// end-while
 
-//                        for (String row : rowsToBeDeleted) {
-//                            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(row);
-//                        }
-
-
                         Log.i(TEST_SYNC_TAG, "OnUpdateSuccesful--> Size of Map :" + rowsOnUpdateSuccessful.size());
                         for (Map.Entry<String,Integer> entry : rowsOnUpdateSuccessful.entrySet()) {
 //                            updateVersionColKospenuser(entry.getValue(), entry.getKey());
-                            deleteOutRestReqKospenuserByIc(entry.getKey());
+//                            deleteOutRestReqKospenuserByIc(entry.getKey());
 
                             Log.i(TEST_SYNC_TAG, "OnUpdateSuccesful--> Ic :" + entry.getKey() + " ,Version :" + entry.getValue());
                         }
                         for (String rowOnInsertSuccessful : rowsOnInsertSuccessful) {
-                            deleteOutRestReqKospenuserByIc(rowOnInsertSuccessful);
+//                            deleteOutRestReqKospenuserByIc(rowOnInsertSuccessful);
 
                             Log.i(TEST_SYNC_TAG, "OnInsertSuccesful--> Ic :" + rowOnInsertSuccessful);
                         }
