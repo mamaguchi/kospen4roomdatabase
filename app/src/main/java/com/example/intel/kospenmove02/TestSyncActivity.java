@@ -2,6 +2,7 @@ package com.example.intel.kospenmove02;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +38,7 @@ import com.example.intel.kospenmove02.db.entity.KospenuserServer;
 import com.example.intel.kospenmove02.db.converter.OutRestReqConverter.OutRestReq;
 import com.example.intel.kospenmove02.db.converter.InDBQueryConverter.InDBQuery;
 import com.example.intel.kospenmove02.db.entity.OutRestReqKospenuser;
+import com.example.intel.kospenmove02.db.viewmodel.TestActivityViewModel;
 
 public class TestSyncActivity extends AppCompatActivity {
 
@@ -54,6 +57,8 @@ public class TestSyncActivity extends AppCompatActivity {
     private String outRestReqKospenuserUrl = "http://192.168.10.11/api/kospenusers/testoutrestreq";
 
     private AppDatabase mDb;
+
+    private TestActivityViewModel mTestActivityViewModel;
 
     private LiveData<List<Kospenuser>> kospenusers;
     private LiveData<List<KospenuserServer>> kospenusersServer;
@@ -86,6 +91,8 @@ public class TestSyncActivity extends AppCompatActivity {
         showKospenuserserverButton = (Button) findViewById(R.id.kospenuserserverButtonId);
 
         mDb = AppDatabase.getDatabase(this);
+
+        mTestActivityViewModel = ViewModelProviders.of(this).get(TestActivityViewModel.class);
     }
 
     public void returnmainButtonClicked(View view) {
@@ -131,23 +138,31 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     public void scene1Clicked(View view) {
-        kospenusersScenarioOne =  mDb.kospenuserModel().loadScenarioOne();
-        kospenusersScenarioOne.observe(this,
-                new Observer<List<Kospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
-                        showScene1InUi(kospenusers);
-                    }
-                });
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioOne();
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerFrmLocal);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
 
-        outRestReqKospenusers = mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();
-        outRestReqKospenusers.observe(this,
-                new Observer<List<OutRestReqKospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<OutRestReqKospenuser> outRestReqKospenusers) {
-                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
-                    }
-                });
+//        kospenusersScenarioOne =  mDb.kospenuserModel().loadScenarioOne();
+//        kospenusersScenarioOne.observe(this,
+//                new Observer<List<Kospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+//                        showScene1InUi(kospenusers);
+//                    }
+//                });
+
+//        outRestReqKospenusers = mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();
+//        outRestReqKospenusers.observe(this,
+//                new Observer<List<OutRestReqKospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<OutRestReqKospenuser> outRestReqKospenusers) {
+//                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
+//                    }
+//                });
     }
 
     private void showScene1InUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -170,23 +185,31 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     public void scene2Clicked(View view) {
-        kospenusersScenarioTwo =  mDb.kospenuserModel().loadScenarioTwo();
-        kospenusersScenarioTwo.observe(this,
-                new Observer<List<Kospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
-                        showScene2InUi(kospenusers);
-                    }
-                });
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioTwo();
+        for (Kospenuser kospenuser : kospenusers) {
+            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
+            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.LocalKospenuserUpdateFrmInsideLocality);
+            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+        }
 
-        inDBQueryKospenusers = mDb.inDBQueryKospenuserModel().loadAllInDBQueryKospenusers();
-        inDBQueryKospenusers.observe(this,
-                new Observer<List<InDBQueryKospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<InDBQueryKospenuser> inDBQueryKospenusers) {
-                        showInDBQueryKospenuserInUi(inDBQueryKospenusers);
-                    }
-                });
+//        kospenusersScenarioTwo =  mDb.kospenuserModel().loadScenarioTwo();
+//        kospenusersScenarioTwo.observe(this,
+//                new Observer<List<Kospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+//                        showScene2InUi(kospenusers);
+//                    }
+//                });
+
+//        inDBQueryKospenusers = mDb.inDBQueryKospenuserModel().loadAllInDBQueryKospenusers();
+//        inDBQueryKospenusers.observe(this,
+//                new Observer<List<InDBQueryKospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<InDBQueryKospenuser> inDBQueryKospenusers) {
+//                        showInDBQueryKospenuserInUi(inDBQueryKospenusers);
+//                    }
+//                });
     }
 
     private void showScene2InUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -209,14 +232,16 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     public void scene3Clicked(View view) {
-        kospenusersScenarioThree =  mDb.kospenuserModel().loadScenarioThree();
-        kospenusersScenarioThree.observe(this,
-                new Observer<List<Kospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
-                        showScene3InUi(kospenusers);
-                    }
-                });
+        mDb.kospenuserModel().loadScenarioThree();
+
+//        kospenusersScenarioThree =  mDb.kospenuserModel().loadScenarioThree();
+//        kospenusersScenarioThree.observe(this,
+//                new Observer<List<Kospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+//                        showScene3InUi(kospenusers);
+//                    }
+//                });
     }
 
     private void showScene3InUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -232,23 +257,31 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     public void scene4aClicked(View view) {
-        kospenusersScenarioFourA =  mDb.kospenuserModel().loadScenarioFourA();
-        kospenusersScenarioFourA.observe(this,
-                new Observer<List<Kospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
-                        showScene4aInUi(kospenusers);
-                    }
-                });
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourA();
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerFrmGlobal);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
 
-        outRestReqKospenusers = mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();
-        outRestReqKospenusers.observe(this,
-                new Observer<List<OutRestReqKospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<OutRestReqKospenuser> outRestReqKospenusers) {
-                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
-                    }
-                });
+//        kospenusersScenarioFourA =  mDb.kospenuserModel().loadScenarioFourA();
+//        kospenusersScenarioFourA.observe(this,
+//                new Observer<List<Kospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+//                        showScene4aInUi(kospenusers);
+//                    }
+//                });
+
+//        outRestReqKospenusers = mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();
+//        outRestReqKospenusers.observe(this,
+//                new Observer<List<OutRestReqKospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<OutRestReqKospenuser> outRestReqKospenusers) {
+//                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
+//                    }
+//                });
     }
 
     private void showScene4aInUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -272,23 +305,31 @@ public class TestSyncActivity extends AppCompatActivity {
 
     // Need to delete this kospenuser from Android(local) Kospenuser.java entity
     public void scene4bClicked(View view) {
-        kospenusersScenarioFourB =  mDb.kospenuserModel().loadScenarioFourB();
-        kospenusersScenarioFourB.observe(this,
-                new Observer<List<Kospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
-                        showScene4bInUi(kospenusers);
-                    }
-                });
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourB();
+        for (Kospenuser kospenuser : kospenusers) {
+            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
+            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.LocalKospenuserUpdateFrmOutsideLocality);
+            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+        }
 
-        inDBQueryKospenusers = mDb.inDBQueryKospenuserModel().loadAllInDBQueryKospenusers();
-        inDBQueryKospenusers.observe(this,
-                new Observer<List<InDBQueryKospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<InDBQueryKospenuser> inDBQueryKospenusers) {
-                        showInDBQueryKospenuserInUi(inDBQueryKospenusers);
-                    }
-                });
+//        kospenusersScenarioFourB =  mDb.kospenuserModel().loadScenarioFourB();
+//        kospenusersScenarioFourB.observe(this,
+//                new Observer<List<Kospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+//                        showScene4bInUi(kospenusers);
+//                    }
+//                });
+
+//        inDBQueryKospenusers = mDb.inDBQueryKospenuserModel().loadAllInDBQueryKospenusers();
+//        inDBQueryKospenusers.observe(this,
+//                new Observer<List<InDBQueryKospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<InDBQueryKospenuser> inDBQueryKospenusers) {
+//                        showInDBQueryKospenuserInUi(inDBQueryKospenusers);
+//                    }
+//                });
     }
 
     private void showScene4bInUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -311,23 +352,31 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     public void scene4cClicked(View view) {
-        kospenusersScenarioFourC =  mDb.kospenuserModel().loadScenarioFourC();
-        kospenusersScenarioFourC.observe(this,
-                new Observer<List<Kospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
-                        showScene4cInUi(kospenusers);
-                    }
-                });
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourC();
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerFrmGlobal);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
 
-        outRestReqKospenusers = mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();
-        outRestReqKospenusers.observe(this,
-                new Observer<List<OutRestReqKospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<OutRestReqKospenuser> outRestReqKospenusers) {
-                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
-                    }
-                });
+//        kospenusersScenarioFourC =  mDb.kospenuserModel().loadScenarioFourC();
+//        kospenusersScenarioFourC.observe(this,
+//                new Observer<List<Kospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+//                        showScene4cInUi(kospenusers);
+//                    }
+//                });
+
+//        outRestReqKospenusers = mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();
+//        outRestReqKospenusers.observe(this,
+//                new Observer<List<OutRestReqKospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<OutRestReqKospenuser> outRestReqKospenusers) {
+//                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
+//                    }
+//                });
     }
 
     private void showScene4cInUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -350,23 +399,31 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     public void scene5Clicked(View view) {
-        kospenusersScenarioFive =  mDb.kospenuserModel().loadScenarioFive();
-        kospenusersScenarioFive.observe(this,
-                new Observer<List<Kospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
-                        showScene5InUi(kospenusers);
-                    }
-                });
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFive();
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerNewKospenuser);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
 
-        outRestReqKospenusers = mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();
-        outRestReqKospenusers.observe(this,
-                new Observer<List<OutRestReqKospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<OutRestReqKospenuser> outRestReqKospenusers) {
-                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
-                    }
-                });
+//        kospenusersScenarioFive =  mDb.kospenuserModel().loadScenarioFive();
+//        kospenusersScenarioFive.observe(this,
+//                new Observer<List<Kospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+//                        showScene5InUi(kospenusers);
+//                    }
+//                });
+
+//        outRestReqKospenusers = mDb.outRestReqKospenuserModel().loadAllOutRestReqKospenusers();
+//        outRestReqKospenusers.observe(this,
+//                new Observer<List<OutRestReqKospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<OutRestReqKospenuser> outRestReqKospenusers) {
+//                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
+//                    }
+//                });
     }
 
     private void showScene5InUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -389,23 +446,31 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     public void scene6Clicked(View view) {
-        kospenusersScenarioSix =  mDb.kospenuserServerModel().loadScenarioSix();
-        kospenusersScenarioSix.observe(this,
-                new Observer<List<KospenuserServer>>() {
-                    @Override
-                    public void onChanged(@Nullable List<KospenuserServer> kospenusersServer) {
-                        showScene6InUi(kospenusersServer);
-                    }
-                });
+        List<KospenuserServer> kospenusersServer = mDb.kospenuserServerModel().loadScenarioSix();
+        for (KospenuserServer kospenuserServer : kospenusersServer) {
+            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuserServer);
+            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.KospenuserInsideLocalityNotInAndroidDb);
+            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+        }
 
-        inDBQueryKospenusers = mDb.inDBQueryKospenuserModel().loadAllInDBQueryKospenusers();
-        inDBQueryKospenusers.observe(this,
-                new Observer<List<InDBQueryKospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<InDBQueryKospenuser> inDBQueryKospenusers) {
-                        showInDBQueryKospenuserInUi(inDBQueryKospenusers);
-                    }
-                });
+//        kospenusersScenarioSix =  mDb.kospenuserServerModel().loadScenarioSix();
+//        kospenusersScenarioSix.observe(this,
+//                new Observer<List<KospenuserServer>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<KospenuserServer> kospenusersServer) {
+//                        showScene6InUi(kospenusersServer);
+//                    }
+//                });
+
+//        inDBQueryKospenusers = mDb.inDBQueryKospenuserModel().loadAllInDBQueryKospenusers();
+//        inDBQueryKospenusers.observe(this,
+//                new Observer<List<InDBQueryKospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<InDBQueryKospenuser> inDBQueryKospenusers) {
+//                        showInDBQueryKospenuserInUi(inDBQueryKospenusers);
+//                    }
+//                });
     }
 
     private void showScene6InUi(final @NonNull List<KospenuserServer> kospenusersServer) {
@@ -753,65 +818,115 @@ public class TestSyncActivity extends AppCompatActivity {
     // [Send OutRestReqKospenusers to Server DB]
     public void outreqsyncButtonClicked(View view) {
         // ========== JsonObjectRequest - POST ==========
-        Log.i(TEST_SYNC_TAG, "[doInBackground] Preparing JsonObjectRequest for OutRestReqKospenuser Sync with ServerDB");
+//        Log.i(TEST_SYNC_TAG, "[doInBackground] Preparing JsonObjectRequest for OutRestReqKospenuser Sync with ServerDB");
+//
+//        List<OutRestReqKospenuser> outRestReqKospenuserList = mDb.outRestReqKospenuserModel().loadAll();
+//        JSONObject jsonObjectPayload = new JSONObject();
+//        try{
+//            JSONObject jsonObjectTable = new JSONObject();
+//            int counter = 1;
+//            for (OutRestReqKospenuser outRestReqKospenuser : outRestReqKospenuserList) {
+//                JSONObject jsonObjectRow = new JSONObject();
+//                jsonObjectRow.put("version", outRestReqKospenuser.getVersion());
+//                jsonObjectRow.put("status", outRestReqKospenuser.getOutRestReqStatus());
+//                jsonObjectRow.put("ic", outRestReqKospenuser.getIc());
+//                jsonObjectRow.put("created_at", outRestReqKospenuser.getTimestamp());
+//                jsonObjectRow.put("updated_at", outRestReqKospenuser.getTimestamp());
+//                jsonObjectRow.put("name", outRestReqKospenuser.getName());
+//                jsonObjectRow.put("gender", outRestReqKospenuser.getFk_gender());
+//                jsonObjectRow.put("address", outRestReqKospenuser.getAddress());
+//                jsonObjectRow.put("state", outRestReqKospenuser.getFk_state());
+//                jsonObjectRow.put("region", outRestReqKospenuser.getFk_region());
+//                jsonObjectRow.put("subregion", outRestReqKospenuser.getFk_subregion());
+//                jsonObjectRow.put("locality", outRestReqKospenuser.getFk_locality());
+//                jsonObjectRow.put("firstRegRegion", outRestReqKospenuser.getFirstRegRegion());
+//
+//                jsonObjectTable.put("user"+counter, jsonObjectRow);
+//                counter += 1;
+//            }
+//            jsonObjectPayload.put("data", jsonObjectTable);
+//
+//        } catch (JSONException jse) {
+//            Log.e(TEST_SYNC_TAG, jse.getMessage());
+//        }
+//
+//        Log.i(TEST_SYNC_TAG, jsonObjectPayload.toString());
+//
+//        // Version 1: using 'JsonObjectRequest'
+//        JsonObjectRequest postRequest = new JsonObjectRequest(
+//                Request.Method.POST,
+//                outRestReqKospenuserUrl,
+//                jsonObjectPayload,
+//                new Response.Listener<JSONObject >() {
+//                    @Override
+//                    public void onResponse(JSONObject  response) {
+//                        Log.i(TEST_SYNC_TAG, "Successful outRestReqKospenuserUrl: \n" + response.toString() + "\n");
+//
+//                        Iterator<String> keys = response.keys();
+//                        while (keys.hasNext()) {
+//
+//                            try {
+//                                JSONObject jsonObjectEachUser = (JSONObject) response.get(keys.next());
+//
+//                                // Version 1: using 'if'
+////                                if (jsonObjectEachUser.getString("returnStatus").equalsIgnoreCase("UPDATE_SUCCESSFUL")) {
+////                                    Log.i(TEST_SYNC_TAG, "Successful Update RespObj-> " + jsonObjectEachUser.getString("name"));
+////                                } else if (jsonObjectEachUser.getString("returnStatus").equalsIgnoreCase("INSERT_SUCCESSFUL")){
+////                                    Log.i(TEST_SYNC_TAG, "Successful Insert RespObj-> " + jsonObjectEachUser.getString("name"));
+////                                }// end-if
+//
+//                                // Version 2: using 'switch'
+//                                switch (jsonObjectEachUser.getString("returnStatus")) {
+//                                    case "UPDATE_SUCCESSFUL":
+//                                        Log.i(TEST_SYNC_TAG, "Successful Update RespObj-> " + jsonObjectEachUser.getString("name") +
+//                                                " " + jsonObjectEachUser.getInt("version"));
+////                                        mDb.kospenuserModel().updateVersionColKospenuser(jsonObjectEachUser.getInt("version"),jsonObjectEachUser.getString("ic"));
+////                                        mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+//                                        mTestActivityViewModel.updateVersionColKospenuser(jsonObjectEachUser.getInt("version"),jsonObjectEachUser.getString("ic"));
+//                                        mTestActivityViewModel.deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+//                                        break;
+//                                    case "INSERT_SUCCESSFUL":
+//                                        Log.i(TEST_SYNC_TAG, "Successful Insert RespObj-> " + jsonObjectEachUser.getString("name") +
+//                                                " " + jsonObjectEachUser.getInt("version"));
+//                                        mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+//                                        break;
+//                                    case "UPDATE_DENIED_STALE_VERSION":
+//                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+//                                                " " + jsonObjectEachUser.getInt("version"));
+////                                        mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+//                                        break;
+//                                    default:
+//                                        Log.i(TEST_SYNC_TAG, "Unknown returnStatus!");
+//                                        break;
+//                                }// end-switch
+//
+//
+//                            } catch (JSONException jse) {
+//                                Log.i(TEST_SYNC_TAG, jse.getMessage());
+//                            }// end-try
+//                        }// end-while
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.i(TEST_SYNC_TAG, "Failed outRestReqKospenuserUrl: " + error.toString());
+//                    }
+//                }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
+//
+//
+//
+//        Log.i(TEST_SYNC_TAG, "[doInBackground] Adding JsonObjectRequest[outRestReqKospenuserUrl] to queue to send request to remote server");
+//        MySingleton.getInstance(this).addToRequestQueue(postRequest);
+//        Log.i(TEST_SYNC_TAG, "[doInBackground] JsonObjectRequest[outRestReqKospenuserUrl] sent");
 
-        List<OutRestReqKospenuser> outRestReqKospenuserList = mDb.outRestReqKospenuserModel().loadAll();
-        JSONObject jsonObjectPayload = new JSONObject();
-        try{
-            JSONObject jsonObjectTable = new JSONObject();
-            int counter = 1;
-            for (OutRestReqKospenuser outRestReqKospenuser : outRestReqKospenuserList) {
-                JSONObject jsonObjectRow = new JSONObject();
-                jsonObjectRow.put("version", outRestReqKospenuser.getVersion());
-                jsonObjectRow.put("status", outRestReqKospenuser.getOutRestReqStatus());
-                jsonObjectRow.put("ic", outRestReqKospenuser.getIc());
-                jsonObjectRow.put("created_at", outRestReqKospenuser.getTimestamp());
-                jsonObjectRow.put("updated_at", outRestReqKospenuser.getTimestamp());
-                jsonObjectRow.put("name", outRestReqKospenuser.getName());
-                jsonObjectRow.put("gender", outRestReqKospenuser.getFk_gender());
-                jsonObjectRow.put("address", outRestReqKospenuser.getAddress());
-                jsonObjectRow.put("state", outRestReqKospenuser.getFk_state());
-                jsonObjectRow.put("region", outRestReqKospenuser.getFk_region());
-                jsonObjectRow.put("subregion", outRestReqKospenuser.getFk_subregion());
-                jsonObjectRow.put("locality", outRestReqKospenuser.getFk_locality());
-                jsonObjectRow.put("firstRegRegion", outRestReqKospenuser.getFirstRegRegion());
-
-                jsonObjectTable.put("user"+counter, jsonObjectRow);
-                counter += 1;
-            }
-            jsonObjectPayload.put("data", jsonObjectTable);
-
-        } catch (JSONException jse) {
-            Log.e(TEST_SYNC_TAG, jse.getMessage());
-        }
-
-        Log.i(TEST_SYNC_TAG, jsonObjectPayload.toString());
-
-        JsonObjectRequest postRequest = new JsonObjectRequest(
-                Request.Method.POST,
-                outRestReqKospenuserUrl,
-                jsonObjectPayload,
-                new Response.Listener<JSONObject >() {
-                    @Override
-                    public void onResponse(JSONObject  response) {
-                        Log.i(TEST_SYNC_TAG, "Successful outRestReqKospenuserUrl: \n" + response.toString() + "\n");
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i(TEST_SYNC_TAG, "Failed outRestReqKospenuserUrl: " + error.toString());
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
-        Log.i(TEST_SYNC_TAG, "[doInBackground] Adding JsonObjectRequest[outRestReqKospenuserUrl] to queue to send request to remote server");
-        MySingleton.getInstance(this).addToRequestQueue(postRequest);
-        Log.i(TEST_SYNC_TAG, "[doInBackground] JsonObjectRequest[outRestReqKospenuserUrl] sent");
+        mTestActivityViewModel.outRestReqSync();
     }
 }

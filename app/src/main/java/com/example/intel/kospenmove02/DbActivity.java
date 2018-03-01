@@ -40,33 +40,33 @@ public class DbActivity extends AppCompatActivity {
     }
 
     private void subscribeToKospenusersList() {
-        mViewModel.kospenusers.observe(this,
-                new Observer<List<Kospenuser>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
-                        showKospenusersInUi(kospenusers);
-                    }
-                });
+//        mViewModel.kospenusers.observe(this,
+//                new Observer<List<Kospenuser>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<Kospenuser> kospenusers) {
+//                        showKospenusersInUi(kospenusers);
+//                    }
+//                });
     }
 
     private void subscribeToKospenusersServerList() {
-        mViewModel.kospenusersScenarioSix.observe(this,
-                new Observer<List<KospenuserServer>>() {
-                    @Override
-                    public void onChanged(@Nullable List<KospenuserServer> kospenusersServer) {
-                        showKospenusersServerInUi(kospenusersServer);
-                    }
-                });
+//        mViewModel.kospenusersScenarioSix.observe(this,
+//                new Observer<List<KospenuserServer>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<KospenuserServer> kospenusersServer) {
+//                        showKospenusersServerInUi(kospenusersServer);
+//                    }
+//                });
     }
 
     private void subscribeToScreeningsList() {
-        mViewModel.screenings.observe(this,
-                new Observer<List<Screening>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Screening> screenings) {
-                        showScreeningsInUi(screenings);
-                    }
-                });
+//        mViewModel.screenings.observe(this,
+//                new Observer<List<Screening>>() {
+//                    @Override
+//                    public void onChanged(@Nullable List<Screening> screenings) {
+//                        showScreeningsInUi(screenings);
+//                    }
+//                });
     }
 
     private void showKospenusersInUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -77,7 +77,7 @@ public class DbActivity extends AppCompatActivity {
             sb.append("_");
             sb.append(kospenuser.getIc());
             sb.append("_");
-//            sb.append(kospenuser.getTimestamp());
+            sb.append(kospenuser.getVersion());
             sb.append("\n");
         }
         mKospenusersListTextView.setText(sb.toString());

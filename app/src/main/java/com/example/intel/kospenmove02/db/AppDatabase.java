@@ -37,7 +37,7 @@ import com.example.intel.kospenmove02.db.entity.Subregion;
 @Database(entities = {Gender.class, State.class, Region.class, Subregion.class, Locality.class,
                     Kospenuser.class, Screening.class,
                     KospenuserServer.class, KospenuserGlobal.class,
-                    OutRestReqKospenuser.class, InDBQueryKospenuser.class}, version=8)
+                    OutRestReqKospenuser.class, InDBQueryKospenuser.class}, version=9)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
