@@ -125,7 +125,8 @@ public interface KospenuserDao {
 //    List<Kospenuser> loadScenarioFive();
 
 
-    // VERSION 3: to update 'version' column of local 'kospenuser' on every REST request of inside-locality kospenusers list from laravel server
+    // VERSION 3: to update 'version' column of local 'kospenuser'(that generates both OutRestReqKospenuser & InDBQueryKospenuser)
+    // on every REST request of inside-locality kospenusers list from laravel server.
     @Query("SELECT kospenuserserver.version, kospenuser.timestamp, kospenuser.ic, kospenuser.name, kospenuser.fk_gender, kospenuser.address, " +
             "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion " +
             "FROM kospenuser INNER JOIN kospenuserserver " +

@@ -138,14 +138,7 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     public void scene1Clicked(View view) {
-        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioOne();
-        for (Kospenuser kospenuser : kospenusers) {
-            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
-            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerFrmLocal);
-            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
-            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
-        }
-
+        // VERSION 1: using LiveData -> good for testing sql statements to see if desired data is return by Android sqlite
 //        kospenusersScenarioOne =  mDb.kospenuserModel().loadScenarioOne();
 //        kospenusersScenarioOne.observe(this,
 //                new Observer<List<Kospenuser>>() {
@@ -163,6 +156,15 @@ public class TestSyncActivity extends AppCompatActivity {
 //                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
 //                    }
 //                });
+
+        // VERSION 2: using normal java list -> when LiveData is no longer required to update UI
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioOne();
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerFrmLocal);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
     }
 
     private void showScene1InUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -185,14 +187,7 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     public void scene2Clicked(View view) {
-        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioTwo();
-        for (Kospenuser kospenuser : kospenusers) {
-            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
-            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.LocalKospenuserUpdateFrmInsideLocality);
-            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
-            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
-        }
-
+        // VERSION 1: using LiveData -> good for testing sql statements to see if desired data is return by Android sqlite
 //        kospenusersScenarioTwo =  mDb.kospenuserModel().loadScenarioTwo();
 //        kospenusersScenarioTwo.observe(this,
 //                new Observer<List<Kospenuser>>() {
@@ -210,6 +205,16 @@ public class TestSyncActivity extends AppCompatActivity {
 //                        showInDBQueryKospenuserInUi(inDBQueryKospenusers);
 //                    }
 //                });
+
+        // VERSION 2: using normal java list -> when LiveData is no longer required to update UI
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioTwo();
+        for (Kospenuser kospenuser : kospenusers) {
+            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
+            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.LocalKospenuserUpdateFrmInsideLocality);
+            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+        }
+
     }
 
     private void showScene2InUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -257,14 +262,7 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     public void scene4aClicked(View view) {
-        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourA();
-        for (Kospenuser kospenuser : kospenusers) {
-            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
-            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerFrmGlobal);
-            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
-            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
-        }
-
+        // VERSION 1: using LiveData -> good for testing sql statements to see if desired data is return by Android sqlite
 //        kospenusersScenarioFourA =  mDb.kospenuserModel().loadScenarioFourA();
 //        kospenusersScenarioFourA.observe(this,
 //                new Observer<List<Kospenuser>>() {
@@ -282,6 +280,16 @@ public class TestSyncActivity extends AppCompatActivity {
 //                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
 //                    }
 //                });
+
+        // VERSION 2: using normal java list -> when LiveData is no longer required to update UI
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourA();
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerFrmGlobal);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
+
     }
 
     private void showScene4aInUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -305,14 +313,7 @@ public class TestSyncActivity extends AppCompatActivity {
 
     // Need to delete this kospenuser from Android(local) Kospenuser.java entity
     public void scene4bClicked(View view) {
-        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourB();
-        for (Kospenuser kospenuser : kospenusers) {
-            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
-            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.LocalKospenuserUpdateFrmOutsideLocality);
-            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
-            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
-        }
-
+        // VERSION 1: using LiveData -> good for testing sql statements to see if desired data is return by Android sqlite
 //        kospenusersScenarioFourB =  mDb.kospenuserModel().loadScenarioFourB();
 //        kospenusersScenarioFourB.observe(this,
 //                new Observer<List<Kospenuser>>() {
@@ -330,6 +331,16 @@ public class TestSyncActivity extends AppCompatActivity {
 //                        showInDBQueryKospenuserInUi(inDBQueryKospenusers);
 //                    }
 //                });
+
+        // VERSION 2: using normal java list -> when LiveData is no longer required to update UI
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourB();
+        for (Kospenuser kospenuser : kospenusers) {
+            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
+            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.LocalKospenuserUpdateFrmOutsideLocality);
+            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+        }
+
     }
 
     private void showScene4bInUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -352,14 +363,7 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     public void scene4cClicked(View view) {
-        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourC();
-        for (Kospenuser kospenuser : kospenusers) {
-            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
-            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerFrmGlobal);
-            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
-            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
-        }
-
+        // VERSION 1: using LiveData -> good for testing sql statements to see if desired data is return by Android sqlite
 //        kospenusersScenarioFourC =  mDb.kospenuserModel().loadScenarioFourC();
 //        kospenusersScenarioFourC.observe(this,
 //                new Observer<List<Kospenuser>>() {
@@ -377,6 +381,15 @@ public class TestSyncActivity extends AppCompatActivity {
 //                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
 //                    }
 //                });
+
+        // VERSION 2: using normal java list -> when LiveData is no longer required to update UI
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourC();
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerFrmGlobal);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
     }
 
     private void showScene4cInUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -399,14 +412,7 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     public void scene5Clicked(View view) {
-        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFive();
-        for (Kospenuser kospenuser : kospenusers) {
-            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
-            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerNewKospenuser);
-            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
-            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
-        }
-
+        // VERSION 1: using LiveData -> good for testing sql statements to see if desired data is return by Android sqlite
 //        kospenusersScenarioFive =  mDb.kospenuserModel().loadScenarioFive();
 //        kospenusersScenarioFive.observe(this,
 //                new Observer<List<Kospenuser>>() {
@@ -424,6 +430,16 @@ public class TestSyncActivity extends AppCompatActivity {
 //                        showOutRestReqKospenuserInUi(outRestReqKospenusers);
 //                    }
 //                });
+
+        // VERSION 2: using normal java list -> when LiveData is no longer required to update UI
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFive();
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReq.UpdateServerNewKospenuser);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
+
     }
 
     private void showScene5InUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -446,14 +462,7 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     public void scene6Clicked(View view) {
-        List<KospenuserServer> kospenusersServer = mDb.kospenuserServerModel().loadScenarioSix();
-        for (KospenuserServer kospenuserServer : kospenusersServer) {
-            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuserServer);
-            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.KospenuserInsideLocalityNotInAndroidDb);
-            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
-            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
-        }
-
+        // VERSION 1: using LiveData -> good for testing sql statements to see if desired data is return by Android sqlite
 //        kospenusersScenarioSix =  mDb.kospenuserServerModel().loadScenarioSix();
 //        kospenusersScenarioSix.observe(this,
 //                new Observer<List<KospenuserServer>>() {
@@ -471,6 +480,16 @@ public class TestSyncActivity extends AppCompatActivity {
 //                        showInDBQueryKospenuserInUi(inDBQueryKospenusers);
 //                    }
 //                });
+
+        // VERSION 2: using normal java list -> when LiveData is no longer required to update UI
+        List<KospenuserServer> kospenusersServer = mDb.kospenuserServerModel().loadScenarioSix();
+        for (KospenuserServer kospenuserServer : kospenusersServer) {
+            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuserServer);
+            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.KospenuserInsideLocalityNotInAndroidDb);
+            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+        }
+
     }
 
     private void showScene6InUi(final @NonNull List<KospenuserServer> kospenusersServer) {
