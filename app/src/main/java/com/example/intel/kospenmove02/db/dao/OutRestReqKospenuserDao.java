@@ -33,11 +33,11 @@ public interface OutRestReqKospenuserDao {
             "ic = :ic")
     void incrementOutRestReqFailCounter(String ic);
 
-    @Query("DELETE from outrestreqkospenuser where " +
+    @Query("DELETE from outrestreqkospenuser WHERE " +
             "outRestReqFailCounter >= 3")
     void deleteOutRestReqKospenuserWith3orMoreFailCounter();
 
-    @Query("DELETE from outrestreqkospenuser where ic = :ic")
+    @Query("DELETE from outrestreqkospenuser WHERE ic = :ic")
     void deleteOutRestReqKospenuserByIc(String ic);
 
     @Query("DELETE from outrestreqkospenuser")

@@ -533,11 +533,13 @@ public class TestSyncActivity extends AppCompatActivity {
         for (Kospenuser kospenuser : kospenusers) {
             sb.append(kospenuser.getName());
             sb.append("_");
-            sb.append(kospenuser.getIc());
-            sb.append("_Version :");
+//            sb.append(kospenuser.getIc());
+            sb.append("_Version:");
             sb.append(kospenuser.getVersion());
-            sb.append("_Dirty :");
+            sb.append("_Dirty:");
             sb.append(kospenuser.isDirty());
+            sb.append("_SoftDel:");
+            sb.append(kospenuser.isSoftDel());
             sb.append("\n");
         }
         InDBOutReqTableTextView.setText(sb.toString());
@@ -626,9 +628,8 @@ public class TestSyncActivity extends AppCompatActivity {
     public void getButtonClicked(View view) throws Exception {
         // ========== JsonArrayRequest - GET version 2.0 ==========
         // ----------------------------------------------------------------------------------------- <getOutsideLocalityRequest>
-
         // !!! TODO-ATTENTION !!! //
-        // THESE PART IS STILL HARDCODE.
+        // THESE PART IS STILL HARDCODED.
         // THE QUERY PARAMS NEED TO BE ABLE
         // TO CAPTURE THE LOCATION OF THE JURURAWAT-MASYARAKAT AUTOMATICALLY
         Map<String, Integer> paramsOutsideLocalityReq = new HashMap<>();
@@ -636,12 +637,12 @@ public class TestSyncActivity extends AppCompatActivity {
         paramsOutsideLocalityReq.put("region", 1);
         paramsOutsideLocalityReq.put("subregion", 1);
         paramsOutsideLocalityReq.put("locality", 1);
-        JSONObject jsonObjOutsideLocalityReq = new JSONObject(paramsOutsideLocalityReq);
+        JSONObject jsonObjOutsideLocalityReqPayload = new JSONObject(paramsOutsideLocalityReq);
 
         MyJsonArrayRequest getOutsideLocalityRequest = new MyJsonArrayRequest(
                 Request.Method.POST,
                 kospenusersOusideLocalityUrl,
-                jsonObjOutsideLocalityReq,
+                jsonObjOutsideLocalityReqPayload,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray  response) {
@@ -691,9 +692,8 @@ public class TestSyncActivity extends AppCompatActivity {
 
 
         // ----------------------------------------------------------------------------------------- <getInsideLocalityRequest>
-
         // !!! TODO-ATTENTION !!! //
-        // THESE PART IS STILL HARDCODE.
+        // THESE PART IS STILL HARDCODED.
         // THE QUERY PARAMS NEED TO BE ABLE
         // TO CAPTURE THE LOCATION OF THE JURURAWAT-MASYARAKAT AUTOMATICALLY
         Map<String, Integer> paramsInsideLocalityReq = new HashMap<>();

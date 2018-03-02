@@ -10,12 +10,19 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.intel.kospenmove02.MyJsonArrayRequest;
 import com.example.intel.kospenmove02.MySingleton;
 import com.example.intel.kospenmove02.db.AppDatabase;
+import com.example.intel.kospenmove02.db.converter.InDBQueryConverter;
 import com.example.intel.kospenmove02.db.converter.OutRestReqConverter;
+import com.example.intel.kospenmove02.db.entity.InDBQueryKospenuser;
+import com.example.intel.kospenmove02.db.entity.Kospenuser;
+import com.example.intel.kospenmove02.db.entity.KospenuserGlobal;
+import com.example.intel.kospenmove02.db.entity.KospenuserServer;
 import com.example.intel.kospenmove02.db.entity.OutRestReqKospenuser;
 import com.example.intel.kospenmove02.db.utils.DatabaseInitializer;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,6 +44,9 @@ public class TestActivityViewModel extends AndroidViewModel {
     Map<String,Integer> rowsOnUpdateSuccessful = new HashMap<>();
     ArrayList<String> rowsOnInsertSuccessful = new ArrayList<>();
     List<OutRestReqKospenuser> outRestReqKospenuserList = new ArrayList<>();
+
+    private boolean insideLocalityGetReqChecker;
+    private boolean outsideLocalityGetReqChecker;
 
     private final AppDatabase mDb;
 
@@ -113,8 +123,253 @@ public class TestActivityViewModel extends AndroidViewModel {
 //        }
 //    }
 
-    private void sendOutRestReq() {
 
+    private void getInsideLocalityKospenuserReq() {
+        // ----------------------------------------------------------------------------------------- <getInsideLocalityRequest>
+        // !!! TODO-ATTENTION !!! //
+        // THESE PART IS STILL HARDCODED.
+        // THE QUERY PARAMS NEED TO BE ABLE
+        // TO CAPTURE THE LOCATION OF THE JURURAWAT-MASYARAKAT AUTOMATICALLY
+        Map<String, Integer> paramsInsideLocalityReq = new HashMap<>();
+        paramsInsideLocalityReq.put("state", 1);
+        paramsInsideLocalityReq.put("region", 1);
+        paramsInsideLocalityReq.put("subregion", 1);
+        paramsInsideLocalityReq.put("locality", 1);
+        JSONObject jsonObjInsideLocalityReq = new JSONObject(paramsInsideLocalityReq);
+
+        // 'getInsideLocalityRequest' -> Version 2:
+        MyJsonArrayRequest getInsideLocalityRequest = new MyJsonArrayRequest(
+                Request.Method.POST,
+                kospenusersInsideLocalityUrl,
+                jsonObjInsideLocalityReq,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray  response) {
+                        Log.i(TEST_SYNC_TAG, "Successful Inside-Locality-Request GET");
+                        try {
+                            mDb.kospenuserServerModel().deleteAll();
+
+                            for (int i=0;i<response.length();i++) {
+                                //Inserting a new kospenuser row into sqlite
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                String updated_at = jsonObject.getString("updated_at");
+                                String ic = jsonObject.getString("ic");
+                                String name = jsonObject.getString("name");
+                                int gender = jsonObject.getInt("gender");
+                                String address = jsonObject.getString("address");
+                                int state = jsonObject.getInt("state");
+                                int region = jsonObject.getInt("region");
+                                int subregion = jsonObject.getInt("subregion");
+                                int locality = jsonObject.getInt("locality");
+                                String firstRegRegion = jsonObject.getString("firstRegRegion");
+                                int version = jsonObject.getInt("version");
+                                KospenuserServer kospenuserServer = new KospenuserServer(updated_at, ic, name, address, gender,
+                                        state, region, subregion, locality, firstRegRegion, version);
+                                mDb.kospenuserServerModel().insertKospenuserServer(kospenuserServer);
+                            }
+                        } catch (Exception e){
+                            Log.e(TEST_SYNC_TAG, "KospenuserServer row insert Failed, error: " + e.getMessage());
+                        }
+
+                        getOutsideLocalityKospenuserReq();
+                    }// end-method'onResponse'
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TEST_SYNC_TAG, "Failed GET: " + error.getMessage());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        Log.i(TEST_SYNC_TAG, "[doInBackground] Adding getInsideLocalityKospenuserReq to queue to send request to remote server");
+        MySingleton.getInstance(this.getApplication()).addToRequestQueue(getInsideLocalityRequest);
+        Log.i(TEST_SYNC_TAG, "[doInBackground] getInsideLocalityKospenuserReq sent");
+    }
+
+    private void getOutsideLocalityKospenuserReq() {
+        // ----------------------------------------------------------------------------------------- <getOutsideLocalityRequest>
+        // !!! TODO-ATTENTION !!! //
+        // THESE PART IS STILL HARDCODED.
+        // THE QUERY PARAMS NEED TO BE ABLE
+        // TO CAPTURE THE LOCATION OF THE JURURAWAT-MASYARAKAT AUTOMATICALLY
+        Map<String, Integer> paramsOutsideLocalityReq = new HashMap<>();
+        paramsOutsideLocalityReq.put("state", 1);
+        paramsOutsideLocalityReq.put("region", 1);
+        paramsOutsideLocalityReq.put("subregion", 1);
+        paramsOutsideLocalityReq.put("locality", 1);
+        JSONObject jsonObjOutsideLocalityReqPayload = new JSONObject(paramsOutsideLocalityReq);
+
+        MyJsonArrayRequest getOutsideLocalityRequest = new MyJsonArrayRequest(
+                Request.Method.POST,
+                kospenusersOusideLocalityUrl,
+                jsonObjOutsideLocalityReqPayload,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray  response) {
+                        Log.i(TEST_SYNC_TAG, "Successful Outside-Locality-Request GET");
+
+                        try {
+                            mDb.kospenuserGlobalModel().deleteAll();
+
+                            for (int i=0;i<response.length();i++) {
+                                //Inserting a new kospenuser row into sqlite
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                String updated_at = jsonObject.getString("updated_at");
+                                String ic = jsonObject.getString("ic");
+                                String name = jsonObject.getString("name");
+                                int gender = jsonObject.getInt("gender");
+                                String address = jsonObject.getString("address");
+                                int state = jsonObject.getInt("state");
+                                int region = jsonObject.getInt("region");
+                                int subregion = jsonObject.getInt("subregion");
+                                int locality = jsonObject.getInt("locality");
+                                String firstRegRegion = jsonObject.getString("firstRegRegion");
+                                int version = jsonObject.getInt("version");
+                                KospenuserGlobal kospenuserGlobal = new KospenuserGlobal(updated_at, ic, name, address, gender,
+                                        state, region, subregion, locality, firstRegRegion, version);
+                                mDb.kospenuserGlobalModel().insertKospenuserGlobal(kospenuserGlobal);
+                            }
+                        } catch (Exception e){
+                            Log.e(TEST_SYNC_TAG, "KospenuserGlobal row insert Failed, error: " + e.getMessage());
+                        }
+
+                        loadScenariosGenerateOutRestReqAndInDBKospenuser();
+                    }// end-method'onResponse'
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TEST_SYNC_TAG, "Failed GET: " + error.getMessage());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        Log.i(TEST_SYNC_TAG, "[doInBackground] Adding getOutsideLocalityKospenuserReq to queue to send request to remote server");
+        MySingleton.getInstance(this.getApplication()).addToRequestQueue(getOutsideLocalityRequest);
+        Log.i(TEST_SYNC_TAG, "[doInBackground] getOutsideLocalityKospenuserReq sent");
+    }
+
+    private void loadScenario1() {
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioOne();
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReqConverter.OutRestReq.UpdateServerFrmLocal);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
+    }
+
+    private void loadScenario2() {
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioTwo();
+        for (Kospenuser kospenuser : kospenusers) {
+            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
+            inDBQueryKospenuser.setInDBQueryStatus(InDBQueryConverter.InDBQuery.LocalKospenuserUpdateFrmInsideLocality);
+            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+        }
+    }
+
+    private void loadScenario3() {
+        mDb.kospenuserModel().loadScenarioThree();
+    }
+
+    private void loadScenario4a() {
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourA();
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReqConverter.OutRestReq.UpdateServerFrmGlobal);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
+    }
+
+    private void loadScenario4b() {
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourB();
+        for (Kospenuser kospenuser : kospenusers) {
+            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
+            inDBQueryKospenuser.setInDBQueryStatus(InDBQueryConverter.InDBQuery.LocalKospenuserUpdateFrmOutsideLocality);
+            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+        }
+    }
+
+    private void loadScenario4c() {
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourC();
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReqConverter.OutRestReq.UpdateServerFrmGlobal);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
+    }
+
+    private void loadScenario5() {
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFive();
+        for (Kospenuser kospenuser : kospenusers) {
+            OutRestReqKospenuser outRestReqKospenuser = new OutRestReqKospenuser(kospenuser);
+            outRestReqKospenuser.setOutRestReqStatus(OutRestReqConverter.OutRestReq.UpdateServerNewKospenuser);
+            mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(outRestReqKospenuser.getIc());
+            mDb.outRestReqKospenuserModel().insertOutRestReqKospenuser(outRestReqKospenuser);
+        }
+    }
+
+    private void loadScenario6() {
+        List<KospenuserServer> kospenusersServer = mDb.kospenuserServerModel().loadScenarioSix();
+        for (KospenuserServer kospenuserServer : kospenusersServer) {
+            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuserServer);
+            inDBQueryKospenuser.setInDBQueryStatus(InDBQueryConverter.InDBQuery.KospenuserInsideLocalityNotInAndroidDb);
+            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+        }
+
+    }
+
+    private void loadAllOutRestReqKospenuserNoLiveData() {
+        outRestReqKospenuserList = mDb.outRestReqKospenuserModel().loadAll();
+    }
+
+    private void setSoftDelColTrueKospenuser() {
+        mDb.kospenuserModel().setSoftDelColTrueKospenuser();
+    }
+
+    private void setDirtyColFalseIfSoftDelColTrueKospenuser() {
+        mDb.kospenuserModel().setDirtyColFalseIfSoftDelColTrueKospenuser();
+    }
+
+    private void deleteOutRestReqKospenuserWith3orMoreFailCounter() {
+        mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserWith3orMoreFailCounter();
+    }
+
+    private void loadScenariosGenerateOutRestReqAndInDBKospenuser() {
+        loadScenario1();
+        loadScenario2();
+        loadScenario3();
+        loadScenario4a();
+        loadScenario4b();
+        loadScenario4c();
+        loadScenario5();
+        loadScenario6();
+
+        loadAllOutRestReqKospenuserNoLiveData();
+        sendOutRestReq();
+    }
+
+    private void sendOutRestReq() {
+        // ========== JsonObjectRequest - POST ==========
+        Log.i(TEST_SYNC_TAG, "\n\n[doInBackground] Preparing JsonObjectRequest for OutRestReqKospenuser Sync with ServerDB");
         JSONObject jsonObjectPayload = new JSONObject();
         try{
             JSONObject jsonObjectTable = new JSONObject();
@@ -348,6 +603,8 @@ public class TestActivityViewModel extends AndroidViewModel {
                             Log.i(TEST_SYNC_TAG, "OnInsertSuccesful--> Ic :" + rowOnInsertSuccessful);
                         }
 
+                        setSoftDelColTrueKospenuser();
+                        setDirtyColFalseIfSoftDelColTrueKospenuser();
                         deleteOutRestReqKospenuserWith3orMoreFailCounter();
                         loadAllOutRestReqKospenuserNoLiveData();
                         if (!outRestReqKospenuserList.isEmpty()) {
@@ -375,22 +632,8 @@ public class TestActivityViewModel extends AndroidViewModel {
 
     }
 
-    private void deleteOutRestReqKospenuserWith3orMoreFailCounter() {
-        mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserWith3orMoreFailCounter();
-    }
-
-    private void loadAllOutRestReqKospenuserNoLiveData() {
-        outRestReqKospenuserList = mDb.outRestReqKospenuserModel().loadAll();
-    }
-
     public void outRestReqSync() {
-
-        // ========== JsonObjectRequest - POST ==========
-        Log.i(TEST_SYNC_TAG, "[doInBackground] Preparing JsonObjectRequest for OutRestReqKospenuser Sync with ServerDB");
-
-        loadAllOutRestReqKospenuserNoLiveData();
-        sendOutRestReq();
-
+        getInsideLocalityKospenuserReq();
     }
 
 
