@@ -201,7 +201,7 @@ public interface KospenuserDao {
             "firstRegRegion = :firstRegRegion WHERE " +
             "ic = :ic")
     void updateKospenuser(int version, int fk_gender, int fk_state, int fk_region, int fk_subregion, int fk_locality,
-                          String name, String  address, String firstRegRegion, String ic);
+                          String name, String address, String firstRegRegion, String ic);
 
     @Query("UPDATE kospenuser SET " +
             "version = :version WHERE " +
