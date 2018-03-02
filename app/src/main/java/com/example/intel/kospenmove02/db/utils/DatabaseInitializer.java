@@ -124,6 +124,7 @@ public class DatabaseInitializer {
         Kospenuser user3 = addKospenuser(db, "2018-01-30 07:00:00", "880601105152", "esther",
                 2,"southernpark",
                 1, 1, 1, 1,"klang", 1);
+        db.kospenuserModel().setDirtyColFalseKospenuser("880601105152");
         Kospenuser user4 = addKospenuser(db, "2018-01-29 03:00:00", "880601105153", "romeo",
                 1,"southernpark",
                 1, 1, 1, 1,"klang", 1);

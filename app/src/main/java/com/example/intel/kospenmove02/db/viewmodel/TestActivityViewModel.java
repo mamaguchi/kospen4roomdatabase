@@ -36,6 +36,7 @@ public class TestActivityViewModel extends AndroidViewModel {
 
     Map<String,Integer> rowsOnUpdateSuccessful = new HashMap<>();
     ArrayList<String> rowsOnInsertSuccessful = new ArrayList<>();
+    List<OutRestReqKospenuser> outRestReqKospenuserList = new ArrayList<>();
 
     private final AppDatabase mDb;
 
@@ -54,10 +55,26 @@ public class TestActivityViewModel extends AndroidViewModel {
         mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserByIc(ic);
     }
 
+    private void deleteKospenuserByIc(String ic) {
+        mDb.kospenuserModel().deleteKospenuserByIc(ic);
+    }
+
     private void updateKospenuser(int version, int fk_gender, int fk_state, int fk_region, int fk_subregion, int fk_locality,
                                   String name, String address, String firstRegRegion, String ic) {
         mDb.kospenuserModel().updateKospenuser(version, fk_gender, fk_state, fk_region, fk_subregion, fk_locality,
         name, address, firstRegRegion, ic);
+    }
+
+    private void incrementOutRestReqFailCounter(String ic) {
+        mDb.outRestReqKospenuserModel().incrementOutRestReqFailCounter(ic);
+    }
+
+    private void setDirtyColTrueKospenuser(String ic) {
+        mDb.kospenuserModel().setDirtyColTrueKospenuser(ic);
+    }
+
+    private void setDirtyColFalseKospenuser(String ic) {
+        mDb.kospenuserModel().setDirtyColFalseKospenuser(ic);
     }
 
 //    private static class DeleteOutrestreqAsync extends AsyncTask<Void, Void, Void> {
@@ -96,7 +113,288 @@ public class TestActivityViewModel extends AndroidViewModel {
 //        }
 //    }
 
+    private void sendOutRestReq() {
+
+        JSONObject jsonObjectPayload = new JSONObject();
+        try{
+            JSONObject jsonObjectTable = new JSONObject();
+            int counter = 1;
+            for (OutRestReqKospenuser outRestReqKospenuser : outRestReqKospenuserList) {
+                JSONObject jsonObjectRow = new JSONObject();
+                jsonObjectRow.put("version", outRestReqKospenuser.getVersion());
+                jsonObjectRow.put("status", outRestReqKospenuser.getOutRestReqStatus());
+                jsonObjectRow.put("ic", outRestReqKospenuser.getIc());
+                jsonObjectRow.put("created_at", outRestReqKospenuser.getTimestamp());
+                jsonObjectRow.put("updated_at", outRestReqKospenuser.getTimestamp());
+                jsonObjectRow.put("name", outRestReqKospenuser.getName());
+                jsonObjectRow.put("gender", outRestReqKospenuser.getFk_gender());
+                jsonObjectRow.put("address", outRestReqKospenuser.getAddress());
+                jsonObjectRow.put("state", outRestReqKospenuser.getFk_state());
+                jsonObjectRow.put("region", outRestReqKospenuser.getFk_region());
+                jsonObjectRow.put("subregion", outRestReqKospenuser.getFk_subregion());
+                jsonObjectRow.put("locality", outRestReqKospenuser.getFk_locality());
+                jsonObjectRow.put("firstRegRegion", outRestReqKospenuser.getFirstRegRegion());
+
+                jsonObjectTable.put("user"+counter, jsonObjectRow);
+                counter += 1;
+            }
+            jsonObjectPayload.put("data", jsonObjectTable);
+
+        } catch (JSONException jse) {
+            Log.e(TEST_SYNC_TAG, jse.getMessage());
+        }
+
+        Log.i(TEST_SYNC_TAG, jsonObjectPayload.toString());
+
+        // Version 1: using 'JsonObjectRequest'
+        JsonObjectRequest postRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                outRestReqKospenuserUrl,
+                jsonObjectPayload,
+                new Response.Listener<JSONObject >() {
+                    @Override
+                    public void onResponse(JSONObject  response) {
+                        Log.i(TEST_SYNC_TAG, "Successful outRestReqKospenuserUrl: \n" + response.toString() + "\n");
+
+                        rowsOnUpdateSuccessful.clear();
+                        rowsOnInsertSuccessful.clear();
+
+                        Iterator<String> keys = response.keys();// JSONOBJECT-ITERATION-STARTS-HERE //
+                        while (keys.hasNext()) {
+
+                            try {
+                                JSONObject jsonObjectEachUser = (JSONObject) response.get(keys.next());
+
+                                // Version 2: using 'switch'
+                                switch (jsonObjectEachUser.getString("returnStatus")) {
+
+                                    //---------------------------------------------------------------------------------------------<INSERT>
+                                    case "INSERT_SUCCESSFUL":
+                                        Log.i(TEST_SYNC_TAG, "Successful Insert RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " Version :" + jsonObjectEachUser.getInt("version"));
+
+                                        // VERSION 1: mDB
+                                        setDirtyColFalseKospenuser(jsonObjectEachUser.getString("ic"));
+                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+
+                                        // VERSION 4: rowsOnInsertSuccessful
+                                        rowsOnInsertSuccessful.add(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+                                    case "INSERT_FAILED":
+                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " " + jsonObjectEachUser.getInt("version"));
+
+                                        incrementOutRestReqFailCounter(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+                                    case "INSERT_ERROR":
+                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " " + jsonObjectEachUser.getInt("version"));
+
+                                        incrementOutRestReqFailCounter(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+                                    case "ON_INSERT_DENIED_ANDROID_TIMESTAMP_OLDER_DATA_NEED_UPDATE":
+                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " " + jsonObjectEachUser.getInt("version"));
+
+                                        updateKospenuser(
+                                                jsonObjectEachUser.getInt("version"),
+                                                jsonObjectEachUser.getInt("gender"),
+                                                jsonObjectEachUser.getInt("state"),
+                                                jsonObjectEachUser.getInt("region"),
+                                                jsonObjectEachUser.getInt("subregion"),
+                                                jsonObjectEachUser.getInt("locality"),
+                                                jsonObjectEachUser.getString("name"),
+                                                jsonObjectEachUser.getString("address"),
+                                                jsonObjectEachUser.getString("firstRegRegion"),
+                                                jsonObjectEachUser.getString("ic")
+                                        );
+                                        setDirtyColFalseKospenuser(jsonObjectEachUser.getString("ic"));
+                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+                                    case "ON_INSERT_DENIED_ANDROID_TIMESTAMP_OLDER_DATA_NEED_DELETE_DIFFREGION":
+                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " " + jsonObjectEachUser.getInt("version"));
+
+                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        deleteKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+                                    case "ON_INSERT_DENIED_ANDROID_TIMESTAMP_SAME":// This Is Quite An Impossible Situation Theoretically.
+                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " " + jsonObjectEachUser.getInt("version"));
+
+                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+                                    case "ON_INSERT_DENIED_ANDROID_TIMESTAMP_NEWER_UPDATE_SUCCESSFUL":
+                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " " + jsonObjectEachUser.getInt("version"));
+
+                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        updateVersionColKospenuser(jsonObjectEachUser.getInt("version"),jsonObjectEachUser.getString("ic"));
+                                        setDirtyColFalseKospenuser(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+                                    case "ON_INSERT_DENIED_ANDROID_TIMESTAMP_NEWER_UPDATE_FAILED":
+                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " " + jsonObjectEachUser.getInt("version"));
+
+                                        incrementOutRestReqFailCounter(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+                                    case "ON_INSERT_DENIED_UPDATE_ERROR":
+                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " " + jsonObjectEachUser.getInt("version"));
+
+                                        incrementOutRestReqFailCounter(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+
+
+                                    //---------------------------------------------------------------------------------------------<UPDATE>
+                                    case "UPDATE_SUCCESSFUL":
+                                        Log.i(TEST_SYNC_TAG, "Successful Update RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " Version :" + jsonObjectEachUser.getInt("version"));
+
+                                        // VERSION 1: mDB
+                                        updateVersionColKospenuser(jsonObjectEachUser.getInt("version"),jsonObjectEachUser.getString("ic"));
+                                        setDirtyColFalseKospenuser(jsonObjectEachUser.getString("ic"));
+                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+
+                                        // VERSION 6: rowsOnUpdateSuccessful
+                                        rowsOnUpdateSuccessful.put(jsonObjectEachUser.getString("ic"), jsonObjectEachUser.getInt("version"));
+                                        break;
+
+                                    case "UPDATE_FAILED":
+                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " " + jsonObjectEachUser.getInt("version"));
+
+                                        incrementOutRestReqFailCounter(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+                                    case "UPDATE_ERROR":
+                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " " + jsonObjectEachUser.getInt("version"));
+
+                                        incrementOutRestReqFailCounter(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+                                    case "ON_UPDATE_STALE_VERSION_ANDROID_TIMESTAMP_OLDER_DATA_NEED_UPDATE":
+                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " " + jsonObjectEachUser.getInt("version"));
+
+                                        updateKospenuser(
+                                                jsonObjectEachUser.getInt("version"),
+                                                jsonObjectEachUser.getInt("gender"),
+                                                jsonObjectEachUser.getInt("state"),
+                                                jsonObjectEachUser.getInt("region"),
+                                                jsonObjectEachUser.getInt("subregion"),
+                                                jsonObjectEachUser.getInt("locality"),
+                                                jsonObjectEachUser.getString("name"),
+                                                jsonObjectEachUser.getString("address"),
+                                                jsonObjectEachUser.getString("firstRegRegion"),
+                                                jsonObjectEachUser.getString("ic")
+                                        );
+                                        setDirtyColFalseKospenuser(jsonObjectEachUser.getString("ic"));
+                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+                                    case "ON_UPDATE_STALE_VERSION_ANDROID_TIMESTAMP_OLDER_DATA_NEED_DELETE_DIFFREGION":
+                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " " + jsonObjectEachUser.getInt("version"));
+
+                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        deleteKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+                                    case "ON_UPDATE_STALE_VERSION_ANDROID_TIMESTAMP_NEWER_UPDATE_SUCCESSFUL":
+                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " " + jsonObjectEachUser.getInt("version"));
+
+                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        updateVersionColKospenuser(jsonObjectEachUser.getInt("version"),jsonObjectEachUser.getString("ic"));
+                                        setDirtyColFalseKospenuser(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+                                    case "ON_UPDATE_STALE_VERSION_ANDROID_TIMESTAMP_NEWER_UPDATE_FAILED":
+                                        Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
+                                                " " + jsonObjectEachUser.getInt("version"));
+
+                                        incrementOutRestReqFailCounter(jsonObjectEachUser.getString("ic"));
+                                        break;
+
+
+                                    //---------------------------------------------------------------------------------------------<DEFAULT>
+                                    default:
+                                        Log.i(TEST_SYNC_TAG, "Unknown returnStatus!");
+                                        break;
+                                }// end-switch
+
+
+                            } catch (JSONException jse) {
+                                Log.i(TEST_SYNC_TAG, jse.getMessage());
+                            }// end-try
+                        }// end-while
+
+                        Log.i(TEST_SYNC_TAG, "OnUpdateSuccesful--> Size of Map :" + rowsOnUpdateSuccessful.size());
+                        for (Map.Entry<String,Integer> entry : rowsOnUpdateSuccessful.entrySet()) {
+                            Log.i(TEST_SYNC_TAG, "OnUpdateSuccesful--> Ic :" + entry.getKey() + " ,Version :" + entry.getValue());
+                        }
+                        for (String rowOnInsertSuccessful : rowsOnInsertSuccessful) {
+                            Log.i(TEST_SYNC_TAG, "OnInsertSuccesful--> Ic :" + rowOnInsertSuccessful);
+                        }
+
+                        deleteOutRestReqKospenuserWith3orMoreFailCounter();
+                        loadAllOutRestReqKospenuserNoLiveData();
+                        if (!outRestReqKospenuserList.isEmpty()) {
+                            sendOutRestReq();
+                        }
+                    }// end-method'onResponse'
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TEST_SYNC_TAG, "Failed outRestReqKospenuserUrl: " + error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        Log.i(TEST_SYNC_TAG, "[doInBackground] Adding JsonObjectRequest[outRestReqKospenuserUrl] to queue to send request to remote server");
+        MySingleton.getInstance(this.getApplication()).addToRequestQueue(postRequest);
+        Log.i(TEST_SYNC_TAG, "[doInBackground] JsonObjectRequest[outRestReqKospenuserUrl] sent");
+
+    }
+
+    private void deleteOutRestReqKospenuserWith3orMoreFailCounter() {
+        mDb.outRestReqKospenuserModel().deleteOutRestReqKospenuserWith3orMoreFailCounter();
+    }
+
+    private void loadAllOutRestReqKospenuserNoLiveData() {
+        outRestReqKospenuserList = mDb.outRestReqKospenuserModel().loadAll();
+    }
+
     public void outRestReqSync() {
+
+        // ========== JsonObjectRequest - POST ==========
+        Log.i(TEST_SYNC_TAG, "[doInBackground] Preparing JsonObjectRequest for OutRestReqKospenuser Sync with ServerDB");
+
+        loadAllOutRestReqKospenuserNoLiveData();
+        sendOutRestReq();
+
+    }
+
+
+    public void outRestReqSync__BACKUP_ON_7PM_2MARCH2018_SOME_STATEMENTS_MIGHT_BE_OUTDATED_OR_WITHERROR() {
 
         // ========== JsonObjectRequest - POST ==========
         Log.i(TEST_SYNC_TAG, "[doInBackground] Preparing JsonObjectRequest for OutRestReqKospenuser Sync with ServerDB");
@@ -169,6 +467,7 @@ public class TestActivityViewModel extends AndroidViewModel {
                                                 " Version :" + jsonObjectEachUser.getInt("version"));
 
                                         // VERSION 1: mDB
+                                        setDirtyColFalseKospenuser(jsonObjectEachUser.getString("ic"));
                                         deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
 
                                         // VERSION 2: rowsToBeDeleted
@@ -186,14 +485,14 @@ public class TestActivityViewModel extends AndroidViewModel {
                                         Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
                                                 " " + jsonObjectEachUser.getInt("version"));
 
-                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        incrementOutRestReqFailCounter(jsonObjectEachUser.getString("ic"));
                                         break;
 
                                     case "INSERT_ERROR":
                                         Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
                                                 " " + jsonObjectEachUser.getInt("version"));
 
-                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        incrementOutRestReqFailCounter(jsonObjectEachUser.getString("ic"));
                                         break;
 
                                     case "ON_INSERT_DENIED_ANDROID_TIMESTAMP_OLDER_DATA_NEED_UPDATE":
@@ -212,6 +511,7 @@ public class TestActivityViewModel extends AndroidViewModel {
                                                 jsonObjectEachUser.getString("firstRegRegion"),
                                                 jsonObjectEachUser.getString("ic")
                                         );
+                                        setDirtyColFalseKospenuser(jsonObjectEachUser.getString("ic"));
                                         deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
                                         break;
 
@@ -220,6 +520,7 @@ public class TestActivityViewModel extends AndroidViewModel {
                                                 " " + jsonObjectEachUser.getInt("version"));
 
                                         deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        deleteKospenuserByIc(jsonObjectEachUser.getString("ic"));
                                         break;
 
                                     case "ON_INSERT_DENIED_ANDROID_TIMESTAMP_SAME":// This Is Quite An Impossible Situation Theoretically.
@@ -235,20 +536,21 @@ public class TestActivityViewModel extends AndroidViewModel {
 
                                         deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
                                         updateVersionColKospenuser(jsonObjectEachUser.getInt("version"),jsonObjectEachUser.getString("ic"));
+                                        setDirtyColFalseKospenuser(jsonObjectEachUser.getString("ic"));
                                         break;
 
                                     case "ON_INSERT_DENIED_ANDROID_TIMESTAMP_NEWER_UPDATE_FAILED":
                                         Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
                                                 " " + jsonObjectEachUser.getInt("version"));
 
-                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        incrementOutRestReqFailCounter(jsonObjectEachUser.getString("ic"));
                                         break;
 
                                     case "ON_INSERT_DENIED_UPDATE_ERROR":
                                         Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
                                                 " " + jsonObjectEachUser.getInt("version"));
 
-                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        incrementOutRestReqFailCounter(jsonObjectEachUser.getString("ic"));
                                         break;
 
 
@@ -260,6 +562,7 @@ public class TestActivityViewModel extends AndroidViewModel {
 
                                         // VERSION 1: mDB
                                         updateVersionColKospenuser(jsonObjectEachUser.getInt("version"),jsonObjectEachUser.getString("ic"));
+                                        setDirtyColFalseKospenuser(jsonObjectEachUser.getString("ic"));
                                         deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
 
                                         // VERSION 2: rowsToBeDeleted
@@ -308,14 +611,14 @@ public class TestActivityViewModel extends AndroidViewModel {
                                         Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
                                                 " " + jsonObjectEachUser.getInt("version"));
 
-                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        incrementOutRestReqFailCounter(jsonObjectEachUser.getString("ic"));
                                         break;
 
                                     case "UPDATE_ERROR":
                                         Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
                                                 " " + jsonObjectEachUser.getInt("version"));
 
-                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        incrementOutRestReqFailCounter(jsonObjectEachUser.getString("ic"));
                                         break;
 
                                     case "ON_UPDATE_STALE_VERSION_ANDROID_TIMESTAMP_OLDER_DATA_NEED_UPDATE":
@@ -334,6 +637,7 @@ public class TestActivityViewModel extends AndroidViewModel {
                                                 jsonObjectEachUser.getString("firstRegRegion"),
                                                 jsonObjectEachUser.getString("ic")
                                         );
+                                        setDirtyColFalseKospenuser(jsonObjectEachUser.getString("ic"));
                                         deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
                                         break;
 
@@ -342,6 +646,7 @@ public class TestActivityViewModel extends AndroidViewModel {
                                                 " " + jsonObjectEachUser.getInt("version"));
 
                                         deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        deleteKospenuserByIc(jsonObjectEachUser.getString("ic"));
                                         break;
 
                                     case "ON_UPDATE_STALE_VERSION_ANDROID_TIMESTAMP_NEWER_UPDATE_SUCCESSFUL":
@@ -350,13 +655,14 @@ public class TestActivityViewModel extends AndroidViewModel {
 
                                         deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
                                         updateVersionColKospenuser(jsonObjectEachUser.getInt("version"),jsonObjectEachUser.getString("ic"));
+                                        setDirtyColFalseKospenuser(jsonObjectEachUser.getString("ic"));
                                         break;
 
                                     case "ON_UPDATE_STALE_VERSION_ANDROID_TIMESTAMP_NEWER_UPDATE_FAILED":
                                         Log.i(TEST_SYNC_TAG, "Update Denied RespObj-> " + jsonObjectEachUser.getString("name") +
                                                 " " + jsonObjectEachUser.getInt("version"));
 
-                                        deleteOutRestReqKospenuserByIc(jsonObjectEachUser.getString("ic"));
+                                        incrementOutRestReqFailCounter(jsonObjectEachUser.getString("ic"));
                                         break;
 
 
@@ -385,8 +691,7 @@ public class TestActivityViewModel extends AndroidViewModel {
                             Log.i(TEST_SYNC_TAG, "OnInsertSuccesful--> Ic :" + rowOnInsertSuccessful);
                         }
 
-
-                    }
+                    }// end-method'onResponse'
                 },
                 new Response.ErrorListener() {
                     @Override
@@ -401,9 +706,6 @@ public class TestActivityViewModel extends AndroidViewModel {
                 return headers;
             }
         };
-
-
-
 
         Log.i(TEST_SYNC_TAG, "[doInBackground] Adding JsonObjectRequest[outRestReqKospenuserUrl] to queue to send request to remote server");
         MySingleton.getInstance(this.getApplication()).addToRequestQueue(postRequest);

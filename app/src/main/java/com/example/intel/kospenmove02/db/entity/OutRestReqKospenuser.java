@@ -2,6 +2,7 @@ package com.example.intel.kospenmove02.db.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
@@ -62,15 +63,39 @@ public class OutRestReqKospenuser {
 
     private int version;
 
+    private int outRestReqFailCounter;
+
     /*
     |
     |   Constructor
     |
     */
-
     public OutRestReqKospenuser(String timestamp, OutRestReq outRestReqStatus, @NonNull String ic, String name, String address,
                                 int fk_gender, int fk_state, int fk_region, int fk_subregion, int fk_locality, String firstRegRegion,
                                 int version) {
+        // VERSION 1: normal constructor
+//        this.timestamp = timestamp;
+//        this.outRestReqStatus = outRestReqStatus;
+//        this.ic = ic;
+//        this.name = name;
+//        this.address = address;
+//        this.fk_gender = fk_gender;
+//        this.fk_state = fk_state;
+//        this.fk_region = fk_region;
+//        this.fk_subregion = fk_subregion;
+//        this.fk_locality = fk_locality;
+//        this.firstRegRegion = firstRegRegion;
+//        this.version = version;
+
+        // VERSION 2: constructor with optional arguments using constructor overloading,by chaining constructor using 'this'.
+        this(timestamp, outRestReqStatus, ic, name, address, fk_gender, fk_state, fk_region, fk_subregion, fk_locality, firstRegRegion,
+        version, 0);
+    }
+
+    @Ignore
+    public OutRestReqKospenuser(String timestamp, OutRestReq outRestReqStatus, @NonNull String ic, String name, String address,
+                                int fk_gender, int fk_state, int fk_region, int fk_subregion, int fk_locality, String firstRegRegion,
+                                int version, int outRestReqFailCounter) {
         this.timestamp = timestamp;
         this.outRestReqStatus = outRestReqStatus;
         this.ic = ic;
@@ -83,6 +108,7 @@ public class OutRestReqKospenuser {
         this.fk_locality = fk_locality;
         this.firstRegRegion = firstRegRegion;
         this.version = version;
+        this.outRestReqFailCounter = outRestReqFailCounter;
     }
 
     public OutRestReqKospenuser(Kospenuser kospenuser) {
@@ -200,5 +226,13 @@ public class OutRestReqKospenuser {
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    public int getOutRestReqFailCounter() {
+        return outRestReqFailCounter;
+    }
+
+    public void setOutRestReqFailCounter(int outRestReqFailCounter) {
+        this.outRestReqFailCounter = outRestReqFailCounter;
     }
 }

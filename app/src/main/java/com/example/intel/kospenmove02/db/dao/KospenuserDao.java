@@ -128,28 +128,28 @@ public interface KospenuserDao {
     // VERSION 3: to update 'version' column of local 'kospenuser'(that generates both OutRestReqKospenuser & InDBQueryKospenuser)
     // on every REST request of inside-locality kospenusers list from laravel server.
     @Query("SELECT kospenuserserver.version, kospenuser.timestamp, kospenuser.ic, kospenuser.name, kospenuser.fk_gender, kospenuser.address, " +
-            "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion " +
+            "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion , kospenuser.softDel, kospenuser.dirty " +
             "FROM kospenuser INNER JOIN kospenuserserver " +
             "ON kospenuserserver.ic = kospenuser.ic " +
             "WHERE kospenuser.timestamp > kospenuserserver.timestamp")
     List<Kospenuser> loadScenarioOne();
 
     @Query("SELECT kospenuserserver.version, kospenuser.timestamp, kospenuser.ic, kospenuser.name, kospenuser.fk_gender, kospenuser.address, " +
-            "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion " +
+            "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion , kospenuser.softDel, kospenuser.dirty " +
             "FROM kospenuser INNER JOIN kospenuserserver " +
             "ON kospenuserserver.ic = kospenuser.ic " +
             "WHERE kospenuser.timestamp < kospenuserserver.timestamp")
     List<Kospenuser> loadScenarioTwo();
 
     @Query("SELECT kospenuserserver.version, kospenuser.timestamp, kospenuser.ic, kospenuser.name, kospenuser.fk_gender, kospenuser.address, " +
-            "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion " +
+            "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion , kospenuser.softDel, kospenuser.dirty " +
             "FROM kospenuser INNER JOIN kospenuserserver " +
             "ON kospenuserserver.ic = kospenuser.ic " +
             "WHERE kospenuser.timestamp = kospenuserserver.timestamp")
     List<Kospenuser> loadScenarioThree();
 
     @Query("SELECT kospenuserglobal.version, kospenuser.timestamp, kospenuser.ic, kospenuser.name, kospenuser.fk_gender, kospenuser.address, " +
-            "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion " +
+            "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion , kospenuser.softDel, kospenuser.dirty " +
             "FROM kospenuser JOIN kospenuserglobal " +
             "ON kospenuser.ic = kospenuserglobal.ic " +
             "WHERE kospenuser.ic NOT in (SELECT ic FROM kospenuserserver) " +
@@ -157,7 +157,7 @@ public interface KospenuserDao {
     List<Kospenuser> loadScenarioFourA();
 
     @Query("SELECT kospenuserglobal.version, kospenuser.timestamp, kospenuser.ic, kospenuser.name, kospenuser.fk_gender, kospenuser.address, " +
-            "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion " +
+            "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion , kospenuser.softDel, kospenuser.dirty " +
             "FROM kospenuser JOIN kospenuserglobal " +
             "ON kospenuser.ic = kospenuserglobal.ic " +
             "WHERE kospenuser.ic NOT in (SELECT ic FROM kospenuserserver) " +
@@ -165,7 +165,7 @@ public interface KospenuserDao {
     List<Kospenuser> loadScenarioFourB();
 
     @Query("SELECT kospenuserglobal.version, kospenuser.timestamp, kospenuser.ic, kospenuser.name, kospenuser.fk_gender, kospenuser.address, " +
-            "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion " +
+            "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion , kospenuser.softDel, kospenuser.dirty " +
             "FROM kospenuser JOIN kospenuserglobal " +
             "ON kospenuser.ic = kospenuserglobal.ic " +
             "WHERE kospenuser.ic NOT in (SELECT ic FROM kospenuserserver) " +
@@ -173,7 +173,7 @@ public interface KospenuserDao {
     List<Kospenuser> loadScenarioFourC();
 
     @Query("SELECT kospenuser.version, kospenuser.timestamp, kospenuser.ic, kospenuser.name, kospenuser.fk_gender, kospenuser.address, " +
-            "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion " +
+            "kospenuser.fk_state, kospenuser.fk_region, kospenuser.fk_subregion, kospenuser.fk_locality, kospenuser.firstRegRegion , kospenuser.softDel, kospenuser.dirty " +
             "FROM kospenuser " +
             "WHERE ic NOT in (SELECT ic FROM kospenuserserver) " +
             "AND ic NOT in (SELECT ic FROM kospenuserglobal)")
@@ -207,6 +207,21 @@ public interface KospenuserDao {
             "version = :version WHERE " +
             "ic = :ic")
     void updateVersionColKospenuser(int version, String ic);
+
+    @Query("UPDATE kospenuser SET " +
+            "softDel = :softDel WHERE " +
+            "ic = :ic")
+    void updateSoftDelColKospenuser(int softDel, String ic);
+
+    @Query("UPDATE kospenuser SET " +
+            "dirty = 1 WHERE " +
+            "ic = :ic")
+    void setDirtyColTrueKospenuser(String ic);
+
+    @Query("UPDATE kospenuser SET " +
+            "dirty = 0 WHERE " +
+            "ic = :ic")
+    void setDirtyColFalseKospenuser(String ic);
 
     @Delete
     void deleteUser(Kospenuser kospenuser);

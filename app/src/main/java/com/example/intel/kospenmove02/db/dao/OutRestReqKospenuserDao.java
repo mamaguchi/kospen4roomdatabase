@@ -16,25 +16,34 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 @Dao
 public interface OutRestReqKospenuserDao {
 
-    @Query("select * from outrestreqkospenuser")
+    @Query("SELECT * from outrestreqkospenuser")
     List<OutRestReqKospenuser> loadAll();
 
-    @Query("select * from outrestreqkospenuser")
+    @Query("SELECT * from outrestreqkospenuser")
     LiveData<List<OutRestReqKospenuser>> loadAllOutRestReqKospenusers();
 
-    @Query("select * from outrestreqkospenuser where ic = :ic")
+    @Query("SELECT * from outrestreqkospenuser where ic = :ic")
     LiveData<OutRestReqKospenuser> loadOutRestReqKospenuserByIc(String ic);
 
     @Insert(onConflict = IGNORE)
     void insertOutRestReqKospenuser(OutRestReqKospenuser outRestReqKospenuser);
 
-    @Delete
-    void deleteOutRestReqKospenuser(OutRestReqKospenuser outRestReqKospenuser);
+    @Query("UPDATE outrestreqkospenuser SET " +
+            "outRestReqFailCounter = outRestReqFailCounter + 1 WHERE " +
+            "ic = :ic")
+    void incrementOutRestReqFailCounter(String ic);
+
+    @Query("DELETE from outrestreqkospenuser where " +
+            "outRestReqFailCounter >= 3")
+    void deleteOutRestReqKospenuserWith3orMoreFailCounter();
 
     @Query("DELETE from outrestreqkospenuser where ic = :ic")
     void deleteOutRestReqKospenuserByIc(String ic);
 
-    @Query("delete from outrestreqkospenuser")
+    @Query("DELETE from outrestreqkospenuser")
     void deleteAll();
+
+    @Delete
+    void deleteOutRestReqKospenuser(OutRestReqKospenuser outRestReqKospenuser);
 
 }

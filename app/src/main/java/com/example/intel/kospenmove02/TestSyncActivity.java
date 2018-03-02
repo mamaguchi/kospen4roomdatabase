@@ -107,10 +107,12 @@ public class TestSyncActivity extends AppCompatActivity {
 
         for (OutRestReqKospenuser outRestReqKospenuser : outRestReqKospenusers) {
             sb.append(outRestReqKospenuser.getName());
-            sb.append("_");
+            sb.append("_Ic:");
             sb.append(outRestReqKospenuser.getIc());
-            sb.append("_");
+            sb.append("_Status:");
             sb.append(outRestReqKospenuser.getOutRestReqStatus());
+            sb.append("_FailCounter:");
+            sb.append(outRestReqKospenuser.getOutRestReqFailCounter());
             sb.append("\n");
         }
         InDBOutReqTableTextView.setText(sb.toString());
@@ -534,6 +536,8 @@ public class TestSyncActivity extends AppCompatActivity {
             sb.append(kospenuser.getIc());
             sb.append("_Version :");
             sb.append(kospenuser.getVersion());
+            sb.append("_Dirty :");
+            sb.append(kospenuser.isDirty());
             sb.append("\n");
         }
         InDBOutReqTableTextView.setText(sb.toString());
@@ -863,6 +867,8 @@ public class TestSyncActivity extends AppCompatActivity {
 
     // [Send OutRestReqKospenusers to Server DB]
     public void outreqsyncButtonClicked(View view) {
+        mTestActivityViewModel.outRestReqSync();
+
         // ========== JsonObjectRequest - POST ==========
 //        Log.i(TEST_SYNC_TAG, "[doInBackground] Preparing JsonObjectRequest for OutRestReqKospenuser Sync with ServerDB");
 //
@@ -972,7 +978,5 @@ public class TestSyncActivity extends AppCompatActivity {
 //        Log.i(TEST_SYNC_TAG, "[doInBackground] Adding JsonObjectRequest[outRestReqKospenuserUrl] to queue to send request to remote server");
 //        MySingleton.getInstance(this).addToRequestQueue(postRequest);
 //        Log.i(TEST_SYNC_TAG, "[doInBackground] JsonObjectRequest[outRestReqKospenuserUrl] sent");
-
-        mTestActivityViewModel.outRestReqSync();
     }
 }
