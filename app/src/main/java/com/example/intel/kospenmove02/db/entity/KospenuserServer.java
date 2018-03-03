@@ -2,10 +2,12 @@ package com.example.intel.kospenmove02.db.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
+import com.example.intel.kospenmove02.db.converter.BooleanConverter;
 import com.example.intel.kospenmove02.db.entity.Gender;
 import com.example.intel.kospenmove02.db.entity.Locality;
 import com.example.intel.kospenmove02.db.entity.Region;
@@ -62,15 +64,41 @@ public class KospenuserServer {
 
     private int version;
 
+    @TypeConverters(BooleanConverter.class)
+    private boolean softDel;
+
+    @TypeConverters(BooleanConverter.class)
+    private boolean dirty;
+
     /*
     |
     |   Constructor
     |
     */
-
     public KospenuserServer(String timestamp, @NonNull String ic, String name, String address,
                             int fk_gender, int fk_state, int fk_region, int fk_subregion, int fk_locality,
                             String firstRegRegion, int version) {
+//        this.timestamp = timestamp;
+//        this.ic = ic;
+//        this.name = name;
+//        this.address = address;
+//        this.fk_gender = fk_gender;
+//        this.fk_state = fk_state;
+//        this.fk_region = fk_region;
+//        this.fk_subregion = fk_subregion;
+//        this.fk_locality = fk_locality;
+//        this.firstRegRegion = firstRegRegion;
+//        this.version = version;
+
+        this(timestamp, ic, name, address, fk_gender, fk_state, fk_region, fk_subregion, fk_locality, firstRegRegion, version,
+                false, false);
+    }
+
+    @Ignore
+    public KospenuserServer(String timestamp, @NonNull String ic, String name, String address,
+                            int fk_gender, int fk_state, int fk_region, int fk_subregion, int fk_locality,
+                            String firstRegRegion, int version,
+                            boolean softDel, boolean dirty) {
         this.timestamp = timestamp;
         this.ic = ic;
         this.name = name;
@@ -82,7 +110,10 @@ public class KospenuserServer {
         this.fk_locality = fk_locality;
         this.firstRegRegion = firstRegRegion;
         this.version = version;
+        this.softDel = softDel;
+        this.dirty = dirty;
     }
+
 
     /*
     |
@@ -175,5 +206,21 @@ public class KospenuserServer {
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    public boolean isSoftDel() {
+        return softDel;
+    }
+
+    public void setSoftDel(boolean softDel) {
+        this.softDel = softDel;
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
     }
 }

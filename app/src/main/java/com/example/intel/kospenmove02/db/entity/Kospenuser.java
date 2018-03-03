@@ -103,8 +103,6 @@ public class Kospenuser {
 //        this.fk_locality = fk_locality;
 //        this.firstRegRegion = firstRegRegion;
 //        this.version = version;
-//        this.softDel = false;
-//        this.dirty = true;
 
         // VERSION 2: constructor with optional arguments using constructor overloading,by chaining constructor using 'this'.
         this(timestamp, ic, name, address, fk_gender, fk_state, fk_region, fk_subregion, fk_locality, firstRegRegion, version,
@@ -126,8 +124,8 @@ public class Kospenuser {
         this.fk_locality = fk_locality;
         this.firstRegRegion = firstRegRegion;
         this.version = version;
-        this.softDel = false;
-        this.dirty = true;
+        this.softDel = softDel;
+        this.dirty = dirty;
     }
 
     /*

@@ -39,7 +39,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp"
         android:text="Display" />
 
     <Button
@@ -137,9 +136,8 @@
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/apiresultTextviewId"
+        android:layout_below="@+id/button4"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="43dp"
         android:text="Database Table" />
 
     <TextView
@@ -148,7 +146,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView7"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
         android:text="Data" />
 
     <Button
@@ -182,8 +179,8 @@
         android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/getButtonId"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:onClick="outreqsyncButtonClicked"
         android:text="outreq sync" />
 
@@ -191,8 +188,8 @@
         android:id="@+id/button5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button2"
-        android:layout_toEndOf="@+id/clearInDBOutReqTableBtnId"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
         android:onClick="localdbButtonClicked"
         android:text="localdb" />
 </RelativeLayout>

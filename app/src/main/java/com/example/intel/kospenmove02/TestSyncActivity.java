@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -209,14 +210,16 @@ public class TestSyncActivity extends AppCompatActivity {
 //                });
 
         // VERSION 2: using normal java list -> when LiveData is no longer required to update UI
-        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioTwo();
-        for (Kospenuser kospenuser : kospenusers) {
-            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
-            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.LocalKospenuserUpdateFrmInsideLocality);
-            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
-            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
-        }
+//        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioTwo();
+//        for (Kospenuser kospenuser : kospenusers) {
+//            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
+//            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.LocalKospenuserUpdateFrmInsideLocality);
+//            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+//            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+//        }
 
+        // VERSION 3: Modified 'loadScenarioTwo()' to apply changes to local sqlite DB immediately.
+        mDb.kospenuserModel().loadScenarioTwo();
     }
 
     private void showScene2InUi(final @NonNull List<Kospenuser> kospenusers) {
@@ -335,13 +338,16 @@ public class TestSyncActivity extends AppCompatActivity {
 //                });
 
         // VERSION 2: using normal java list -> when LiveData is no longer required to update UI
-        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourB();
-        for (Kospenuser kospenuser : kospenusers) {
-            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
-            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.LocalKospenuserUpdateFrmOutsideLocality);
-            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
-            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
-        }
+//        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourB();
+//        for (Kospenuser kospenuser : kospenusers) {
+//            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
+//            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.LocalKospenuserUpdateFrmOutsideLocality);
+//            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+//            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+//        }
+
+        // VERSION 3: Modified 'loadScenarioFourB()' to apply changes to local sqlite DB immediately.
+        mDb.kospenuserModel().loadScenarioFourB();
 
     }
 
@@ -484,14 +490,25 @@ public class TestSyncActivity extends AppCompatActivity {
 //                });
 
         // VERSION 2: using normal java list -> when LiveData is no longer required to update UI
-        List<KospenuserServer> kospenusersServer = mDb.kospenuserServerModel().loadScenarioSix();
-        for (KospenuserServer kospenuserServer : kospenusersServer) {
-            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuserServer);
-            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.KospenuserInsideLocalityNotInAndroidDb);
-            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
-            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
-        }
+//        List<KospenuserServer> kospenusersServer = mDb.kospenuserServerModel().loadScenarioSix();
+//        for (KospenuserServer kospenuserServer : kospenusersServer) {
+//            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuserServer);
+//            inDBQueryKospenuser.setInDBQueryStatus(InDBQuery.KospenuserInsideLocalityNotInAndroidDb);
+//            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+//            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+//        }
 
+        // VERSION 3: Modified 'loadScenarioSix()' to apply changes to local sqlite DB immediately. [LONG FORM]
+//        mDb.query("INSERT into kospenuser(timestamp, ic, name, address, fk_gender, fk_state, fk_region, fk_subregion, fk_locality, firstRegRegion, version, " +
+//                "softDel, dirty) " +
+//                "SELECT * from kospenuserserver WHERE " +
+//                "ic NOT in (SELECT ic from kospenuser)", null);
+//        cursor.getCount();
+
+        // VERSION 4: Modified 'loadScenarioSix()' to apply changes to local sqlite DB immediately. [SHORT FORM]
+        Cursor cursor =  mDb.query("INSERT INTO kospenuser SELECT * from kospenuserserver WHERE " +
+                "ic NOT in (SELECT ic from kospenuser)", null);
+        cursor.getCount();
     }
 
     private void showScene6InUi(final @NonNull List<KospenuserServer> kospenusersServer) {
@@ -532,8 +549,10 @@ public class TestSyncActivity extends AppCompatActivity {
 
         for (Kospenuser kospenuser : kospenusers) {
             sb.append(kospenuser.getName());
-            sb.append("_");
-//            sb.append(kospenuser.getIc());
+            sb.append("_Addr:");
+            sb.append(kospenuser.getAddress());
+            sb.append("_Date:");
+            sb.append(kospenuser.getTimestamp());
             sb.append("_Version:");
             sb.append(kospenuser.getVersion());
             sb.append("_Dirty:");

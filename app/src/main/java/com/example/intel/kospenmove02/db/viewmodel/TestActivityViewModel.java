@@ -2,6 +2,7 @@ package com.example.intel.kospenmove02.db.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -67,6 +68,10 @@ public class TestActivityViewModel extends AndroidViewModel {
 
     private void deleteKospenuserByIc(String ic) {
         mDb.kospenuserModel().deleteKospenuserByIc(ic);
+    }
+
+    private void deleteKospenuserServerByIc(String ic) {
+        mDb.kospenuserServerModel().deleteKospenuserServerByIc(ic);
     }
 
     private void updateKospenuser(int version, int fk_gender, int fk_state, int fk_region, int fk_subregion, int fk_locality,
@@ -273,13 +278,17 @@ public class TestActivityViewModel extends AndroidViewModel {
     }
 
     private void loadScenario2() {
-        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioTwo();
-        for (Kospenuser kospenuser : kospenusers) {
-            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
-            inDBQueryKospenuser.setInDBQueryStatus(InDBQueryConverter.InDBQuery.LocalKospenuserUpdateFrmInsideLocality);
-            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
-            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
-        }
+        // VERSION 1: using normal java list -> when LiveData is no longer required to update UI
+//        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioTwo();
+//        for (Kospenuser kospenuser : kospenusers) {
+//            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
+//            inDBQueryKospenuser.setInDBQueryStatus(InDBQueryConverter.InDBQuery.LocalKospenuserUpdateFrmInsideLocality);
+//            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+//            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+//        }
+
+        // VERSION 2: Modified 'loadScenarioTwo()' to apply changes to local sqlite DB immediately.
+        mDb.kospenuserModel().loadScenarioTwo();
     }
 
     private void loadScenario3() {
@@ -297,13 +306,17 @@ public class TestActivityViewModel extends AndroidViewModel {
     }
 
     private void loadScenario4b() {
-        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourB();
-        for (Kospenuser kospenuser : kospenusers) {
-            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
-            inDBQueryKospenuser.setInDBQueryStatus(InDBQueryConverter.InDBQuery.LocalKospenuserUpdateFrmOutsideLocality);
-            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
-            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
-        }
+        // VERSION 1: using normal java list -> when LiveData is no longer required to update UI
+//        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadScenarioFourB();
+//        for (Kospenuser kospenuser : kospenusers) {
+//            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuser);
+//            inDBQueryKospenuser.setInDBQueryStatus(InDBQueryConverter.InDBQuery.LocalKospenuserUpdateFrmOutsideLocality);
+//            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+//            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+//        }
+
+        // VERSION 2: Modified 'loadScenarioFourB()' to apply changes to local sqlite DB immediately.
+        mDb.kospenuserModel().loadScenarioFourB();
     }
 
     private void loadScenario4c() {
@@ -327,14 +340,26 @@ public class TestActivityViewModel extends AndroidViewModel {
     }
 
     private void loadScenario6() {
-        List<KospenuserServer> kospenusersServer = mDb.kospenuserServerModel().loadScenarioSix();
-        for (KospenuserServer kospenuserServer : kospenusersServer) {
-            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuserServer);
-            inDBQueryKospenuser.setInDBQueryStatus(InDBQueryConverter.InDBQuery.KospenuserInsideLocalityNotInAndroidDb);
-            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
-            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
-        }
+        // VERSION 1: using normal java list -> when LiveData is no longer required to update UI
+//        List<KospenuserServer> kospenusersServer = mDb.kospenuserServerModel().loadScenarioSix();
+//        for (KospenuserServer kospenuserServer : kospenusersServer) {
+//            InDBQueryKospenuser inDBQueryKospenuser = new InDBQueryKospenuser(kospenuserServer);
+//            inDBQueryKospenuser.setInDBQueryStatus(InDBQueryConverter.InDBQuery.KospenuserInsideLocalityNotInAndroidDb);
+//            mDb.inDBQueryKospenuserModel().deleteInDBQueryKospenuserByIc(inDBQueryKospenuser.getIc());
+//            mDb.inDBQueryKospenuserModel().insertInDBQueryKospenuser(inDBQueryKospenuser);
+//        }
 
+        // VERSION 2: Modified 'loadScenarioSix()' to apply changes to local sqlite DB immediately. [LONG FORM]
+//        mDb.query("INSERT into kospenuser(timestamp, ic, name, address, fk_gender, fk_state, fk_region, fk_subregion, fk_locality, firstRegRegion, version, " +
+//                "softDel, dirty) " +
+//                "SELECT * from kospenuserserver WHERE " +
+//                "ic NOT in (SELECT ic from kospenuser)", null);
+//        cursor.getCount();
+
+        // VERSION 3: Modified 'loadScenarioSix()' to apply changes to local sqlite DB immediately. [SHORT FORM]
+        Cursor cursor =  mDb.query("INSERT INTO kospenuser SELECT * from kospenuserserver WHERE " +
+                "ic NOT in (SELECT ic from kospenuser)", null);
+        cursor.getCount();
     }
 
     private void loadAllOutRestReqKospenuserNoLiveData() {
