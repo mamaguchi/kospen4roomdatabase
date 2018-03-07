@@ -22,7 +22,7 @@ public class NewKospenuserFormViewModel extends AndroidViewModel {
     //LiveData
     private LiveData<List<Kospenuser>> liveDataKospenusers;
 
-
+    //Constructor
     public NewKospenuserFormViewModel(Application application) {
         super(application);
 
@@ -53,7 +53,6 @@ public class NewKospenuserFormViewModel extends AndroidViewModel {
 
 
     public LiveData<List<Kospenuser>> getLiveDataKospenusers() {
-
         return mDb.kospenuserModel().loadAllKospenusers();
     }
 
