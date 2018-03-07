@@ -55,6 +55,8 @@ public class TestActivityViewModel extends AndroidViewModel {
         super(application);
 
         mDb = AppDatabase.getDatabase(this.getApplication());
+        mDb.screeningModel().deleteAll();
+        mDb.kospenuserModel().deleteAll();
         DatabaseInitializer.populateAsync(mDb);
     }
 

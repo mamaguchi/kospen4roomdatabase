@@ -80,8 +80,7 @@ public class DatabaseInitializer {
     }
 
     private static void populateWithTestData(AppDatabase db) {
-        db.screeningModel().deleteAll();
-        db.kospenuserModel().deleteAll();
+
 
         String today = getTodayPlusDays(0);
 
@@ -140,7 +139,7 @@ public class DatabaseInitializer {
         Screening screening1 = addScreening(db, "1", "880601105149", today,
                 60, 160, 120, 80, 6,
                 false, false);
-        Screening screening2 = addScreening(db, "2", "880601105151", today,
+        Screening screening2 = addScreening(db, "2", "880601105152", today,
                 20, 80, 90, 60, 6,
                 true, true);
 
