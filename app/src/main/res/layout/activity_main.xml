@@ -1,232 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- VERSION 2: STARTED ON 7 March 2018 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.intel.kospenmove02.MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="11dp"
-        android:layout_marginStart="11dp"
-        android:layout_marginTop="14dp"
-        android:text="IC"
-        android:textSize="24sp" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView"
-        android:layout_below="@+id/textView"
-        android:layout_marginTop="49dp"
-        android:text="Name"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="30dp"
-        android:text="Birthday"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_alignStart="@+id/textView3"
-        android:layout_below="@+id/birthdayYearId"
-        android:layout_marginTop="14dp"
-        android:text="Gender"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/genderId"
-        android:layout_alignStart="@+id/genderId"
-        android:layout_below="@+id/genderId"
-        android:text="Address"
-        android:textSize="24sp" />
-
-    <EditText
-        android:id="@+id/icId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/textView"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
-        android:ems="10"
-        android:inputType="text" />
-
-    <EditText
-        android:id="@+id/nameId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textView3"
-        android:layout_alignLeft="@+id/icId"
-        android:layout_alignStart="@+id/icId"
-        android:ems="10"
-        android:inputType="textPersonName" />
-
-    <Spinner
-        android:id="@+id/birthdayDayId"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView3"
-        android:entries="@array/birthday_day"/>
+        app:tabMode="fixed"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:tabGravity="fill"
+        app:tabTextColor="#FFF"
+        app:tabSelectedTextColor="@color/colorAccent">
 
-    <Spinner
-        android:id="@+id/birthdayMonthId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/birthdayDayId"
-        android:layout_alignStart="@+id/birthdayDayId"
-        android:layout_below="@+id/birthdayDayId"
-        android:entries="@array/birthday_month"/>
+    </android.support.design.widget.TabLayout>
 
-    <Spinner
-        android:id="@+id/birthdayYearId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/birthdayMonthId"
-        android:layout_alignStart="@+id/birthdayMonthId"
-        android:layout_below="@+id/birthdayMonthId"
-        android:entries="@array/birthday_year" />
-
-    <Spinner
-        android:id="@+id/genderId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView4"
-        android:layout_alignStart="@+id/textView4"
-        android:layout_below="@+id/textView4"
-        android:layout_toStartOf="@+id/dbButtonId"
-        android:entries="@array/gender" />
-
-    <EditText
-        android:id="@+id/addressId"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView5"
-        android:layout_alignBottom="@+id/textView5"
-        android:layout_toEndOf="@+id/textView3"
-        android:layout_toStartOf="@+id/networkButtonId"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        android:layout_height="wrap_content">
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_favorite_black_48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>
 
-    <Button
-        android:id="@+id/testButtonId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/deleteButtonId"
-        android:layout_toStartOf="@+id/deleteButtonId"
-        android:onClick="testButtonClicked"
-        android:text="Test " />
 
-    <TextView
-        android:id="@+id/testOutputId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/addressId"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="11dp" />
 
-    <Button
-        android:id="@+id/addButtonId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/testButtonId"
-        android:layout_toStartOf="@+id/testButtonId"
-        android:onClick="addButtonClicked"
-        android:text="Add" />
+<!-- VERSION 1: From beginning, DEPRECATED ON 7 March 2018 -->
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--tools:context="com.example.intel.kospenmove02.MainActivity">-->
 
-    <Button
-        android:id="@+id/deleteButtonId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:onClick="deleteButtonClicked"
-        android:text="DELETE" />
+    <!--<Button-->
+        <!--android:id="@+id/testButtonId"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:onClick="testButtonClicked"-->
+        <!--android:text="Test " />-->
 
-    <Button
-        android:id="@+id/syncGetButtonId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView5"
-        android:onClick="syncGetButtonClicked"
-        android:text="syncget" />
+    <!--<Button-->
+        <!--android:id="@+id/prefButtonId"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_marginStart="15dp"-->
+        <!--android:layout_toEndOf="@+id/networkButtonId"-->
+        <!--android:onClick="prefButtonClicked"-->
+        <!--android:text="pref" />-->
 
-    <Button
-        android:id="@+id/syncPostButtonId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/textView5"
-        android:layout_alignRight="@+id/textView5"
-        android:layout_below="@+id/syncGetButtonId"
-        android:onClick="syncPostButtonClicked"
-        android:text="syncpost" />
+    <!--<Button-->
+        <!--android:id="@+id/networkButtonId"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:onClick="networkButtonClicked"-->
+        <!--android:text="network" />-->
 
-    <Button
-        android:id="@+id/syncDelButtonId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView5"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/textView5"
-        android:onClick="syncDelButtonClicked"
-        android:text="syncdel" />
+    <!--<Button-->
+        <!--android:id="@+id/dbButtonId"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_toStartOf="@+id/testButtonId"-->
+        <!--android:onClick="dbButtonClicked"-->
+        <!--android:text="Db" />-->
 
-    <Button
-        android:id="@+id/prefButtonId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView5"
-        android:onClick="prefButtonClicked"
-        android:text="pref" />
-
-    <Button
-        android:id="@+id/networkButtonId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/syncPostButtonId"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:onClick="networkButtonClicked"
-        android:text="network" />
-
-    <Button
-        android:id="@+id/dbButtonId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/prefButtonId"
-        android:layout_toEndOf="@+id/addressId"
-        android:onClick="dbButtonClicked"
-        android:text="Db" />
-
-</RelativeLayout>
+<!--</RelativeLayout>-->

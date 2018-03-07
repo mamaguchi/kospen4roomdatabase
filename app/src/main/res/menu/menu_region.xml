@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:support="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/region_maran"
+        android:title="@string/menu_region_maran"/>
+    <item android:id="@+id/region_jerantut"
+        android:title="@string/menu_region_jerantut"/>
+
+</menu>

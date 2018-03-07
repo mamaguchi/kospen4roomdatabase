@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:support="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/locality_ulujempol"
+        android:title="@string/menu_locality_ulujempol"/>
+    <item android:id="@+id/locality_jengka6"
+        android:title="@string/menu_locality_jengka6"/>
+
+</menu>

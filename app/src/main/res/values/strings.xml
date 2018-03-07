@@ -1,36 +1,68 @@
 <resources>
     <string name="app_name">KospenMove02</string>
-    <string-array name="birthday_day">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-    </string-array>
-    <string-array name="birthday_month">
-        <item>jan</item>
-        <item>feb</item>
-        <item>march</item>
-        <item>april</item>
-        <item>may</item>
-        <item>june</item>
-        <item>july</item>
-        <item>august</item>
-    </string-array>
-    <string-array name="birthday_year">
-        <item>2000</item>
-        <item>2001</item>
-        <item>2002</item>
-        <item>2003</item>
-    </string-array>
-    <string-array name="gender">
-        <item>Male</item>
-        <item>Female</item>
-    </string-array>
+    <string name="element_text">Element</string>
 
+    <!--String values for Preference in SettingsActivity-->
     <string name="pref_sync_wifi">Update on WiFi</string>
     <string name="pref_sync_wifi_summ">To allow app to update when Wifi is available</string>
+
+    <!--String values for App Bar-->
+    <string name="action_favorite">Favourite</string>
+    <string name="action_settings">Settings</string>
+
+    <!--String values for Floating-Label-for-EditText-->
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_age">Age</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_ic">IC</string>
+    <string name="hint_kospenuser_name">Name</string>
+    <string name="hint_address">Address</string>
+    <string name="text_sign_up">Sign Up</string>
+    <string name="error_message_name">Enter Full Name</string>
+    <string name="error_message_email">Enter Valid Email</string>
+    <string name="error_message_age">Enter Age</string>
+    <string name="error_message_password">Enter Password</string>
+    <string name="error_message_ic">Enter Ic</string>
+    <string name="error_message_address">Enter Address</string>
+    <string name="error_message_gender">Enter Gender</string>
+    <string name="error_message_state">Enter State</string>
+    <string name="error_message_region">Enter Region</string>
+    <string name="error_message_subregion">Enter Subregion</string>
+    <string name="error_message_locality">Enter Locality</string>
+    <string name="success_message">Sign Up Successful</string>
+    <string name="fail_form_input_invalid">Sign Up Fail. Input Invalid</string>
+
+    <!--String values for Birthday DatePickerDialog in EditText-->
+    <string name="hint_birthday">Birthday</string>
+
+    <!--String values for Gender menu in EditText-->
+    <string name="hint_gender">Gender</string>
+    <string name="menu_male">Male</string>
+    <string name="menu_female">Female</string>
+
+    <!--String values for State menu in EditText-->
+    <string name="hint_state">State</string>
+    <string name="menu_state_pahang">PAHANG</string>
+    <string name="menu_state_nonpahang">NONPAHANG</string>
+
+    <!--String values for Region menu in EditText-->
+    <string name="hint_region">Region</string>
+    <string name="menu_region_maran">MARAN</string>
+    <string name="menu_region_jerantut">JERANTUT</string>
+
+    <!--String values for Subregion menu in EditText-->
+    <string name="hint_subregion">Subregion</string>
+    <string name="menu_subregion_jengka2">JENGKA2</string>
+    <string name="menu_subregion_maran">MARAN</string>
+
+    <!--String values for Locality menu in EditText-->
+    <string name="hint_locality">Locality</string>
+    <string name="menu_locality_ulujempol">ULUJEMPOL</string>
+    <string name="menu_locality_jengka6">JENGKA6</string>
+
+    <!--String values for 'Show DB' Button-->
+    <string name="text_show_db">Show DB</string>
+
+
 </resources>

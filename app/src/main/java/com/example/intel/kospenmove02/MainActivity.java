@@ -1,45 +1,45 @@
 package com.example.intel.kospenmove02;
 
+import android.app.DatePickerDialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.os.PersistableBundle;
-import android.preference.PreferenceActivity;
-import android.support.annotation.Nullable;
 
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
 import android.widget.EditText;
 import android.util.Log;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+
+import com.example.intel.kospenmove02.fragments.FragmentDebugLauncher;
+import com.example.intel.kospenmove02.fragments.FragmentOne;
+import com.example.intel.kospenmove02.fragments.FragmentThree;
+import com.example.intel.kospenmove02.fragments.FragmentTwo;
+import com.example.intel.kospenmove02.validator.ValidationHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-
-    private EditText ic;
-    private EditText name;
-    private EditText address;
-    private Spinner birthdayDaySpinner;
-    private Spinner birthdayMonthSpinner;
-    private Spinner birthdayYearSpinner;
-    private Spinner genderSpinner;
-    private Button testButton;
-    private Button syncGetButton;
-    private Button syncPostButton;
-    private Button syncDelButton;
-    private Button prefButton;
-    private Button networkButton;
-
-    private TextView testOutput;
 
     // Job Schedule ID
     public static final int SYNC_JOB_ID = "SyncJobService".hashCode();
@@ -51,32 +51,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String JOB_SCHEDULE_TAG = "SyncJobService";
 
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // -------------------------------------------------------------------------------------- Initialization - START
-        testOutput = (TextView) findViewById(R.id.testOutputId);
-        ic = (EditText) findViewById(R.id.icId);
-        name = (EditText) findViewById(R.id.nameId);
-        address = (EditText) findViewById(R.id.addressId);
-        birthdayDaySpinner = (Spinner) findViewById(R.id.birthdayDayId);
-        birthdayMonthSpinner = (Spinner) findViewById(R.id.birthdayMonthId);
-        birthdayYearSpinner = (Spinner) findViewById(R.id.birthdayYearId);
-        genderSpinner = (Spinner) findViewById(R.id.genderId);
-        testButton = (Button) findViewById(R.id.testButtonId);
-
-        /* syncButton to trigger REST Api call */
-        syncGetButton = (Button) findViewById(R.id.syncGetButtonId);
-        syncPostButton = (Button) findViewById(R.id.syncPostButtonId);
-        syncDelButton = (Button) findViewById(R.id.syncDelButtonId);
-
-        /* prefButton to show preference activity */
-        prefButton = (Button) findViewById(R.id.prefButtonId);
-
-        /* prefButton to show network-status activity */
-        networkButton = (Button) findViewById(R.id.networkButtonId);
 
         /* Set up job schedule */
 //        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
@@ -94,9 +75,93 @@ public class MainActivity extends AppCompatActivity {
 //            Log.i(JOB_SCHEDULE_TAG, "No job. Creating new...");
 //            setupJob();
 //        }
-        // -------------------------------------------------------------------------------------- Initialization - END
 
-//        printDatabase();
+        // App Bar(Toolbar)
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
+        // Creating Tabs with TabLayout & ViewPager
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new FragmentOne(), "FRAG1");
+        adapter.addFragment(new FragmentDebugLauncher(), "FRAG2");
+        adapter.addFragment(new FragmentThree(), "FRAG3");
+        viewPager.setAdapter(adapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        // FAB (FloatingActionButton)
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "FAB Favourite clicked", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
+            }
+        });
+
+    }
+
+    // Creating Tabs: Adapter for the viewpager using FragmentPagerAdapter
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
+
+    // Creating AppBar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate our menu from the resources by using the menu inflater.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //should return true if you have added items to it and want the menu to be displayed.
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
+
+            case R.id.action_favorite:
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+
+                Toast.makeText(this, "Favourite clicked", Toast.LENGTH_SHORT).show();
+
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
 
@@ -147,80 +212,34 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-    // =========== Setup JobInfo and Submit job using JobScheduler - END ===========
 
 
-    // =========== Goto Database Activity - START ===========
-    public void dbButtonClicked(View view) {
-        Intent gotoDbActivityIntent = new Intent(this, DbActivity.class);
-        startActivity(gotoDbActivityIntent);
-    }
-    // =========== Goto Database Activity - END ===========
-
-
-    // =========== Goto Network Activity - START ===========
-    public void networkButtonClicked(View view) {
-        Intent gotoNetworkStatusActivityIntent = new Intent(this, NetworkStatusActivity.class);
-        startActivity(gotoNetworkStatusActivityIntent);
-    }
-    // =========== Goto Network Activity - END ===========
-
-
-    // =========== Goto Preference Activity - START ===========
-    public void prefButtonClicked(View view) {
-        Intent gotoPrefActivityIntent = new Intent(this, SettingsActivity.class);
-        startActivity(gotoPrefActivityIntent);
-    }
-    // =========== Goto Preference Activity - END ===========
-
-
-    // =========== Sync Simulation Button - START ===========
-    public void syncGetButtonClicked(View view) {
-        // ToDo
-    }
-
-    public void syncPostButtonClicked(View view) {
-        // ToDo
-    }
-    // =========== Sync Simulation Button - END ===========
-
-
-    public void testButtonClicked(View view){
-        Intent gotoTestSyncActivityIntent = new Intent(this, TestSyncActivity.class);
-        startActivity(gotoTestSyncActivityIntent);
-    }
-
-    public void addButtonClicked(View view){
-        String str_ic = ic.getText().toString();
-        String str_name = name.getText().toString();
-
-        String str_birthdayDay = String.valueOf(birthdayDaySpinner.getSelectedItem());
-        String str_birthdayMonth = String.valueOf(birthdayMonthSpinner.getSelectedItem());
-        String str_birthdayYear = String.valueOf(birthdayYearSpinner.getSelectedItem());
-        StringBuilder sb = new StringBuilder();
-        sb.append(str_birthdayDay);
-        sb.append("-");
-        sb.append(str_birthdayMonth);
-        sb.append("-");
-        sb.append(str_birthdayYear);
-
-        String str_gender = String.valueOf(genderSpinner.getSelectedItem());
-        String str_address = address.getText().toString();
-
-        // ToDo
-
-        printDatabase();
-    }
-
-    public void printDatabase(){
-        // ToDo
-    }
-
-    public void deleteButtonClicked(View view){
-        // ToDo
-        printDatabase();
-    }
-
+//    // =========== Goto Database Activity - START ===========
+//    public void dbButtonClicked(View view) {
+//        Intent gotoDbActivityIntent = new Intent(this, DbActivity.class);
+//        startActivity(gotoDbActivityIntent);
+//    }
+//
+//
+//    // =========== Goto Network Activity - START ===========
+//    public void networkButtonClicked(View view) {
+//        Intent gotoNetworkStatusActivityIntent = new Intent(this, NetworkStatusActivity.class);
+//        startActivity(gotoNetworkStatusActivityIntent);
+//    }
+//
+//
+//    // =========== Goto Preference Activity - START ===========
+//    public void prefButtonClicked(View view) {
+//        Intent gotoPrefActivityIntent = new Intent(this, SettingsActivity.class);
+//        startActivity(gotoPrefActivityIntent);
+//    }
+//
+//
+//    // =========== Goto TestSyncActivity - START ===========
+//    public void testButtonClicked(View view){
+//        Intent gotoTestSyncActivityIntent = new Intent(this, TestSyncActivity.class);
+//        startActivity(gotoTestSyncActivityIntent);
+//    }
 
 
 }

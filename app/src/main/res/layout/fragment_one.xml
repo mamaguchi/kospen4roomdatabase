@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- VERSION 2: adding RecyclerView vertically-scrolling-list to one of the page of ViewPager -->
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recyclerView"
+    android:scrollbars="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+</android.support.v7.widget.RecyclerView>
+
+
+
+
+
+
+<!-- VERSION 1: used when making 'tabs' with TabLayout & ViewPager -->
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--android:layout_width="match_parent"-->
+<!--android:background="#D81B60"-->
+<!--android:layout_height="match_parent">-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Fragment One"-->
+    <!--android:textSize="40dp"-->
+    <!--android:textStyle="bold"-->
+    <!--android:textColor="#fff"-->
+    <!--android:layout_centerInParent="true"/>-->
+<!--</RelativeLayout>-->
