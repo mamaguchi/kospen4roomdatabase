@@ -331,7 +331,7 @@ public interface KospenuserDao {
     @Query("UPDATE kospenuser SET " +
             "softDel = 1 WHERE " +
             "ic in (SELECT ic FROM outrestreqkospenuser WHERE outRestReqFailCounter >= 3)")
-    void setSoftDelColTrueKospenuser();
+    void setKospenuserSoftDelColTrueWith3orMoreFailCounter();
 
     @Query("UPDATE kospenuser SET " +
             "dirty = 0 WHERE " +
@@ -347,6 +347,11 @@ public interface KospenuserDao {
             "dirty = 0 WHERE " +
             "ic = :ic")
     void setDirtyColFalseKospenuser(String ic);
+
+    @Query("UPDATE kospenuser SET " +
+            "softDel = 1 WHERE " +
+            "ic = :ic")
+    void setSoftDelColTrueKospenuser(String ic);
 
     @Delete
     void deleteUser(Kospenuser kospenuser);

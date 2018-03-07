@@ -19,11 +19,32 @@ public interface ScreeningDao {
     @Query("select * from screening")
     LiveData<List<Screening>> loadAllScreenings();
 
+    @Query("select * from screening where softDel = 0")
+    List<Screening> loadAll();
+
     @Query("select * from screening where fk_ic = :fk_ic")
     LiveData<Screening> loadScreeningByFkic(String fk_ic);
 
     @Insert(onConflict = IGNORE)
     void insertScreening(Screening screening);
+
+    @Query("UPDATE screening SET " +
+            "outRestReqFailCounter = outRestReqFailCounter + 1 WHERE " +
+            "id = :id")
+    void incrementOutRestReqFailCounter(int id);
+
+    @Query("UPDATE screening SET " +
+            "softDel = 1 WHERE " +
+            "fk_ic in (SELECT kospenuser.ic FROM kospenuser WHERE softDel = 1)")
+    void setScreeningSoftDelColTrueWithSoftDeletedKospenuser();
+
+    @Query("UPDATE screening SET " +
+            "softDel = 1 WHERE " +
+            "id in (SELECT id FROM screening WHERE outRestReqFailCounter >= 3)")
+    void setScreeningSoftDelColTrueWith3orMoreFailCounter();
+
+    @Query("DELETE from screening WHERE id = :id")
+    void deleteScreeningById(int id);
 
     @Delete
     void deleteScreening(Screening screening);

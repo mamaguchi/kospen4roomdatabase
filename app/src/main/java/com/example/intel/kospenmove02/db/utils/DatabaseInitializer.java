@@ -41,14 +41,13 @@ public class DatabaseInitializer {
         return kospenuser;
     }
 
-    private static Screening addScreening(final AppDatabase db, final String id, final String fk_ic,
+    private static Screening addScreening(final AppDatabase db, final int id, final String fk_ic,
                                           String date, final int weight, final int height,
                                       final int systolic, final int diastolic,
-                                      final int dxt, boolean smoker,
-                                     boolean sendToServer) {
+                                      final int dxt, boolean smoker) {
 
         Screening screening = new Screening(
-                id, fk_ic, date, weight, height, systolic, diastolic, dxt, smoker, sendToServer);
+                id, fk_ic, date, weight, height, systolic, diastolic, dxt, smoker);
         db.screeningModel().insertScreening(screening);
 
         return screening;
@@ -120,6 +119,7 @@ public class DatabaseInitializer {
         Kospenuser user2 = addKospenuser(db, "2018-01-30 07:00:00", "880601105151", "bellio2",
                 2,"southernpark",
                 1, 1, 1, 1,"klang", 1);
+//        db.kospenuserModel().setSoftDelColTrueKospenuser("880601105151");
         Kospenuser user3 = addKospenuser(db, "2018-01-30 07:00:00", "880601105152", "esther",
                 2,"southernpark",
                 1, 1, 1, 1,"klang", 1);
@@ -136,12 +136,12 @@ public class DatabaseInitializer {
         Kospenuser user7 = addKospenuser(db, "2018-01-30 08:00:00", "880601105159", "bellio7",
                 1,"southernpark",
                 1, 1, 1, 1,"klang", 1);
-        Screening screening1 = addScreening(db, "1", "880601105149", today,
+        Screening screening1 = addScreening(db, 1, "880601105149", today,
                 60, 160, 120, 80, 6,
-                false, false);
-        Screening screening2 = addScreening(db, "2", "880601105152", today,
+                false);
+        Screening screening2 = addScreening(db, 2, "880601105151", today,
                 20, 80, 90, 60, 6,
-                true, true);
+                true);
 
 
         // Version 3:

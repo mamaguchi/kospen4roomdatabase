@@ -2,22 +2,26 @@ package com.example.intel.kospenmove02.db.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
 import com.example.intel.kospenmove02.db.converter.BooleanConverter;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
 
 @Entity(foreignKeys = {
         @ForeignKey(entity=Kospenuser.class,
                     parentColumns = "ic",
-                    childColumns = "fk_ic")})
+                    childColumns = "fk_ic",
+                    onDelete = CASCADE)})
 public class Screening {
 
     @PrimaryKey
     @NonNull
-    private String id;
+    private int id;
 
     private String fk_ic;
 
@@ -40,7 +44,9 @@ public class Screening {
     private boolean smoker;
 
     @TypeConverters(BooleanConverter.class)
-    private boolean sendToServer;
+    private boolean softDel;
+
+    private int outRestReqFailCounter;
 
 
     /*
@@ -48,9 +54,29 @@ public class Screening {
     |   Constructor
     |
     */
-    public Screening(@NonNull String id, String fk_ic, String date,
+    public Screening(@NonNull int id, String fk_ic, String date,
                      int weight, int height, int systolic, int diastolic, int dxt,
-                     boolean smoker, boolean sendToServer) {
+                     boolean smoker) {
+        // VERSION 1: normal constructor
+//        this.id = id;
+//        this.fk_ic = fk_ic;
+//        this.date = date;
+//        this.weight = weight;
+//        this.height = height;
+//        this.systolic = systolic;
+//        this.diastolic = diastolic;
+//        this.dxt = dxt;
+//        this.smoker = smoker;
+//        this.softDel = softDel;
+
+        // VERSION 2: constructor with optional arguments using constructor overloading,by chaining constructor using 'this'.
+        this(id, fk_ic, date, weight, height, systolic, diastolic, dxt, smoker, false, 0);
+    }
+
+    @Ignore
+    public Screening(@NonNull int id, String fk_ic, String date,
+                     int weight, int height, int systolic, int diastolic, int dxt,
+                     boolean smoker, boolean softDel, int outRestReqFailCounter) {
         this.id = id;
         this.fk_ic = fk_ic;
         this.date = date;
@@ -60,7 +86,8 @@ public class Screening {
         this.diastolic = diastolic;
         this.dxt = dxt;
         this.smoker = smoker;
-        this.sendToServer = sendToServer;
+        this.softDel = softDel;
+        this.outRestReqFailCounter = outRestReqFailCounter;
     }
 
     /*
@@ -69,11 +96,11 @@ public class Screening {
     |
     */
     @NonNull
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(@NonNull String id) {
+    public void setId(@NonNull int id) {
         this.id = id;
     }
 
@@ -141,11 +168,19 @@ public class Screening {
         this.smoker = smoker;
     }
 
-    public boolean isSendToServer() {
-        return sendToServer;
+    public boolean isSoftDel() {
+        return softDel;
     }
 
-    public void setSendToServer(boolean sendToServer) {
-        this.sendToServer = sendToServer;
+    public void setSoftDel(boolean softDel) {
+        this.softDel = softDel;
+    }
+
+    public int getOutRestReqFailCounter() {
+        return outRestReqFailCounter;
+    }
+
+    public void setOutRestReqFailCounter(int outRestReqFailCounter) {
+        this.outRestReqFailCounter = outRestReqFailCounter;
     }
 }
