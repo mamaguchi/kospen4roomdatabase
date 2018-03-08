@@ -42,9 +42,9 @@ public class DatabaseInitializer {
     }
 
     private static Screening addScreening(final AppDatabase db, final int id, final String fk_ic,
-                                          String date, final int weight, final int height,
+                                          String date, final double weight, final double height,
                                       final int systolic, final int diastolic,
-                                      final int dxt, boolean smoker) {
+                                      final double dxt, boolean smoker) {
 
         Screening screening = new Screening(
                 id, fk_ic, date, weight, height, systolic, diastolic, dxt, smoker);
@@ -79,7 +79,8 @@ public class DatabaseInitializer {
     }
 
     private static void populateWithTestData(AppDatabase db) {
-
+        db.screeningModel().deleteAll();
+        db.kospenuserModel().deleteAll();
 
         String today = getTodayPlusDays(0);
 
@@ -136,12 +137,12 @@ public class DatabaseInitializer {
         Kospenuser user7 = addKospenuser(db, "2018-01-30 08:00:00", "880601105159", "bellio7",
                 1,"southernpark",
                 1, 1, 1, 1,"klang", 1);
-        Screening screening1 = addScreening(db, 1, "880601105149", today,
-                60, 160, 120, 80, 6,
-                false);
-        Screening screening2 = addScreening(db, 2, "880601105151", today,
-                20, 80, 90, 60, 6,
-                true);
+//        Screening screening1 = addScreening(db, 1, "880601105149", today,
+//                60, 160, 120, 80, 6,
+//                false);
+//        Screening screening2 = addScreening(db, 2, "880601105151", today,
+//                20, 80, 90, 60, 6,
+//                true);
 
 
         // Version 3:

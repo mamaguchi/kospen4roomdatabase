@@ -30,15 +30,15 @@ public class Screening {
 
     private String date;
 
-    private int weight;
+    private double weight;
 
-    private int height;
+    private double height;
 
     private int systolic;
 
     private int diastolic;
 
-    private int dxt;
+    private double dxt;
 
     @TypeConverters(BooleanConverter.class)
     private boolean smoker;
@@ -55,7 +55,7 @@ public class Screening {
     |
     */
     public Screening(@NonNull int id, String fk_ic, String date,
-                     int weight, int height, int systolic, int diastolic, int dxt,
+                     double weight, double height, int systolic, int diastolic, double dxt,
                      boolean smoker) {
         // VERSION 1: normal constructor
 //        this.id = id;
@@ -75,7 +75,7 @@ public class Screening {
 
     @Ignore
     public Screening(@NonNull int id, String fk_ic, String date,
-                     int weight, int height, int systolic, int diastolic, int dxt,
+                     double weight, double height, int systolic, int diastolic, double dxt,
                      boolean smoker, boolean softDel, int outRestReqFailCounter) {
         this.id = id;
         this.fk_ic = fk_ic;
@@ -120,19 +120,19 @@ public class Screening {
         this.date = date;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 
@@ -152,11 +152,11 @@ public class Screening {
         this.diastolic = diastolic;
     }
 
-    public int getDxt() {
+    public double getDxt() {
         return dxt;
     }
 
-    public void setDxt(int dxt) {
+    public void setDxt(double dxt) {
         this.dxt = dxt;
     }
 

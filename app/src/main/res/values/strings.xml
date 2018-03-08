@@ -31,7 +31,7 @@
     <string name="error_message_subregion">Enter Subregion</string>
     <string name="error_message_locality">Enter Locality</string>
     <string name="success_message">Sign Up Successful</string>
-    <string name="fail_form_input_invalid">Sign Up Fail. Input Invalid</string>
+    <string name="fail_form_input_invalid">Form Inputs Invalid</string>
 
     <!--String values for Birthday DatePickerDialog in EditText-->
     <string name="hint_birthday">Birthday</string>
@@ -64,5 +64,24 @@
     <!--String values for 'Show DB' Button-->
     <string name="text_show_db">Show DB</string>
 
+    <!--String values for New-Screening-Form-->
+    <string name="hint_weight">Weight</string>
+    <string name="hint_height">Height</string>
+    <string name="hint_systolic">Systolic</string>
+    <string name="hint_diastolic">Diastolic</string>
+    <string name="hint_dxt">Dxt</string>
+    <string name="hint_smoker">Smoker</string>
+    <string name="text_save">Save</string>
+    <string name="text_show_db_screening">Show Screenings</string>
+    <string name="menu_smoker_yes">Yes</string>
+    <string name="menu_smoker_no">No</string>
+    <string name="error_message_screening_ic">Enter Ic</string>
+    <string name="error_message_screening_weight">Enter Weight</string>
+    <string name="error_message_screening_height">Enter Height</string>
+    <string name="error_message_screening_systolic">Enter Systolic Bp</string>
+    <string name="error_message_screening_diastolic">Enter Diastolic Bp</string>
+    <string name="error_message_screening_dxt">Enter Dxt</string>
+    <string name="error_message_screening_smoker">Enter Smoking Status</string>
+    <string name="success_screening_input_validation_message">Screening Inputs Valid</string>
 
 </resources>

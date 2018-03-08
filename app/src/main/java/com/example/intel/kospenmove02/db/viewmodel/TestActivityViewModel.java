@@ -3,7 +3,6 @@ package com.example.intel.kospenmove02.db.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -14,9 +13,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.intel.kospenmove02.MyJsonArrayRequest;
 import com.example.intel.kospenmove02.MySingleton;
 import com.example.intel.kospenmove02.db.AppDatabase;
-import com.example.intel.kospenmove02.db.converter.InDBQueryConverter;
 import com.example.intel.kospenmove02.db.converter.OutRestReqConverter;
-import com.example.intel.kospenmove02.db.entity.InDBQueryKospenuser;
 import com.example.intel.kospenmove02.db.entity.Kospenuser;
 import com.example.intel.kospenmove02.db.entity.KospenuserGlobal;
 import com.example.intel.kospenmove02.db.entity.KospenuserServer;
@@ -60,8 +57,7 @@ public class TestActivityViewModel extends AndroidViewModel {
         super(application);
 
         mDb = AppDatabase.getDatabase(this.getApplication());
-//        mDb.screeningModel().deleteAll();
-//        mDb.kospenuserModel().deleteAll();
+
         DatabaseInitializer.populateAsync(mDb);
     }
 

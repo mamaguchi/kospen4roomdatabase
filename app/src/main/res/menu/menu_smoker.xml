@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:support="http://schemas.android.com/apk/res-auto" >
+
+    <!-- Male - Gender Option -->
+    <item
+        android:id="@+id/smoker_yes"
+        android:title="@string/menu_smoker_yes"/>
+
+    <!-- Female - Gender Option -->
+    <item android:id="@+id/smoker_no"
+        android:title="@string/menu_smoker_no"/>
+
+</menu>

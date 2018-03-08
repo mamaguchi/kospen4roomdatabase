@@ -39,6 +39,7 @@ import com.example.intel.kospenmove02.db.entity.KospenuserServer;
 import com.example.intel.kospenmove02.db.converter.OutRestReqConverter.OutRestReq;
 import com.example.intel.kospenmove02.db.converter.InDBQueryConverter.InDBQuery;
 import com.example.intel.kospenmove02.db.entity.OutRestReqKospenuser;
+import com.example.intel.kospenmove02.db.entity.Screening;
 import com.example.intel.kospenmove02.db.viewmodel.TestActivityViewModel;
 
 public class TestSyncActivity extends AppCompatActivity {
@@ -60,6 +61,8 @@ public class TestSyncActivity extends AppCompatActivity {
     private AppDatabase mDb;
 
     private TestActivityViewModel mTestActivityViewModel;
+
+    private LiveData<List<Screening>> screenings;
 
     private LiveData<List<Kospenuser>> kospenusers;
     private LiveData<List<KospenuserServer>> kospenusersServer;
@@ -559,6 +562,34 @@ public class TestSyncActivity extends AppCompatActivity {
             sb.append(kospenuser.isDirty());
             sb.append("_SoftDel:");
             sb.append(kospenuser.isSoftDel());
+            sb.append("\n");
+        }
+        InDBOutReqTableTextView.setText(sb.toString());
+    }
+
+    // [Show Screening List in UI]
+    public void loadScreeningButtonClicked(View view) {
+        screenings =  mDb.screeningModel().loadAllScreenings();
+        screenings.observe(this,
+                new Observer<List<Screening>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Screening> screenings) {
+                        showScreeningsInUi(screenings);
+                    }
+                });
+    }
+
+    // [Display Screening List]
+    private void showScreeningsInUi(final @NonNull List<Screening> screenings) {
+        StringBuilder sb = new StringBuilder();
+
+        for (Screening screening : screenings) {
+            sb.append("_Id:");
+            sb.append(screening.getId());
+            sb.append("_Ic:");
+            sb.append(screening.getFk_ic());
+            sb.append("_SoftDel:");
+            sb.append(screening.isSoftDel());
             sb.append("\n");
         }
         InDBOutReqTableTextView.setText(sb.toString());

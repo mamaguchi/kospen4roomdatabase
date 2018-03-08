@@ -5,8 +5,6 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.widget.EditText;
 
-import com.example.intel.kospenmove02.MyJsonArrayRequest;
-import com.example.intel.kospenmove02.MySingleton;
 import com.example.intel.kospenmove02.db.AppDatabase;
 import com.example.intel.kospenmove02.db.entity.Kospenuser;
 import com.example.intel.kospenmove02.validator.ValidationHelper;
@@ -19,8 +17,6 @@ public class NewKospenuserFormViewModel extends AndroidViewModel {
     //AppDatabase
     private final AppDatabase mDb;
 
-    //LiveData
-    private LiveData<List<Kospenuser>> liveDataKospenusers;
 
     //Constructor
     public NewKospenuserFormViewModel(Application application) {

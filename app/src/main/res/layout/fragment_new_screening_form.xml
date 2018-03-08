@@ -16,12 +16,12 @@
         <!--tools:context="com.androidtutorialshub.floatinglabels.MainActivity">-->
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/text_input_layout_ic"
+            android:id="@+id/text_input_layout_screening_ic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/edit_text_ic"
+                android:id="@+id/edit_text_screening_ic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_ic"
@@ -31,148 +31,124 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/text_input_layout_kospenuser_name"
+            android:id="@+id/text_input_layout_screening_weight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/edit_text_kospenuser_name"
+                android:id="@+id/edit_text_screening_weight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_kospenuser_name"
-                android:inputType="text"
-                android:singleLine="true" />
+                android:hint="@string/hint_weight"
+                android:inputType="numberDecimal"
+                android:singleLine="true"
+                android:focusable="true"/>
         </android.support.design.widget.TextInputLayout>
 
         <!--BEGIN - adding Menu-Gender in EditText [FUNCTIONAL]-->
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/text_input_layout_gender"
+            android:id="@+id/text_input_layout_screening_height"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/edit_text_gender"
+                android:id="@+id/edit_text_screening_height"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_gender"
-                android:focusable="false"
-                android:inputType="text"/>
+                android:hint="@string/hint_height"
+                android:inputType="numberDecimal"
+                android:singleLine="true"
+                android:focusable="true"/>
         </android.support.design.widget.TextInputLayout>
         <!--END - adding Menu-Gender in EditText-->
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/text_input_layout_address"
+            android:id="@+id/text_input_layout_screening_systolic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/edit_text_address"
+                android:id="@+id/edit_text_screening_systolic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_address"
+                android:hint="@string/hint_systolic"
+                android:inputType="number"
+                android:singleLine="true"
+                android:focusable="true"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_input_layout_screening_diastolic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edit_text_screening_diastolic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_diastolic"
+                android:inputType="number"
+                android:singleLine="true"
+                android:focusable="true"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_input_layout_screening_dxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edit_text_screening_dxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_dxt"
+                android:inputType="numberDecimal"
+                android:singleLine="true"
+                android:focusable="true"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_input_layout_screening_smoker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edit_text_screening_smoker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_smoker"
                 android:inputType="text"
-                android:singleLine="false"/>
+                android:focusable="false"/>
         </android.support.design.widget.TextInputLayout>
 
-        <!--BEGIN - adding DatePickerDialog in EditText [FUNCTIONAL]-->
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/text_input_layout_birthday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/edit_text_birthday"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_birthday"
-                android:focusable="false"
-                android:inputType="text"/>
-        </android.support.design.widget.TextInputLayout>
-        <!--END - adding DatePickerDialog in EditText-->
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/text_input_layout_state"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/edit_text_state"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_state"
-                android:focusable="false"
-                android:inputType="text"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/text_input_layout_region"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/edit_text_region"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_region"
-                android:focusable="false"
-                android:inputType="text"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/text_input_layout_subregion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/edit_text_subregion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_subregion"
-                android:focusable="false"
-                android:inputType="text"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/text_input_layout_locality"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/edit_text_locality"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_locality"
-                android:focusable="false"
-                android:inputType="text"/>
-        </android.support.design.widget.TextInputLayout>
 
 
 
 
         <Button
-            android:id="@+id/button_sign_up"
+            android:id="@+id/button_screening_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/button_margin_top"
             android:background="@color/colorPrimary"
-            android:text="@string/text_sign_up"
+            android:text="@string/text_save"
             android:textColor="@android:color/white" />
 
         <Button
-            android:id="@+id/button_show_db"
+            android:id="@+id/button_show_db_screening"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/button_margin_top"
             android:background="@color/colorPrimary"
-            android:text="@string/text_show_db"
+            android:text="@string/text_show_db_screening"
             android:textColor="@android:color/white" />
 
         <TextView
-            android:id="@+id/text_view_display_db"
+            android:id="@+id/text_view_display_db_screening"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/button_margin_top"
-            android:text="Kospenuser DB" />
+            android:text="Screening DB" />
 
     </LinearLayout>
 </ScrollView>
@@ -187,17 +163,15 @@
 
 
 
-<!-- VERSION 1: used when making 'tabs' with TabLayout & ViewPager -->
-<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--android:layout_width="match_parent"-->
-    <!--android:background="#00796B"-->
-<!--android:layout_height="match_parent">-->
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="Fragment Three"-->
-    <!--android:textSize="40dp"-->
-    <!--android:textStyle="bold"-->
-    <!--android:textColor="#fff"-->
-    <!--android:layout_centerInParent="true"/>-->
-<!--</RelativeLayout>-->
+
+
+
+
+
+
+
+
+
+
+
+

@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.intel.kospenmove02.R;
-import com.example.intel.kospenmove02.db.AppDatabase;
 import com.example.intel.kospenmove02.db.entity.Kospenuser;
 import com.example.intel.kospenmove02.db.viewmodel.NewKospenuserFormViewModel;
 import com.example.intel.kospenmove02.validator.ValidationHelper;
@@ -31,7 +30,6 @@ import java.util.List;
 public class FragmentThree extends Fragment {
 
     // MEMBER VARIBALES -> New-Kospenuser-Registration-Form
-    // [later this needs to go to a separate fragment instead of MainActivity]
     //TextInputLayout variables
     private TextInputLayout textInputLayoutIc;
     private TextInputLayout textInputLayoutKospenuserName;
