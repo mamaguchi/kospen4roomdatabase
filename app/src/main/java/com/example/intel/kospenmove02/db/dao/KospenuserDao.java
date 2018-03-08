@@ -300,6 +300,9 @@ public interface KospenuserDao {
     List<Kospenuser> loadScenarioFive();
 
 
+    @Query("SELECT COUNT(*) from kospenuser WHERE dirty=1 AND softDel=0")
+    int checkIfKospenuserDirty();
+
     @Query("SELECT * from kospenuser")
     LiveData<List<Kospenuser>> loadAllKospenusers();
 

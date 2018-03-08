@@ -534,6 +534,18 @@ public class TestSyncActivity extends AppCompatActivity {
     }
 
     // --------------------------------------------------------------------------------------------------------------<AndroidDB manipulation>
+    // [Show Is-Kospenuser-Dirty in UI]
+    public void isDirtyButtonClicked(View view) {
+        int kospenuserDirtyCount =  mDb.kospenuserModel().checkIfKospenuserDirty();
+        InDBOutReqTableTextView.setText(Integer.toString(kospenuserDirtyCount));
+    }
+
+    // [Show Is-Screening-Empty in UI]
+    public void isScreenEmptyButtonClicked(View view) {
+        int screeningNotEmptyCount =  mDb.screeningModel().checkIfScreeningNotEmpty();
+        InDBOutReqTableTextView.setText(Integer.toString(screeningNotEmptyCount));
+    }
+
     // [Show Local Kospenuser List in UI]
     public void localdbButtonClicked(View view) {
         kospenusers =  mDb.kospenuserModel().loadAllKospenusers();

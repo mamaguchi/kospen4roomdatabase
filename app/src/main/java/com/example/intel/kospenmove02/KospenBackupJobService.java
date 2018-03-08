@@ -8,17 +8,24 @@ import android.widget.Toast;
 
 public class KospenBackupJobService extends JobService {
 
-    private static final String JOB_SCHEDULE_TAG = "SyncJobService";
+    private static final String TEST_SYNC_TAG = "TestSyncService";
     private SyncTask mJob = null;
 
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
 
-        Log.i(JOB_SCHEDULE_TAG, "[onStartJob] on start job: " + jobParameters.getJobId());
+
+
+        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] [onStartJob] on start job: " + jobParameters.getJobId());
         if(mJob==null) {
-            mJob = new SyncTask(this);
-//            Toast.makeText(this, "Starting job...", Toast.LENGTH_SHORT).show();
+            // VERSION 1: using SyncTask constructor with 'JobService' arg.
+//            mJob = new SyncTask(this);
+
+            // VERSION 2: using SyncTask constructor with 'ApplicationContext' & 'JobService' arg.
+            mJob = new SyncTask(getApplicationContext(),this);
+
+
             mJob.execute(jobParameters);
             return true;
         }
@@ -28,9 +35,8 @@ public class KospenBackupJobService extends JobService {
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
 
-        Log.i(JOB_SCHEDULE_TAG, "[onStopJob] on stop job: " + jobParameters.getJobId());
+        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] [onStopJob] on stop job: " + jobParameters.getJobId());
         if(mJob!=null) {
-            Toast.makeText(this, "Stopping job...", Toast.LENGTH_SHORT).show();
             mJob.cancel(true);
             mJob = null;
         }

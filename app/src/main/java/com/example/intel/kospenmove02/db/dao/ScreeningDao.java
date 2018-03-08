@@ -16,6 +16,9 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 @Dao
 public interface ScreeningDao {
 
+    @Query("SELECT COUNT(*) from screening WHERE softDel=0")
+    int checkIfScreeningNotEmpty();
+
     @Query("select * from screening")
     LiveData<List<Screening>> loadAllScreenings();
 

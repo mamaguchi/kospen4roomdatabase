@@ -1,16 +1,13 @@
 package com.example.intel.kospenmove02;
 
-import android.app.DatePickerDialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
-import android.content.Intent;
 import android.os.PersistableBundle;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,20 +16,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import android.widget.Button;
-import android.widget.EditText;
 import android.util.Log;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.intel.kospenmove02.db.AppDatabase;
+import com.example.intel.kospenmove02.db.utils.DatabaseInitializer;
 import com.example.intel.kospenmove02.fragments.FragmentDebugLauncher;
 import com.example.intel.kospenmove02.fragments.FragmentNewScreeningForm;
-import com.example.intel.kospenmove02.fragments.FragmentOne;
 import com.example.intel.kospenmove02.fragments.FragmentThree;
-import com.example.intel.kospenmove02.fragments.FragmentTwo;
-import com.example.intel.kospenmove02.validator.ValidationHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,33 +43,19 @@ public class MainActivity extends AppCompatActivity {
     // To hold a JobInfo instance
     private static JobInfo mJobInfo = null;
     // JobSchedule TAG
-    private static final String JOB_SCHEDULE_TAG = "SyncJobService";
+//    private static final String TEST_SYNC_TAG = "SyncJobService";
+    private static final String TEST_SYNC_TAG = "TestSyncService";
 
 
 
+    //AppDatabase
+    private AppDatabase mDb;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        /* Set up job schedule */
-//        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-//        mJobInfo = jobScheduler.getPendingJob(SYNC_JOB_ID);
-//        Log.i(JOB_SCHEDULE_TAG, "[Pre-setup] Number of all pending jobs: " + jobScheduler.getAllPendingJobs().size());
-//        Log.i(JOB_SCHEDULE_TAG, "[Pre-setup] All pending jobs: " + jobScheduler.getAllPendingJobs());
-//        Log.i(JOB_SCHEDULE_TAG, "...");
-//        if(mJobInfo!=null) {
-////            Toast.makeText(this, "Job exist: " + mJobInfo.getId(), Toast.LENGTH_SHORT).show();
-//            Log.i(JOB_SCHEDULE_TAG, "Job exist: " + mJobInfo.getId());
-//            jobScheduler.cancel(mJobInfo.getId());
-//            setupJob();
-//        } else {
-////            Toast.makeText(this, "No job. Creating new...", Toast.LENGTH_SHORT).show();
-//            Log.i(JOB_SCHEDULE_TAG, "No job. Creating new...");
-//            setupJob();
-//        }
 
         // App Bar(Toolbar)
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -100,6 +80,25 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        //------FOR-DEBUGGING-TO_BE_REMOVED_IN_PRODUCTION------//
+        mDb = AppDatabase.getDatabase(this);
+        DatabaseInitializer.populateAsync(mDb);
+
+        // Set up job schedule
+        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        mJobInfo = jobScheduler.getPendingJob(SYNC_JOB_ID);
+        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] [Pre-setup] Number of all pending jobs: " + jobScheduler.getAllPendingJobs().size());
+        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] [Pre-setup] All pending jobs: " + jobScheduler.getAllPendingJobs());
+        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] ...");
+        if(mJobInfo!=null) {
+            Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] Job exist: " + mJobInfo.getId());
+            jobScheduler.cancel(mJobInfo.getId());
+            setupJob();
+        } else {
+            Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] No job. Creating new...");
+            setupJob();
+        }
 
     }
 
@@ -168,48 +167,52 @@ public class MainActivity extends AppCompatActivity {
 
     // =========== Setup JobInfo and Submit job using JobScheduler - START ===========
     public void setupJob() {
-        Log.i(JOB_SCHEDULE_TAG, "Entering setupJob()");
+        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] Entering setupJob()");
         PersistableBundle bundle = new PersistableBundle();
         bundle.putString(SyncTask.SYNC_KOSPENPATH_KEY, SYNC_KOSPENPATH);
 
-        Log.i(JOB_SCHEDULE_TAG, "Creating JobInfo");
+        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] Configuring JobInfo");
         ComponentName serviceName = new ComponentName(this,
                 KospenBackupJobService.class);
         JobInfo.Builder jobinfoBuilder = null;
         jobinfoBuilder = new JobInfo.Builder(SYNC_JOB_ID, serviceName);
         /* One-shot job */
-//        jobinfoBuilder.setPersisted(true)
-//                .setOverrideDeadline(TimeUnit.HOURS.toMillis(10))
-//                .setMinimumLatency(TimeUnit.SECONDS.toMillis(1))
-//                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_METERED)
-//                .setRequiresDeviceIdle(false)
-//                .setExtras(bundle);
-        /* Periodic job */
         jobinfoBuilder.setPersisted(true)
-                .setPeriodic(TimeUnit.HOURS.toMillis(10))
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_METERED)
+                .setOverrideDeadline(TimeUnit.SECONDS.toMillis(10))
+                .setMinimumLatency(TimeUnit.SECONDS.toMillis(6))
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+//                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
                 .setRequiresDeviceIdle(false)
                 .setExtras(bundle);
-        Log.i(JOB_SCHEDULE_TAG, "Retrieving JobScheduler");
+
+        /* Periodic job */
+//        jobinfoBuilder.setPersisted(true)
+//                .setPeriodic(TimeUnit.MINUTES.toMillis(15))
+//                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+//                .setRequiresDeviceIdle(false)
+//                .setExtras(bundle);
+        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] Retrieving JobScheduler");
         JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] Building JobInfo");
         mJobInfo = jobinfoBuilder.build();
-        Log.i(JOB_SCHEDULE_TAG, "Minimum Period (in seconds): " + (mJobInfo.getMinPeriodMillis()/1000));
+        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] Default Minimum Interval (in seconds): " + (mJobInfo.getMinPeriodMillis()/1000));
+        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] Current Minimum Interval (in seconds): " + (mJobInfo.getIntervalMillis()/1000));
         int result = jobScheduler.schedule(mJobInfo);
 
-        Log.i(JOB_SCHEDULE_TAG, "[Post-setup] Number of all pending jobs: " + jobScheduler.getAllPendingJobs().size());
-        Log.i(JOB_SCHEDULE_TAG, "[Post-setup] All pending jobs: " + jobScheduler.getAllPendingJobs());
+        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] [Post-setup] Number of all pending jobs: " + jobScheduler.getAllPendingJobs().size());
+        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] [Post-setup] All pending jobs: " + jobScheduler.getAllPendingJobs());
 
         if(result!= JobScheduler.RESULT_SUCCESS) {
 
-            Log.i(JOB_SCHEDULE_TAG, "Failed job schedule setup!");
+            Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] Failed job schedule setup!");
 
         } else if(result==JobScheduler.RESULT_SUCCESS) {
 
-            Log.i(JOB_SCHEDULE_TAG, "Successful job schedule setup!");
+            Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] Successful job schedule setup!");
 
         } else {
 
-            Log.i(JOB_SCHEDULE_TAG, "Error in job schedule setup!");
+            Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] Error in job schedule setup!");
 
         }
     }
