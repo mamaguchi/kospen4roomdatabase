@@ -81,24 +81,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //------FOR-DEBUGGING-TO_BE_REMOVED_IN_PRODUCTION------//
-        mDb = AppDatabase.getDatabase(this);
-        DatabaseInitializer.populateAsync(mDb);
-
-        // Set up job schedule
-        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        mJobInfo = jobScheduler.getPendingJob(SYNC_JOB_ID);
-        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] [Pre-setup] Number of all pending jobs: " + jobScheduler.getAllPendingJobs().size());
-        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] [Pre-setup] All pending jobs: " + jobScheduler.getAllPendingJobs());
-        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] ...");
-        if(mJobInfo!=null) {
-            Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] Job exist: " + mJobInfo.getId());
-            jobScheduler.cancel(mJobInfo.getId());
-            setupJob();
-        } else {
-            Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] No job. Creating new...");
-            setupJob();
-        }
+        //------FOR-DEBUGGING-JOB-SCHEDULER-TO_BE_REMOVED_IN_PRODUCTION------//
+//        mDb = AppDatabase.getDatabase(this);
+//        DatabaseInitializer.populateAsync(mDb);
+//
+//        // Set Up Job Schedule
+//        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+//        mJobInfo = jobScheduler.getPendingJob(SYNC_JOB_ID);
+//        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] [Pre-setup] Number of all pending jobs: " + jobScheduler.getAllPendingJobs().size());
+//        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] [Pre-setup] All pending jobs: " + jobScheduler.getAllPendingJobs());
+//        Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] ...");
+//        if(mJobInfo!=null) {
+//            Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] Job exist: " + mJobInfo.getId());
+//            jobScheduler.cancel(mJobInfo.getId());
+//            setupJob();
+//        } else {
+//            Log.i(TEST_SYNC_TAG, "[JOB SCHEDULER] No job. Creating new...");
+//            setupJob();
+//        }
 
     }
 
