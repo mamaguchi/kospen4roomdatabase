@@ -23,10 +23,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.intel.kospenmove02.db.AppDatabase;
-import com.example.intel.kospenmove02.db.utils.DatabaseInitializer;
 import com.example.intel.kospenmove02.fragments.FragmentDebugLauncher;
+import com.example.intel.kospenmove02.fragments.FragmentHomepage;
 import com.example.intel.kospenmove02.fragments.FragmentNewScreeningForm;
-import com.example.intel.kospenmove02.fragments.FragmentThree;
+import com.example.intel.kospenmove02.fragments.FragmentNewKospenuserForm;
+import com.example.intel.kospenmove02.fragments.FragmentOne;
+import com.example.intel.kospenmove02.singleton.ViewPagerSingleton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,14 +64,19 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         // Creating Tabs with TabLayout & ViewPager
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new FragmentNewScreeningForm(), "FRAG1");
-        adapter.addFragment(new FragmentDebugLauncher(), "FRAG2");
-        adapter.addFragment(new FragmentThree(), "FRAG3");
-        viewPager.setAdapter(adapter);
+        adapter.addFragment(new FragmentHomepage(), "FRAG1");
+        adapter.addFragment(new FragmentOne(), "FRAG2");
+        adapter.addFragment(new FragmentNewKospenuserForm(), "FRAG3");
+//        viewPager.setAdapter(adapter);
+        ViewPagerSingleton.getInstance(this).setAdapter(adapter);
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+//        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(ViewPagerSingleton.getInstance(this).getViewPagerInstance());
+
 
         // FAB (FloatingActionButton)
         FloatingActionButton fab = findViewById(R.id.fab);

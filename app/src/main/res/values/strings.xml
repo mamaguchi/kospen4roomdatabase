@@ -84,4 +84,8 @@
     <string name="error_message_screening_smoker">Enter Smoking Status</string>
     <string name="success_screening_input_validation_message">Screening Inputs Valid</string>
 
+    <!--String values for Homepage-->
+    <string name="text_homepage_new_kospenuser">New Kospenuser</string>
+    <string name="text_homepage_new_screening">New Screening</string>
+
 </resources>

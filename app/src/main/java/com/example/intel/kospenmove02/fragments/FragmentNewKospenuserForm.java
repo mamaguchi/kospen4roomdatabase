@@ -27,7 +27,7 @@ import com.example.intel.kospenmove02.validator.ValidationHelper;
 import java.util.List;
 
 
-public class FragmentThree extends Fragment {
+public class FragmentNewKospenuserForm extends Fragment {
 
     // MEMBER VARIBALES -> New-Kospenuser-Registration-Form
     //TextInputLayout variables
@@ -72,7 +72,7 @@ public class FragmentThree extends Fragment {
     private TextView textViewDisplayDb;
 
 
-    public FragmentThree() {
+    public FragmentNewKospenuserForm() {
         // Required empty public constructor
     }
 
@@ -97,7 +97,7 @@ public class FragmentThree extends Fragment {
     // To initialize views objects -> New-Kospenuser-Registration-Form
     private View initViews(LayoutInflater inflater, ViewGroup container) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_three, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_new_kospenuser_form, container, false);
 
         textInputLayoutIc = (TextInputLayout) rootView.findViewById(R.id.text_input_layout_ic);
         textInputLayoutKospenuserName = (TextInputLayout) rootView.findViewById(R.id.text_input_layout_kospenuser_name);
