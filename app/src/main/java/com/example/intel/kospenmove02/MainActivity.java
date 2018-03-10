@@ -5,6 +5,7 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.os.PersistableBundle;
 
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -23,6 +24,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.intel.kospenmove02.db.AppDatabase;
+import com.example.intel.kospenmove02.db.utils.DatabaseInitializer;
 import com.example.intel.kospenmove02.fragment.FragmentDebugLauncher;
 import com.example.intel.kospenmove02.fragment.FragmentHomepage;
 import com.example.intel.kospenmove02.fragment.FragmentKospenuserList;
@@ -110,10 +112,22 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!=null) {
-            int currentItem = bundle.getInt("currentItem");
-            if (currentItem!=0) {
-                mViewPager.setCurrentItem(currentItem);
+            int currentItem;
+            switch (bundle.getString("currentItem")) {
+                case "tab2":
+                    currentItem = 1;
+                    break;
+                case "tab3":
+                    currentItem = 2;
+                    break;
+                default:
+                    currentItem = 0;
             }
+            mViewPager.setCurrentItem(currentItem);
+
+//            if (currentItem!=0) {
+//                mViewPager.setCurrentItem(currentItem);
+//            }
         }
     }
 

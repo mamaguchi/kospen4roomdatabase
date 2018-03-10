@@ -153,7 +153,7 @@ public class FragmentNewKospenuserForm extends Fragment {
                     insertNewKospenuser();
 
                     Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.putExtra("currentItem", 1);
+                    intent.putExtra("currentItem", "tab2");
                     startActivity(intent);
                 } else {
                     Toast.makeText(getContext(), getString(R.string.fail_form_input_invalid), Toast.LENGTH_LONG).show();

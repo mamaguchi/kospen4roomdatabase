@@ -42,7 +42,9 @@ public class NewScreeningFormViewModel extends AndroidViewModel {
 
         String created_at = ValidationHelper.getCurrentDateTime();
 
-        int dummyId = 1;
+        int dummyId = 3; // TODO - this is still hardcoded.Need to change Room-entity 'Screening'
+                         // to use autoincrement-id, so that we don't have to insert a 'dummyId'
+                         // here in the input-form.
 
         Screening screening = new Screening(dummyId, inputIc, created_at, inputWeight, inputHeight,
                 inputSystolic, inputDiastolic, inputDxt, inputSmoker);

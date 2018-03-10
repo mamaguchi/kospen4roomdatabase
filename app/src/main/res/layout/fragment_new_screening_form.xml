@@ -46,7 +46,6 @@
                 android:focusable="true"/>
         </android.support.design.widget.TextInputLayout>
 
-        <!--BEGIN - adding Menu-Gender in EditText [FUNCTIONAL]-->
         <android.support.design.widget.TextInputLayout
             android:id="@+id/text_input_layout_screening_height"
             android:layout_width="match_parent"
@@ -61,7 +60,6 @@
                 android:singleLine="true"
                 android:focusable="true"/>
         </android.support.design.widget.TextInputLayout>
-        <!--END - adding Menu-Gender in EditText-->
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/text_input_layout_screening_systolic"

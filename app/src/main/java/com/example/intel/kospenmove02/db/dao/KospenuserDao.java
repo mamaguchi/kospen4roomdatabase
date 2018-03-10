@@ -304,6 +304,9 @@ public interface KospenuserDao {
     int checkIfKospenuserDirty();
 
     @Query("SELECT * from kospenuser")
+    List<Kospenuser> loadAll();
+
+    @Query("SELECT * from kospenuser")
     LiveData<List<Kospenuser>> loadAllKospenusers();
 
     @Query("SELECT * from kospenuser WHERE ic = :ic")

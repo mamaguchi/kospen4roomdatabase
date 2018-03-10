@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 
 import com.example.intel.kospenmove02.R;
 import com.example.intel.kospenmove02.adapter.CustomAdapter;
+import com.example.intel.kospenmove02.db.AppDatabase;
+import com.example.intel.kospenmove02.db.entity.Kospenuser;
+
+import java.util.List;
 
 
 public class FragmentKospenuserList extends Fragment {
@@ -23,6 +27,9 @@ public class FragmentKospenuserList extends Fragment {
     protected RecyclerView.LayoutManager mLayoutManager;
     protected String[] mDataset;
 
+    //AppDatabase
+    private AppDatabase mDb;
+
 
     public FragmentKospenuserList() {
         // Required empty public constructor
@@ -32,6 +39,8 @@ public class FragmentKospenuserList extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mDb = AppDatabase.getDatabase(getContext());
 
         // Initialize dataset, this data would usually come from a local content provider or
         // remote server.
@@ -88,9 +97,19 @@ public class FragmentKospenuserList extends Fragment {
      * from a local content provider or remote server.
      */
     private void initDataset() {
-        mDataset = new String[DATASET_COUNT];
-        for (int i = 0; i < DATASET_COUNT; i++) {
-            mDataset[i] = "This is element #" + i;
+
+        // VERSION 1: using Hardcoded-values
+//        mDataset = new String[DATASET_COUNT];
+//        for (int i = 0; i < DATASET_COUNT; i++) {
+//            mDataset[i] = "This is element #" + i;
+//        }
+
+        // VERSION 2: obtain data from sqlite 'kospenuser' table
+        List<Kospenuser> kospenusers = mDb.kospenuserModel().loadAll();
+
+        mDataset = new String[kospenusers.size()];
+        for (int i = 0; i < kospenusers.size(); i++) {
+            mDataset[i] = kospenusers.get(i).getName() + " IC :" + kospenusers.get(i).getIc();
         }
     }
 

@@ -127,7 +127,7 @@ public class FragmentNewScreeningForm extends Fragment {
                     insertNewScreening();
 
                     Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.putExtra("currentItem", 1);
+                    intent.putExtra("currentItem", "tab3");
                     startActivity(intent);
                 } else {
                     Toast.makeText(getContext(), getString(R.string.fail_form_input_invalid), Toast.LENGTH_LONG).show();
@@ -162,7 +162,6 @@ public class FragmentNewScreeningForm extends Fragment {
                         });
             }
         });
-
 
         // editTextGender EditText-Listener
         edit_text_smoker.setOnClickListener(new View.OnClickListener() {
