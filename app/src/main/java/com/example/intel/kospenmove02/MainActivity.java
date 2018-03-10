@@ -25,7 +25,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.example.intel.kospenmove02.db.AppDatabase;
 import com.example.intel.kospenmove02.fragment.FragmentDebugLauncher;
 import com.example.intel.kospenmove02.fragment.FragmentHomepage;
+import com.example.intel.kospenmove02.fragment.FragmentKospenuserList;
 import com.example.intel.kospenmove02.fragment.FragmentOne;
+import com.example.intel.kospenmove02.fragment.FragmentScreeningList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
         // Creating Tabs with TabLayout & ViewPager
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new FragmentHomepage(), "FRAG1");
-        adapter.addFragment(new FragmentOne(), "FRAG2");
-        adapter.addFragment(new FragmentDebugLauncher(), "FRAG3");
+        adapter.addFragment(new FragmentKospenuserList(), "FRAG2");
+        adapter.addFragment(new FragmentScreeningList(), "FRAG3");
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);

@@ -34,7 +34,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     private String[] mDataSet;
 
 
-    // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
@@ -57,7 +56,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             return textView;
         }
     }
-    // END_INCLUDE(recyclerViewSampleViewHolder)
 
 
     /**
@@ -70,7 +68,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
 
-    // BEGIN_INCLUDE(recyclerViewOnCreateViewHolder)
     // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -80,10 +77,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         return new ViewHolder(v);
     }
-    // END_INCLUDE(recyclerViewOnCreateViewHolder)
 
 
-    // BEGIN_INCLUDE(recyclerViewOnBindViewHolder)
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
@@ -93,7 +88,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         // with that element
         viewHolder.getTextView().setText(mDataSet[position]);
     }
-    // END_INCLUDE(recyclerViewOnBindViewHolder)
 
 
     // Return the size of your dataset (invoked by the layout manager)
