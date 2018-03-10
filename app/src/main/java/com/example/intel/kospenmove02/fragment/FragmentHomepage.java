@@ -1,4 +1,4 @@
-package com.example.intel.kospenmove02.fragments;
+package com.example.intel.kospenmove02.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,10 +9,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.intel.kospenmove02.DbActivity;
-import com.example.intel.kospenmove02.NetworkStatusActivity;
 import com.example.intel.kospenmove02.R;
-import com.example.intel.kospenmove02.SettingsActivity;
-import com.example.intel.kospenmove02.TestSyncActivity;
+import com.example.intel.kospenmove02.activity.NewKospenuserFormActivity;
+import com.example.intel.kospenmove02.activity.NewScreeningFormActivity;
 import com.example.intel.kospenmove02.singleton.ViewPagerSingleton;
 
 public class FragmentHomepage extends Fragment {
@@ -64,7 +63,8 @@ public class FragmentHomepage extends Fragment {
             @Override
             public void onClick(View v) {
 
-                ViewPagerSingleton.getInstance(getActivity()).setCurrentItem(1);
+                Intent gotoNewKospenuserFormActivity = new Intent(getContext(), NewKospenuserFormActivity.class);
+                startActivity(gotoNewKospenuserFormActivity);
 
             }
         });
@@ -74,8 +74,8 @@ public class FragmentHomepage extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Intent gotoDbActivityIntent = new Intent(getContext(), DbActivity.class);
-                startActivity(gotoDbActivityIntent);
+                Intent gotoNewScreeningFormIntent = new Intent(getContext(), NewScreeningFormActivity.class);
+                startActivity(gotoNewScreeningFormIntent);
 
             }
         });

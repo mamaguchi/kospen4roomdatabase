@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.example.intel.kospenmove02.R;
 
-
+@Deprecated
 public class ViewPagerSingleton {
 
     private static ViewPagerSingleton mInstance;

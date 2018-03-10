@@ -1,9 +1,8 @@
-package com.example.intel.kospenmove02.fragments;
+package com.example.intel.kospenmove02.fragment;
 
-import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.icu.util.Calendar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -18,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.intel.kospenmove02.MainActivity;
 import com.example.intel.kospenmove02.R;
 import com.example.intel.kospenmove02.db.entity.Screening;
 import com.example.intel.kospenmove02.db.viewmodel.NewScreeningFormViewModel;
@@ -125,6 +125,10 @@ public class FragmentNewScreeningForm extends Fragment {
 
                 if (checkValidation() == 0) {
                     insertNewScreening();
+
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.putExtra("currentItem", 1);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(getContext(), getString(R.string.fail_form_input_invalid), Toast.LENGTH_LONG).show();
                 }

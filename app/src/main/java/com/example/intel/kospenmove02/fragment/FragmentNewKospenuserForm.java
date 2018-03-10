@@ -1,13 +1,18 @@
-package com.example.intel.kospenmove02.fragments;
+package com.example.intel.kospenmove02.fragment;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,9 +24,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.intel.kospenmove02.MainActivity;
 import com.example.intel.kospenmove02.R;
 import com.example.intel.kospenmove02.db.entity.Kospenuser;
 import com.example.intel.kospenmove02.db.viewmodel.NewKospenuserFormViewModel;
+import com.example.intel.kospenmove02.singleton.ViewPagerSingleton;
 import com.example.intel.kospenmove02.validator.ValidationHelper;
 
 import java.util.List;
@@ -76,6 +83,7 @@ public class FragmentNewKospenuserForm extends Fragment {
         // Required empty public constructor
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +91,7 @@ public class FragmentNewKospenuserForm extends Fragment {
         //ViewModel
         mNewKospenuserFormViewModel = ViewModelProviders.of(this).get(NewKospenuserFormViewModel.class);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -142,6 +151,10 @@ public class FragmentNewKospenuserForm extends Fragment {
 
                 if (checkValidation() == 0) {
                     insertNewKospenuser();
+
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.putExtra("currentItem", 1);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(getContext(), getString(R.string.fail_form_input_invalid), Toast.LENGTH_LONG).show();
                 }

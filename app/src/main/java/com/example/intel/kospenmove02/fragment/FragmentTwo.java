@@ -1,4 +1,4 @@
-package com.example.intel.kospenmove02.fragments;
+package com.example.intel.kospenmove02.fragment;
 
 import android.app.DatePickerDialog;
 import android.icu.util.Calendar;

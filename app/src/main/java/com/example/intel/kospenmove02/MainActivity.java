@@ -23,12 +23,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.intel.kospenmove02.db.AppDatabase;
-import com.example.intel.kospenmove02.fragments.FragmentDebugLauncher;
-import com.example.intel.kospenmove02.fragments.FragmentHomepage;
-import com.example.intel.kospenmove02.fragments.FragmentNewScreeningForm;
-import com.example.intel.kospenmove02.fragments.FragmentNewKospenuserForm;
-import com.example.intel.kospenmove02.fragments.FragmentOne;
-import com.example.intel.kospenmove02.singleton.ViewPagerSingleton;
+import com.example.intel.kospenmove02.fragment.FragmentDebugLauncher;
+import com.example.intel.kospenmove02.fragment.FragmentHomepage;
+import com.example.intel.kospenmove02.fragment.FragmentOne;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
 //    private static final String TEST_SYNC_TAG = "SyncJobService";
     private static final String TEST_SYNC_TAG = "TestSyncService";
 
-
+    //ViewPager
+    ViewPager mViewPager;
 
     //AppDatabase
     private AppDatabase mDb;
@@ -64,19 +62,14 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         // Creating Tabs with TabLayout & ViewPager
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new FragmentHomepage(), "FRAG1");
         adapter.addFragment(new FragmentOne(), "FRAG2");
-        adapter.addFragment(new FragmentNewKospenuserForm(), "FRAG3");
-//        viewPager.setAdapter(adapter);
-        ViewPagerSingleton.getInstance(this).setAdapter(adapter);
-
+        adapter.addFragment(new FragmentDebugLauncher(), "FRAG3");
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-//        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setupWithViewPager(ViewPagerSingleton.getInstance(this).getViewPagerInstance());
-
+        tabLayout.setupWithViewPager(mViewPager);
 
         // FAB (FloatingActionButton)
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -107,6 +100,19 @@ public class MainActivity extends AppCompatActivity {
 //            setupJob();
 //        }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle!=null) {
+            int currentItem = bundle.getInt("currentItem");
+            if (currentItem!=0) {
+                mViewPager.setCurrentItem(currentItem);
+            }
+        }
     }
 
     // Creating Tabs: Adapter for the viewpager using FragmentPagerAdapter
@@ -225,32 +231,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    // =========== Goto Database Activity - START ===========
-//    public void dbButtonClicked(View view) {
-//        Intent gotoDbActivityIntent = new Intent(this, DbActivity.class);
-//        startActivity(gotoDbActivityIntent);
-//    }
-//
-//
-//    // =========== Goto Network Activity - START ===========
-//    public void networkButtonClicked(View view) {
-//        Intent gotoNetworkStatusActivityIntent = new Intent(this, NetworkStatusActivity.class);
-//        startActivity(gotoNetworkStatusActivityIntent);
-//    }
-//
-//
-//    // =========== Goto Preference Activity - START ===========
-//    public void prefButtonClicked(View view) {
-//        Intent gotoPrefActivityIntent = new Intent(this, SettingsActivity.class);
-//        startActivity(gotoPrefActivityIntent);
-//    }
-//
-//
-//    // =========== Goto TestSyncActivity - START ===========
-//    public void testButtonClicked(View view){
-//        Intent gotoTestSyncActivityIntent = new Intent(this, TestSyncActivity.class);
-//        startActivity(gotoTestSyncActivityIntent);
-//    }
+
 
 
 }

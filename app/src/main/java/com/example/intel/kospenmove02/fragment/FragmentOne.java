@@ -1,4 +1,4 @@
-package com.example.intel.kospenmove02.fragments;
+package com.example.intel.kospenmove02.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
